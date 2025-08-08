@@ -7,3 +7,9 @@ and sortable information site, so you can impress your friends with your astute
 (and perhaps excessive) trivia knowledge.
 
 ![Star Wars Ship Models](readme_ships.png)
+
+## Project Structure
+
+At the root of the solution there are 2 main project folders:
+- __StarWarsInfo__: The backend API project, written in .NET as a REST provider
+- __StarWarsInfoClient__: The React.js front end client application (via Vite)
