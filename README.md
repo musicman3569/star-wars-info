@@ -18,5 +18,7 @@ At the root of the solution there are several project folders:
 - __/StarWarsInfoClient__: The React.js front end client application (via Vite)
 
 ## Developer Resources and Links
+- [Star Wars API](https://swapi.dev/)
 - [Keycloak, Importing Realm on Startup](https://www.keycloak.org/nightly/server/containers#_importing_a_realm_on_startup)
 - [Keycloak, Full Env Variables Reference](https://www.keycloak.org/server/all-config)
+- [Postgres, Initialization Scripts](https://hub.docker.com/_/postgres#initialization-scripts)
