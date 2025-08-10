@@ -10,6 +10,13 @@ and sortable information site, so you can impress your friends with your astute
 
 ## Project Structure
 
-At the root of the solution there are 2 main project folders:
-- __StarWarsInfo__: The backend API project, written in .NET as a REST provider
-- __StarWarsInfoClient__: The React.js front end client application (via Vite)
+At the root of the solution there are several project folders:
+- __/DevTools__: Scripts/tools for developers that simplify environment management.
+- __/Postgres__: Files and configurations for the Postgres database service.
+- __/SSL__: PEM-formatted SSL certificate and key files for use with API and client services.
+- __/StarWarsInfo__: The backend API project, written in .NET as a REST provider
+- __/StarWarsInfoClient__: The React.js front end client application (via Vite)
+
+## Developer Resources and Links
+- [Keycloak, Importing Realm on Startup](https://www.keycloak.org/nightly/server/containers#_importing_a_realm_on_startup)
+- [Keycloak, Full Env Variables Reference](https://www.keycloak.org/server/all-config)

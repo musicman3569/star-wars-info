@@ -9,7 +9,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClientApp", policy =>
     {
-        policy.WithOrigins(Environment.GetEnvironmentVariable("CORS_ORIGIN") ?? "*")
+        policy.WithOrigins(Environment.GetEnvironmentVariable("HOSTNAME_CLIENT") ?? "*")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });

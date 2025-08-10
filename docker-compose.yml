@@ -1,0 +1,85 @@
+services:
+  starwarsinfo:
+    build:
+      context: .
+      dockerfile: ./StarWarsInfo/Dockerfile
+      args:
+        API_HTTPS_PORT: ${API_HTTPS_PORT}
+        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
+    environment:
+      ASPNETCORE_URLS: "https://+:${API_HTTPS_PORT}"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/SSL/${HOSTNAME_API}.crt"
+      ASPNETCORE_Kestrel__Certificates__Default__KeyPath: "/SSL/${HOSTNAME_API}.key"
+    volumes:
+      - ./SSL:/SSL
+    env_file:
+      - .env
+    ports:
+      - ${API_HTTPS_PORT}:${API_HTTPS_PORT}
+    networks:
+      - app_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      
+  postgres:
+    image: postgres:15.8
+    platform: linux/amd64
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./Postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    # Wait for the DB to actually be fully started and listening
+    # for connections on the specified port before reporting healthy
+    # to dependent services that should wait to start.
+    healthcheck:
+      test: pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB
+      timeout: 10s
+      retries: 20
+    expose:
+      - 5432
+    ports:
+      - ${LOCALDEV__POSTGRES_PORT:-5432}:5432
+    networks:
+      - app_network
+
+  keycloak:
+    image: keycloak/keycloak:26.3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    platform: linux/amd64
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "${LOCALDEV__KC_ENTRYPOINT}"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_HTTPS_PORT: ${KC_HTTPS_PORT}
+      KC_HOSTNAME_STRICT: ${KC_HOSTNAME_STRICT}
+      KC_DB: ${KC_DB}
+      KC_DB_SCHEMA: ${KC_DB_SCHEMA}
+      KC_DB_URL: jdbc:postgresql://postgres:${LOCALDEV__POSTGRES_PORT}/${POSTGRES_DB}
+      KC_DB_DATABASE: ${POSTGRES_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_HTTPS_CERTIFICATE_FILE: /SSL/${KC_HOSTNAME}.crt
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /SSL/${KC_HOSTNAME}.key
+    volumes:
+      - ./SSL:/SSL
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - app_network
+    ports:
+      - ${KC_HTTPS_PORT}:${KC_HTTPS_PORT}
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
