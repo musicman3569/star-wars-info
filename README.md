@@ -13,7 +13,7 @@ and sortable information site, so you can impress your friends with your astute
 At the root of the solution there are several project folders:
 - __/DevTools__: Scripts/tools for developers that simplify environment management.
 - __/Postgres__: Files and configurations for the Postgres database service.
-- __/SSL__: PEM-formatted SSL certificate and key files for use with API and client services.
+- __/SSL__: PEM-formatted SSL certificate and key files for use with API, client, & Keycloak services.
 - __/StarWarsInfo__: The backend API project, written in .NET as a REST provider
 - __/StarWarsInfoClient__: The React.js front end client application (via Vite)
 
