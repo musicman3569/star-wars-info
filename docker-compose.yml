@@ -23,6 +23,34 @@ services:
         condition: service_healthy
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  
+  starwarsclient:
+    image: node:24.5.0-alpine3.22
+    volumes:
+      - ./SSL:/SSL
+      - ./StarWarsClient:/app
+    working_dir: /app
+    command: sh -c "npm install && npm run ${NPM_RUN_COMMAND}"
+    # These environment variables are used by the Vite build process
+    # in /StarWarsClient/vite.config.js
+    environment:
+      VITE_HOSTNAME_CLIENT: ${HOSTNAME_CLIENT}
+      VITE_CLIENT_HTTPS_PORT: ${CLIENT_HTTPS_PORT}
+      VITE_HOSTNAME_API: ${HOSTNAME_API}
+      VITE_API_HTTPS_PORT: ${API_HTTPS_PORT}
+      VITE_API_URL: "https://${HOSTNAME_API}:${API_HTTPS_PORT}"
+      VITE_KEYCLOAK_URL: "https://${KC_HOSTNAME}:${KC_HTTPS_PORT}"
+    expose:
+      - ${CLIENT_HTTPS_PORT}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - ${CLIENT_HTTPS_PORT}:${CLIENT_HTTPS_PORT}
+    networks:
+      - app_network
+    depends_on:
+      starwarsinfo:
+        condition: service_started
       
   postgres:
     image: postgres:15.8
