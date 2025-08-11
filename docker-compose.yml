@@ -10,6 +10,7 @@ services:
       ASPNETCORE_URLS: "https://+:${API_HTTPS_PORT}"
       ASPNETCORE_Kestrel__Certificates__Default__Path: "/SSL/${HOSTNAME_API}.crt"
       ASPNETCORE_Kestrel__Certificates__Default__KeyPath: "/SSL/${HOSTNAME_API}.key"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     volumes:
       - ./SSL:/SSL
     env_file:
