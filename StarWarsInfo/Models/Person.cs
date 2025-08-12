@@ -11,7 +11,7 @@ public class Person
     public string EyeColor { get; set; }
     public string BirthYear { get; set; }
     public string Gender { get; set; } // male, female, n/a
-    public int PlanetId_Homeworld { get; set; }
+    public int HomeworldId { get; set; }
     public Planet Homeworld { get; set; }
     public ICollection<Film> Films { get; set; }
     public ICollection<Species> Species { get; set; }
