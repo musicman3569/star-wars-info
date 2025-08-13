@@ -13,6 +13,7 @@ services:
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
     volumes:
       - ./SSL:/SSL
+      - dotnet_nuget:/root/.nuget/packages
     env_file:
       - .env
     ports:
@@ -109,6 +110,7 @@ services:
 
 volumes:
   postgres_data:
+  dotnet_nuget:
 
 networks:
   app_network:

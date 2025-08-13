@@ -73,3 +73,19 @@ generate_password() {
     LC_CTYPE=C LC_COLLATE=C tr -dc "$password_chars" < /dev/urandom | head -c $length
     echo
 }
+
+# Prompts user for a yes/no response and returns 0 for yes, 1 for no
+prompt_y_n() {
+    local prompt_message="${1:-Continue?}"
+    local response
+
+    while true; do
+        log_output "${prompt_message} [y/n]" "${COLOR_BLUE}"
+        read -r response
+        case "$response" in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) log_output "Please answer yes (y) or no (n)." "${COLOR_RED}";;
+        esac
+    done
+}
