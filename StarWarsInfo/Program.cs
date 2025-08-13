@@ -1,6 +1,8 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using StarWarsInfo.Data;
+using StarWarsInfo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,17 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+// Register HttpClient for SWAPI
+builder.Services.AddHttpClient("swapi", client =>
+{
+    client.BaseAddress = new Uri("https://swapi.info/api/");
+    client.Timeout = TimeSpan.FromSeconds(30);
+    //client.DefaultRequestHeaders.UserAgent.ParseAdd("StarWarsInfo/1.0 (+https://example.com)");
+});
+// Register the import service
+builder.Services.AddScoped<IStarWarsImportService, StarWarsImportService>();
+
+
 
 // Configure Entity Framework Core with PostgreSQL
 // Ensure you have the Npgsql.EntityFrameworkCore.PostgreSQL package installed
@@ -31,38 +44,34 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline to use Controllers.
+app.MapControllers();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "StarWarsInfo API v1");
+        c.RoutePrefix = string.Empty; // makes Swagger UI available at "/"
+    });
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// Map Controller Routes
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapGet("/weatherforecast", () =>
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
+        var forecast = "Hello World!";
         return forecast;
     })
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
