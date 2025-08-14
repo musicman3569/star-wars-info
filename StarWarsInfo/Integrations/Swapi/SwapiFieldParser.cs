@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 
-namespace StarWarsInfo.Helpers;
+namespace StarWarsInfo.Integrations.Swapi;
 
-public static class SwapiInputCleanup
+public static class SwapiFieldParser
 {
     /// <summary>
     /// Checks if the text is null, empty, whitespace, or contains "unknown" or "n/a".
@@ -75,5 +75,48 @@ public static class SwapiInputCleanup
     public static decimal RawTextToDecimal(string rawText)
     {
         return decimal.Parse(RemoveNonNumerics(rawText));
+    }
+    
+    /// <summary>
+    /// Converts a raw text value to an unsigned long integer, returning null if the text is considered null.
+    /// This method is useful for converting SWAPI fields that may contain numeric values
+    /// with extraneous characters or string literals that should be treated as null.
+    /// </summary>
+    /// <param name="rawText">Raw numeric text value that may contain extra characters.</param>
+    /// <returns>Parsed ulong value from the sanitized text or null.</returns>
+    public static ulong? RawTextToUlongNullable(string rawText)
+    {
+        if (TextIsNull(rawText)) {
+            return null;
+        }
+
+        return ulong.Parse(RemoveNonNumerics(rawText));
+    }
+    
+    /// <summary>
+    /// Extracts the numeric identifier from the end of a URL string.
+    /// This method is useful for getting the ID from SWAPI URLs that end with a numeric value.
+    /// </summary>
+    /// <param name="url">URL string that ends with a numeric ID (e.g., "https://swapi.info/api/starships/3").</param>
+    /// <returns>The numeric ID from the end of the URL.</returns>
+    public static int RawUrlToId(string url)
+    {
+        var parts = url.TrimEnd('/').Split('/');
+        return int.Parse(parts[^1]);
+    }
+    
+    /// <summary>
+    /// Converts a raw text value to title case, where the first letter of each word is capitalized.
+    /// This method is useful for formatting text fields from SWAPI that need consistent capitalization.
+    /// </summary>
+    /// <param name="rawText">Raw text value that needs title case formatting.</param>
+    /// <returns>Text with the first letter of each word capitalized.</returns>
+    public static string RawTextToTitleCase(string rawText)
+    {
+        if (TextIsNull(rawText)) {
+            return string.Empty;
+        }
+
+        return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawText);
     }
 }

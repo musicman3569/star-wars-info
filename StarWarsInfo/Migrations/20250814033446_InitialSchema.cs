@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace StarWarsInfo.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,8 +25,7 @@ namespace StarWarsInfo.Migrations
                     Producer = table.Column<string>(type: "text", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false)
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +49,7 @@ namespace StarWarsInfo.Migrations
                     HomeworldId = table.Column<int>(type: "integer", nullable: false),
                     Language = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false)
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,15 +70,13 @@ namespace StarWarsInfo.Migrations
                     MaxAtmospheringSpeed = table.Column<decimal>(type: "numeric", nullable: true),
                     Crew = table.Column<int>(type: "integer", nullable: true),
                     Passengers = table.Column<int>(type: "integer", nullable: true),
-                    CargoCapacity = table.Column<string>(type: "text", nullable: true),
+                    CargoCapacity = table.Column<decimal>(type: "numeric(20,0)", nullable: true),
                     Consumables = table.Column<string>(type: "text", nullable: true),
-                    HyperdriveRating = table.Column<string>(type: "text", nullable: true),
+                    HyperdriveRating = table.Column<decimal>(type: "numeric", nullable: true),
                     Mglt = table.Column<int>(type: "integer", nullable: true),
                     StarshipClass = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false),
-                    Notes = table.Column<string>(type: "text", nullable: false)
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,8 +101,7 @@ namespace StarWarsInfo.Migrations
                     Consumables = table.Column<string>(type: "text", nullable: true),
                     VehicleClass = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false)
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,7 +149,6 @@ namespace StarWarsInfo.Migrations
                     Population = table.Column<long>(type: "bigint", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false),
                     SpeciesId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -255,8 +249,7 @@ namespace StarWarsInfo.Migrations
                     Gender = table.Column<string>(type: "text", nullable: false),
                     HomeworldId = table.Column<int>(type: "integer", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false)
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

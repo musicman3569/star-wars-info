@@ -14,11 +14,10 @@ public class Vehicle
     public string? CargoCapacity { get; set; } // unknown
     public string? Consumables { get; set; } // unknown
     public string VehicleClass { get; set; } = string.Empty; // unknown
-    public ICollection<Person> Pilots { get; set; } = new List<Person>();
-    public ICollection<Film> Films { get; set; } = new List<Film>();
+    public ICollection<Person> Pilots { get; set; } = [];
+    public ICollection<Film> Films { get; set; } = [];
     public DateTime Created { get; set; } = DateTime.Now;
     public DateTime Edited { get; set; } = DateTime.Now;
-    public string Url { get; set; } = string.Empty;
     
     public Vehicle()
     {

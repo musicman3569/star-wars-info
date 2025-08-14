@@ -178,10 +178,6 @@ namespace StarWarsInfo.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("FilmId");
 
                     b.ToTable("Films");
@@ -231,10 +227,6 @@ namespace StarWarsInfo.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SkinColor")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -289,10 +281,6 @@ namespace StarWarsInfo.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Terrain")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -354,10 +342,6 @@ namespace StarWarsInfo.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("SpeciesId");
 
                     b.ToTable("Species");
@@ -371,8 +355,8 @@ namespace StarWarsInfo.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StarshipId"));
 
-                    b.Property<string>("CargoCapacity")
-                        .HasColumnType("text");
+                    b.Property<decimal?>("CargoCapacity")
+                        .HasColumnType("numeric(20,0)");
 
                     b.Property<string>("Consumables")
                         .HasColumnType("text");
@@ -389,8 +373,8 @@ namespace StarWarsInfo.Migrations
                     b.Property<DateTime>("Edited")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("HyperdriveRating")
-                        .HasColumnType("text");
+                    b.Property<decimal?>("HyperdriveRating")
+                        .HasColumnType("numeric");
 
                     b.Property<decimal>("Length")
                         .HasColumnType("numeric");
@@ -403,7 +387,8 @@ namespace StarWarsInfo.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<int?>("Mglt")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasAnnotation("Relational:JsonPropertyName", "MGLT");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -413,18 +398,10 @@ namespace StarWarsInfo.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int?>("Passengers")
                         .HasColumnType("integer");
 
                     b.Property<string>("StarshipClass")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -478,10 +455,6 @@ namespace StarWarsInfo.Migrations
 
                     b.Property<int?>("Passengers")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("VehicleClass")
                         .IsRequired()

@@ -13,13 +13,12 @@ public class Person
     public string Gender { get; set; } = string.Empty; // male, female, n/a
     public int HomeworldId { get; set; } = 0; // foreign key
     public Planet Homeworld { get; set; } = null!;
-    public ICollection<Film> Films { get; set; } = new List<Film>();
-    public ICollection<Species> Species { get; set; } = new List<Species>();
-    public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
-    public ICollection<Starship> Starships { get; set; } = new List<Starship>();
+    public ICollection<Film> Films { get; set; } = [];
+    public ICollection<Species> Species { get; set; } = [];
+    public ICollection<Vehicle> Vehicles { get; set; } = [];
+    public ICollection<Starship> Starships { get; set; } = [];
     public DateTime Created { get; set; } = DateTime.Now;
     public DateTime Edited { get; set; } = DateTime.Now;
-    public string Url { get; set; } = string.Empty;
     
     public Person()
     {
