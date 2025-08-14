@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StarWarsInfo.Data;
-using StarWarsInfo.Services;
+using StarWarsInfo.Integrations.Swapi;
 
 namespace StarWarsInfo.Controllers;
 
@@ -8,13 +8,13 @@ public class ImportController : Controller
 {
     private readonly ILogger<ImportController> _logger;
     private readonly AppDbContext _dbContext;
-    private readonly IStarWarsImportService _importService;
+    private readonly ISwapiClient _swapiClient;
 
-    public ImportController(ILogger<ImportController> logger, AppDbContext dbContext, IStarWarsImportService importService)
+    public ImportController(ILogger<ImportController> logger, AppDbContext dbContext, ISwapiClient swapiClient)
     {
         _logger = logger;
         _dbContext = dbContext;
-        _importService = importService;
+        _swapiClient = swapiClient;
     }
     
     // GET: All
@@ -22,7 +22,7 @@ public class ImportController : Controller
     {
         try
         {
-            await _importService.ImportAllDataAsync(cancellationToken);
+            await _swapiClient.ImportAllDataAsync(cancellationToken);
             return Ok(new
             {
                 status = "import-started"

@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StarWarsInfo.Services;
+namespace StarWarsInfo.Integrations.Swapi;
 
-public interface IStarWarsImportService
+public interface ISwapiClient
 {
     Task ImportAllDataAsync(CancellationToken cancellationToken = default);
 }

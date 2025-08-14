@@ -2,7 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StarWarsInfo.Data;
-using StarWarsInfo.Services;
+using StarWarsInfo.Integrations.Swapi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +32,7 @@ builder.Services.AddHttpClient("swapi", client =>
     //client.DefaultRequestHeaders.UserAgent.ParseAdd("StarWarsInfo/1.0 (+https://example.com)");
 });
 // Register the import service
-builder.Services.AddScoped<IStarWarsImportService, StarWarsImportService>();
+builder.Services.AddScoped<ISwapiClient, SwapiClient>();
 
 
 
