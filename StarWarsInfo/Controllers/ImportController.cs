@@ -22,11 +22,8 @@ public class ImportController : Controller
     {
         try
         {
-            await _swapiClient.ImportAllDataAsync(cancellationToken);
-            return Ok(new
-            {
-                status = "import-started"
-            });
+            var result = await _swapiClient.ImportAllDataAsync(cancellationToken);
+            return result;
         }
         catch (Exception ex)
         {

@@ -1,11 +1,6 @@
-using System;
-using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi.Mappers;
 
@@ -29,23 +24,23 @@ public class SwapiClient : ISwapiClient
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task ImportAllDataAsync(CancellationToken cancellationToken = default)
+    public async Task<OkObjectResult> ImportAllDataAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Starting Star Wars import...");
 
         var client = _httpClientFactory.CreateClient("swapi");
-
         await ImportStarshipsAsync(client, cancellationToken);
-        // Import commonly used resources; extend as needed.
-        // await FetchResourceAsync(client, "people", cancellationToken);
-        // await FetchResourceAsync(client, "planets", cancellationToken);
-        // await FetchResourceAsync(client, "species", cancellationToken);
-        // await FetchResourceAsync(client, "films", cancellationToken);
-        // await FetchResourceAsync(client, "vehicles", cancellationToken);
 
         _logger.LogInformation("Star Wars import finished.");
         _logger.LogInformation("Added {Count} items.", _addedCount);
         _logger.LogInformation("Updated {Count} items.", _updatedCount);
+        
+        return new OkObjectResult(new 
+        {
+            status = "complete",
+            addedCount = _addedCount,
+            updatedCount = _updatedCount
+        });
     }
 
     private async Task<JsonDocument?> FetchResourceAsync(HttpClient client, string resource, CancellationToken ct)
