@@ -28,7 +28,7 @@ public class ImportController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during data import");
-            return StatusCode(500, new { status = "import-failed", message = ex.Message });
+            return StatusCode(500, new { status = "failed", message = ex.Message });
         }
     }
     

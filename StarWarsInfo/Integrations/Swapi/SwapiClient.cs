@@ -1,4 +1,5 @@
 using System.Text.Json;
+using EFCore.BulkExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StarWarsInfo.Data;
@@ -11,8 +12,7 @@ public class SwapiClient : ISwapiClient
     private readonly ILogger<SwapiClient> _logger;
     private readonly AppDbContext _dbContext;
     private readonly IHttpClientFactory _httpClientFactory;
-    private int _addedCount = 0;
-    private int _updatedCount = 0;
+    private const string _logPrefix = "[SwapiClient]";
 
     public SwapiClient(
         ILogger<SwapiClient> logger,
@@ -26,61 +26,45 @@ public class SwapiClient : ISwapiClient
 
     public async Task<OkObjectResult> ImportAllDataAsync(CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Starting Star Wars import...");
+        LogWithPrefix("IMPORT STARTED");
 
         var client = _httpClientFactory.CreateClient("swapi");
-        await ImportStarshipsAsync(client, cancellationToken);
+        var starshipCount = await ImportStarshipsAsync(client, cancellationToken);
 
-        _logger.LogInformation("Star Wars import finished.");
-        _logger.LogInformation("Added {Count} items.", _addedCount);
-        _logger.LogInformation("Updated {Count} items.", _updatedCount);
+        LogWithPrefix("IMPORT COMPLETE");
+        LogWithPrefix("Processed {Count} Starship records.");
         
         return new OkObjectResult(new 
         {
             status = "complete",
-            addedCount = _addedCount,
-            updatedCount = _updatedCount
+            starship_import_count = starshipCount
         });
     }
 
-    private async Task<JsonDocument?> FetchResourceAsync(HttpClient client, string resource, CancellationToken ct)
+    private async Task<JsonDocument> FetchResourceAsync(HttpClient client, string resource, CancellationToken ct)
     {
-        JsonDocument? jsonDocument = null;
-        
-        if (!ct.IsCancellationRequested)
-        {
-            using var response = await client.GetAsync(resource, ct);
-            response.EnsureSuccessStatusCode();
+        using var response = await client.GetAsync(resource, ct);
+        response.EnsureSuccessStatusCode();
 
-            await using var stream = await response.Content.ReadAsStreamAsync(ct);
-            jsonDocument = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
-        }
-
-        return jsonDocument;
+        await using var stream = await response.Content.ReadAsStreamAsync(ct);
+        return await JsonDocument.ParseAsync(stream, cancellationToken: ct);
     }
 
-    private async Task ImportStarshipsAsync(HttpClient client, CancellationToken ct)
+    private async Task<int> ImportStarshipsAsync(HttpClient client, CancellationToken ct)
     {
         var jsonDocument = await FetchResourceAsync(client, "starships", ct);
-        foreach (JsonElement starshipJson in jsonDocument.RootElement.EnumerateArray())
-        {
-            var starship = StarshipMapper.FromJson(starshipJson);
-            var oldStarship = await _dbContext.Starships.FirstOrDefaultAsync(s => s.StarshipId == starship.StarshipId);
-            
-            if (oldStarship == null)
-            {
-                _dbContext.Starships.Add(starship);
-                _addedCount++;
-                _logger.LogInformation("Added {StarshipName} ({StarshipId})", starship.Name, starship.StarshipId);
-            }
-            else
-            {
-                _dbContext.Entry(oldStarship).CurrentValues.SetValues(starship);
-                _updatedCount++;
-                _logger.LogInformation("Updated {StarshipName} ({StarshipId})", starship.Name, starship.StarshipId);
-            }
-            
-            await _dbContext.SaveChangesAsync(ct);
-        }
+        var starships = jsonDocument?
+            .RootElement
+            .EnumerateArray()
+            .Select(StarshipMapper.FromJson)
+            .ToList() ?? [];
+        
+        await _dbContext.BulkInsertOrUpdateAsync(starships, cancellationToken:ct);
+        return starships.Count;
+    }
+    
+    private void LogWithPrefix(string message)
+    {
+        _logger.LogInformation("{LogPrefix} {Message}", _logPrefix, message);
     }
 }

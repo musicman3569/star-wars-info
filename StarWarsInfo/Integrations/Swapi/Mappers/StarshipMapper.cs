@@ -5,25 +5,25 @@ using System.Text.Json.Serialization;
 namespace StarWarsInfo.Integrations.Swapi.Mappers;
 
 public class StarshipMapper {
-    public string Name { get; set; }
-    public string Model { get; set; }
-    public string Manufacturer { get; set; }
-    public string CostInCredits { get; set; }
-    public string Length { get; set; }
-    public string MaxAtmospheringSpeed { get; set; }
-    public string Crew { get; set; }
-    public string Passengers { get; set; }
-    public string CargoCapacity { get; set; }
-    public string Consumables { get; set; }
-    public string HyperdriveRating { get; set; }
+    public string Name { get; set; } = String.Empty;
+    public string Model { get; set; } = String.Empty;
+    public string Manufacturer { get; set; } = String.Empty;
+    public string CostInCredits { get; set; } = String.Empty;
+    public string Length { get; set; } = String.Empty;
+    public string MaxAtmospheringSpeed { get; set; } = String.Empty;
+    public string Crew { get; set; } = String.Empty;
+    public string Passengers { get; set; } = String.Empty;
+    public string CargoCapacity { get; set; } = String.Empty;
+    public string Consumables { get; set; } = String.Empty;
+    public string HyperdriveRating { get; set; } = String.Empty;
     [JsonPropertyName("MGLT")]
-    public string Mglt { get; set; }
-    public string StarshipClass { get; set; }
-    public ICollection<string> Pilots { get; set; }
-    public ICollection<string> Films { get; set; }
+    public string Mglt { get; set; } = String.Empty;
+    public string StarshipClass { get; set; } = String.Empty;
+    public ICollection<string> Pilots { get; set; } = [];
+    public ICollection<string> Films { get; set; } = [];
     public DateTime Created { get; set; }
     public DateTime Edited { get; set; }
-    public string Url { get; set; }
+    public string Url { get; set; } = String.Empty;
     
     public Starship ToStarship()
     {
