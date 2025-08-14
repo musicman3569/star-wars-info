@@ -12,11 +12,10 @@ public class Planet
     public string Terrain { get; set; } = string.Empty;
     public int? SurfaceWater { get; set; } // unknown
     public long? Population { get; set; } // unknown
-    public ICollection<Person> Residents { get; set; } = new List<Person>();
-    public ICollection<Film> Films { get; set; } = new List<Film>();
+    public ICollection<Person> Residents { get; set; } = [];
+    public ICollection<Film> Films { get; set; } = [];
     public DateTime Created { get; set; } = DateTime.Now;
     public DateTime Edited { get; set; } = DateTime.Now;
-    public string Url { get; set; } = string.Empty;
     
     public Planet()
     {

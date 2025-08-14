@@ -105,6 +105,18 @@ public static class SwapiFieldParser
         return int.Parse(parts[^1]);
     }
     
-    
+    /// <summary>
+    /// Converts a raw text value to title case, where the first letter of each word is capitalized.
+    /// This method is useful for formatting text fields from SWAPI that need consistent capitalization.
+    /// </summary>
+    /// <param name="rawText">Raw text value that needs title case formatting.</param>
+    /// <returns>Text with the first letter of each word capitalized.</returns>
+    public static string RawTextToTitleCase(string rawText)
+    {
+        if (TextIsNull(rawText)) {
+            return string.Empty;
+        }
 
+        return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawText);
+    }
 }
