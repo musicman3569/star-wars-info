@@ -12,6 +12,8 @@ services:
       ASPNETCORE_Kestrel__Certificates__Default__KeyPath: "/SSL/${HOSTNAME_API}.key"
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=${LOCALDEV__POSTGRES_PORT:-5432};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Search Path=starwarsinfo"
       VSTEST_HOST_DEBUG: 1
+      CLIENT_APP_URL_NO_PORT: "https://${HOSTNAME_CLIENT}"
+      CLIENT_APP_URL: "https://${HOSTNAME_CLIENT}:${CLIENT_HTTPS_PORT}"
     volumes:
       - ./SSL:/SSL
       - dotnet_nuget:/root/.nuget/packages

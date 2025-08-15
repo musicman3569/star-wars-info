@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
 
@@ -19,7 +18,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClientApp", policy =>
     {
-        policy.WithOrigins(Environment.GetEnvironmentVariable("HOSTNAME_CLIENT") ?? "*")
+        policy
+            .WithOrigins(
+                Environment.GetEnvironmentVariable("CLIENT_APP_URL") ?? "",
+                Environment.GetEnvironmentVariable("CLIENT_APP_URL_NO_PORT") ?? ""
+            )
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
@@ -59,6 +62,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCors("AllowClientApp");
 app.UseRouting();
 
 // Map Controller Routes
