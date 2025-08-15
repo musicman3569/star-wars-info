@@ -1,70 +1,61 @@
 using System.Text.Json;
-using EFCore.BulkExtensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi.Mappers;
+using StarWarsInfo.Models;
 
 namespace StarWarsInfo.Integrations.Swapi;
 
+/// <summary>
+/// Provides methods for interacting with the Star Wars API (SWAPI) to fetch information
+/// related to various Star Wars entities, such as starships.
+/// </summary>
 public class SwapiClient : ISwapiClient
 {
     private readonly ILogger<SwapiClient> _logger;
-    private readonly AppDbContext _dbContext;
-    private readonly IHttpClientFactory _httpClientFactory;
-    private const string _logPrefix = "[SwapiClient]";
+    private readonly HttpClient _httpClient;
 
+    /// <summary>
+    /// Initialize an instance of the Star Wars API HTTP client.
+    /// </summary>
+    /// <param name="logger"></param> Logging interface to use.
+    /// <param name="httpClientFactory"></param> Factory for creating the HTTP client to be used for the REST API calls.
     public SwapiClient(
         ILogger<SwapiClient> logger,
         AppDbContext dbContext,
         IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
-        _dbContext = dbContext;
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClientFactory.CreateClient("swapi");
     }
 
-    public async Task<OkObjectResult> ImportAllDataAsync(CancellationToken cancellationToken = default)
+    /// <summary>
+    /// Fetches a specified resource from the Star Wars API (SWAPI) as a JSON document asynchronously.
+    /// </summary>
+    /// <param name="resource">The URI of the resource to fetch from the SWAPI.</param>
+    /// <param name="ct">A cancellation token to monitor for cancellation requests.</param>
+    /// <returns>A task whose value contains a <see cref="JsonDocument"/> representing the fetched resource.</returns>
+    private async Task<JsonDocument> FetchResourceAsync(string resource, CancellationToken ct)
     {
-        LogWithPrefix("IMPORT STARTED");
-
-        var client = _httpClientFactory.CreateClient("swapi");
-        var starshipCount = await ImportStarshipsAsync(client, cancellationToken);
-
-        LogWithPrefix("IMPORT COMPLETE");
-        LogWithPrefix("Processed {Count} Starship records.");
-        
-        return new OkObjectResult(new 
-        {
-            status = "complete",
-            starship_import_count = starshipCount
-        });
-    }
-
-    private async Task<JsonDocument> FetchResourceAsync(HttpClient client, string resource, CancellationToken ct)
-    {
-        using var response = await client.GetAsync(resource, ct);
+        using var response = await _httpClient.GetAsync(resource, ct);
         response.EnsureSuccessStatusCode();
 
         await using var stream = await response.Content.ReadAsStreamAsync(ct);
         return await JsonDocument.ParseAsync(stream, cancellationToken: ct);
     }
 
-    private async Task<int> ImportStarshipsAsync(HttpClient client, CancellationToken ct)
+    /// <summary>
+    /// Fetches a list of Starship objects by retrieving the corresponding data
+    /// from the Star Wars API (SWAPI) and mapping/cleaning the raw values to a Starship model.
+    /// </summary>
+    /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A list of Starships retrieved from the API, or an empty list if no data is available.</returns>
+    public async Task<List<Starship>> FetchStarshipsAsync(CancellationToken ct)
     {
-        var jsonDocument = await FetchResourceAsync(client, "starships", ct);
-        var starships = jsonDocument?
+        var jsonDocument = await FetchResourceAsync("starships", ct);
+        return jsonDocument?
             .RootElement
             .EnumerateArray()
             .Select(StarshipMapper.FromJson)
             .ToList() ?? [];
-        
-        await _dbContext.BulkInsertOrUpdateAsync(starships, cancellationToken:ct);
-        return starships.Count;
-    }
-    
-    private void LogWithPrefix(string message)
-    {
-        _logger.LogInformation("{LogPrefix} {Message}", _logPrefix, message);
     }
 }

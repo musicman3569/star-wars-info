@@ -4,7 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace StarWarsInfo.Integrations.Swapi.Mappers;
 
-public class StarshipMapper {
+/// <summary>
+/// The StarshipMapper class is responsible for mapping starship-related data
+/// from external sources, particularly the Star Wars API (SWAPI), into the
+/// internal Starship model used within the system.
+/// </summary>
+public class StarshipMapper
+{
     public string Name { get; set; } = String.Empty;
     public string Model { get; set; } = String.Empty;
     public string Manufacturer { get; set; } = String.Empty;
@@ -24,7 +30,11 @@ public class StarshipMapper {
     public DateTime Created { get; set; }
     public DateTime Edited { get; set; }
     public string Url { get; set; } = String.Empty;
-    
+
+    /// <summary>
+    /// Converts the current instance of <see cref="StarshipMapper"/> into an instance of <see cref="Starship"/>.
+    /// </summary>
+    /// <returns>A <see cref="Starship"/> object populated from the current <see cref="StarshipMapper"/> instance.</returns>
     public Starship ToStarship()
     {
         return new Starship
@@ -49,7 +59,13 @@ public class StarshipMapper {
             Edited = Edited
         };
     }
-    
+
+    /// <summary>
+    /// Creates an instance of <see cref="Starship"/> by deserializing the provided <see cref="JsonElement"/>
+    /// using the mapping rules defined in <see cref="StarshipMapper"/>.
+    /// </summary>
+    /// <param name="jsonElement">The JSON representation of a starship object as a <see cref="JsonElement"/>.</param>
+    /// <returns>A <see cref="Starship"/> object created from the provided JSON data.</returns>
     public static Starship FromJson(JsonElement jsonElement)
     {
         var options = new JsonSerializerOptions

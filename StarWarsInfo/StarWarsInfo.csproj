@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,7 +28,6 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>
