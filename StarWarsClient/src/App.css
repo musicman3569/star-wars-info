@@ -15,6 +15,13 @@ h1 {
     font-weight: bolder ;
 }
 
+/* 
+Theme Colors:
+Bright purple: #aa82ff
+Bright orange: #ffc000 
+*/
+
+
 :root {
     --kendo-font-family: "Oxanium", sans-serif;
 }

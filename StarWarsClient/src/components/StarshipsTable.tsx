@@ -27,6 +27,8 @@ function StarshipsTable() {
           filterable={true}
           pageable={true}
           editable={{ mode: 'incell' }}
+          fixedScroll={true}
+          showLoader={starships.length === 0}
         >
             <Column field="name" title="Name" editor="text" width={defaultWidth}/>
             <Column field="model" title="Model" editor="text" width={defaultWidth}/>
