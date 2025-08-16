@@ -10,9 +10,12 @@ html {
     padding: 0;
 }
 
+body {
+    background-image: none;
+}
+
 h1 {
     color: #aa82ff;
-    font-weight: bolder ;
 }
 
 /* 
@@ -20,3 +23,8 @@ Theme Colors:
 Bright purple: #aa82ff
 Bright orange: #ffc000 
 */
+
+:root {
+    font-family: "Oxanium", sans-serif;
+    --font-family: "Oxanium", sans-serif;
+}
