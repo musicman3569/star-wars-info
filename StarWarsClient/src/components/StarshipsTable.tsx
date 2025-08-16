@@ -4,6 +4,7 @@ import {
     Grid, 
     GridColumn as Column
 } from '@progress/kendo-react-grid';
+import starshipsIcon from '../assets/icon_starships.svg';
 
 function StarshipsTable() {
     const defaultWidth = "200px";
@@ -14,7 +15,10 @@ function StarshipsTable() {
     }, [])
     
     return <>
-        <h1>Starships</h1>
+        <div style={{display: 'flex', alignItems: 'center', gap: '10px', color: '#aa82ff'}}>
+            <img src={starshipsIcon} alt="Starships icon" style={{width: '32px', height: '32px'}}/>
+            <h1>Starships</h1>
+        </div>
         <Grid
           data={starships}
           dataItemKey="starship_id"

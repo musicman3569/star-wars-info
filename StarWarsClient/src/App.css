@@ -1,24 +1,18 @@
 html {
-    font-family: "Oxanium", sans-serif;
-}
-
-body {
-    margin: 1em;
     background-color: #1e1e23;
     color: #ffffff;
+    font-family: "Oxanium", sans-serif;
+    background-image: url("./assets/imperial_ships.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
-    color: mediumpurple;
-}
-
-.electrolize-regular {
-    font-weight: 400;
-    font-style: normal;
-}
-
-.electrolize-bold {
-    font-weight: 700;
+    color: #aa82ff;
+    font-weight: bolder ;
 }
 
 :root {
