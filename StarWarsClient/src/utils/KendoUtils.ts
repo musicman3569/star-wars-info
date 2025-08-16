@@ -8,11 +8,11 @@ import {convertStringDates} from "./DateUtils.ts";
  * @param useStateCallback - React setState callback function to update the component's state with the fetched data
  *
  * @example
- * // Fetch starships data and convert 'created' and 'edited' fields to Date objects
+ * // Fetch "starships" data and convert 'created' and 'edited' fields to Date objects
  * const [starships, setStarships] = useState<any[]>([]);
  * FetchData('starships', ['created', 'edited'], setStarships);
  *
- * @throws {Error} Logs error message to console if the fetch operation fails
+ * @throws {Error} Logs an error message to console if the fetch operation fails
  */
 export function FetchData(
   swapiModel: 'characters' | 'films' | 'planets' | 'species' | 'starships' | 'vehicles',
