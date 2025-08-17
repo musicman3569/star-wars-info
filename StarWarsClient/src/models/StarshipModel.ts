@@ -2,25 +2,6 @@ import {
     type FilterSpec
 } from '../utils/DataTableFilters.tsx';
 
-export interface StarshipModel {
-    starship_id: number;
-    name: string;
-    model: string;
-    manufacturer: string;
-    cost_in_credits: number;
-    length: number;
-    max_atmosphering_speed: number;
-    crew: number;
-    passengers: number;
-    cargo_capacity: number;
-    consumables: string;
-    hyperdrive_rating: number;
-    MGLT: number;
-    starship_class: string;
-    created: Date;
-    edited: Date;
-}
-
 export const StarshipModelFilterSpec: FilterSpec = {
     starship_id: {kind: 'id'},
     name: {kind: 'text', frozen: true},
