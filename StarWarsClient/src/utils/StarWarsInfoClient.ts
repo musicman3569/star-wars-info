@@ -15,17 +15,19 @@ import {convertStringDates} from "./DateUtils.ts";
  * @throws {Error} Logs an error message to console if the fetch operation fails
  */
 export function FetchData(
-  swapiModel: 'characters' | 'films' | 'planets' | 'species' | 'starships' | 'vehicles',
-  dateFields: string[],
-  useStateCallback: (data: any[]) => void
+    swapiModel: 'characters' | 'films' | 'planets' | 'species' | 'starships' | 'vehicles',
+    dateFields: string[],
+    useStateCallback: (data: any[]) => void
 ) {
-  fetch('https://api.starwarsinfo.test:8080/' + swapiModel + '/getall')
-    .then(response => response.json())
-    .then(data => {
-      useStateCallback(
-        convertStringDates(data, dateFields)
-      );
-    })
-    .catch(error => console.log('Error fetching '+ swapiModel +' data: ', error));
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    fetch(apiUrl + '/' + swapiModel + '/getall')
+        .then(response => response.json())
+        .then(data => {
+            useStateCallback(
+                convertStringDates(data, dateFields)
+            );
+        })
+        .catch(error => console.log('Error fetching '+ swapiModel +' data: ', error));
 }
 
