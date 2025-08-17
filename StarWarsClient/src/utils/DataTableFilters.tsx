@@ -15,12 +15,10 @@ import { InputNumber, type InputNumberChangeEvent } from 'primereact/inputnumber
  * Each type corresponds to a specific filtering behavior and UI component.
  */
 export type ColumnFilterKind =
+    | 'id'
     | 'text'
-    | 'startsWith'
     | 'number'
-    | 'between'
     | 'date'
-    | 'dateIs'
     | 'dropdown'
     | 'multiselect'
     | 'boolean';
@@ -28,6 +26,9 @@ export type ColumnFilterKind =
 export interface FilterFieldSpec {
     /** One of the preset kinds above. */
     kind: ColumnFilterKind;
+    width?: string; // TODO: handle default width
+    frozen?: boolean; // TODO: handle column freezing, and set background to #363749ff
+    decimalPlaces?: number; // TODO: add decimal place handling
     /** Override operator if needed (defaults chosen per kind). */
     operator?: FilterOperator;
     /** For simple kinds use a single matchMode override (optional). */
@@ -59,24 +60,20 @@ export interface UseTableFiltersOptions {
  *
  * Filter kinds and their corresponding match modes:
  * - text: Uses CONTAINS match mode for substring matching
- * - startsWith: Uses STARTS_WITH match mode for prefix matching
- * - number: Uses EQUALS match mode for exact number matching
- * - between: Uses BETWEEN match mode for range comparisons
- * - date: Uses DATE_AFTER match mode for date filtering
- * - dateIs: Uses DATE_IS match mode for exact date matching
+ * - id: Uses EQUALS match mode for exact number matching
+ * - number: Uses BETWEEN match mode for exact number matching
+ * - date: Uses DATE_AFTER/DATE_BEFORE match mode for date filtering
  * - dropdown: Uses EQUALS match mode for single selection
  * - multiselect: Uses IN match mode for multiple selection
  * - boolean: Uses EQUALS match mode for true/false comparison
  */
 function defaultConstraint(kind: ColumnFilterKind) {
     switch (kind) {
+        case 'id':
+            return { value: null, matchMode: FilterMatchMode.EQUALS };
         case 'text':
             return { value: null, matchMode: FilterMatchMode.CONTAINS };
-        case 'startsWith':
-            return { value: null, matchMode: FilterMatchMode.STARTS_WITH };
         case 'number':
-            return { value: null, matchMode: FilterMatchMode.EQUALS };
-        case 'between':
             // DataTable uses a single value for BETWEEN with array [min, max] or a small object – we’ll keep null start
             return { value: null, matchMode: FilterMatchMode.BETWEEN };
         case 'date':
@@ -84,8 +81,6 @@ function defaultConstraint(kind: ColumnFilterKind) {
                 { value: null, matchMode: FilterMatchMode.DATE_AFTER },  // start
                 { value: null, matchMode: FilterMatchMode.DATE_BEFORE }  // end
             ];
-        case 'dateIs':
-            return { value: null, matchMode: FilterMatchMode.DATE_IS };
         case 'dropdown':
             return { value: null, matchMode: FilterMatchMode.EQUALS };
         case 'multiselect':
@@ -110,21 +105,14 @@ function defaultConstraint(kind: ColumnFilterKind) {
  *   is sufficient (typically better UX for single-choice selections)
  */
 function defaultOperator(kind: ColumnFilterKind): FilterOperator {
+    // UX-wise this often feels better for single-choice
     switch (kind) {
-        case 'text':
-        case 'startsWith':
-        case 'date':
-        case 'dateIs':
-        case 'number':
-            return FilterOperator.AND;
-        case 'between':
-            return FilterOperator.AND;
         case 'dropdown':
         case 'boolean':
-            return FilterOperator.OR; // UX-wise this often feels better for single-choice
-        case 'multiselect':
-            return FilterOperator.AND;
+            return FilterOperator.OR; 
     }
+
+    return FilterOperator.AND;
 }
 
 
@@ -162,14 +150,12 @@ function buildDefaultFilters(spec: FilterSpec): DataTableFilterMeta {
 
         // kinds using constraint array vs simple value:
         if (
+            def.kind === 'id' ||
             def.kind === 'text' ||
-            def.kind === 'startsWith' ||
-            def.kind === 'date' ||
-            def.kind === 'dateIs' ||
-            def.kind === 'number'
+            def.kind === 'date'
         ) {
             meta[field] = {operator, constraints: constraint};
-        } else if (def.kind === 'between') {
+        } else if (def.kind === 'number') {
             meta[field] = { value: null, matchMode: FilterMatchMode.BETWEEN };
         } else if (def.kind === 'dropdown' || def.kind === 'multiselect' || def.kind === 'boolean') {
             meta[field] = constraint[0];
@@ -301,7 +287,7 @@ export function textFilterTemplate(options: any) {
  * @param options - Filter options object containing current value and callback
  * @returns InputNumber component configured for filtering
  */
-export function numberFilterTemplate(options: any) {
+export function idFilterTemplate(options: any) {
     return (
         <InputNumber
             value={options.value ?? null}
@@ -352,29 +338,6 @@ export function dateBetweenFilterTemplate(options: any) {
         />
     );
 }
-
-/**
- * Creates a date picker filter template for PrimeReact DataTable columns.
- *
- * @param options - Filter options object containing current value and callback
- * @returns Calendar component configured for date filtering
- */
-export function dateFilterTemplate(options: any) {
-    return (
-        <Calendar
-            value={options.value ?? null}
-            onChange={(e) => options.filterCallback(e.value)}
-            dateFormat="mm/dd/yy"
-            placeholder="mm/dd/yyyy"
-            mask="99/99/9999"
-            showIcon
-            className="p-column-filter"
-        />
-    );
-}
-
-
-
 
 /**
  * Creates a dropdown filter template for PrimeReact DataTable columns.
