@@ -39,7 +39,7 @@ function StarshipsTable() {
             globalFilterFields={globalFilterFields}
             removableSort
         >
-            <Column field="name" header="Name" style={{minWidth: defaultWidth}} frozen sortable filter filterElement={textFilterTemplate} />
+            <Column field="name" header="Name" style={{minWidth: defaultWidth, background: "#363749ff"}} frozen sortable filter filterElement={textFilterTemplate} />
             <Column field="model" header="Model" style={{minWidth: defaultWidth}} sortable filter filterElement={textFilterTemplate}/>
             <Column field="manufacturer" header="Manufacturer" style={{minWidth: defaultWidth}} sortable filter filterElement={textFilterTemplate}/>
             <Column field="cost_in_credits" header="Cost In Credits" style={{minWidth: defaultWidth}} sortable filter filterElement={numberBetweenFilterTemplate} showFilterMatchModes={false}/>
