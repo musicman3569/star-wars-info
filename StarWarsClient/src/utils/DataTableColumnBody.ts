@@ -10,12 +10,15 @@ export interface RowData {
  * Formats a numeric value from the row data with specified number of decimal places.
  * @param rowData - The data object containing the value to format
  * @param propertyName - The property name to access the value in the row data
- * @param decimals - Number of decimal places to show (default: 2)
+ * @param decimals - Maximum number of decimal places to show (default: 0)
  * @returns Formatted number string with specified decimals, or empty string if value is not a number
  */
-export const formatNumberWithDecimals = (rowData: RowData, propertyName: string, decimals: number = 2): string => {
+export const formatNumber = (rowData: RowData, propertyName: string, decimals: number = 0): string => {
     const value = rowData[propertyName];
-    return typeof value === 'number' ? value.toFixed(decimals) : '';
+    return typeof value === 'number' ? value.toLocaleString('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: decimals
+    }) : '';
 };
 
 /**
