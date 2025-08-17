@@ -2,6 +2,7 @@ html {
     background-color: #1e1e23;
     color: #ffffff;
     font-family: "Oxanium", sans-serif;
+    font-size: 13px;
     background-image: url("./assets/imperial_ships.jpg");
     background-size: cover;
     background-position: center;
@@ -27,4 +28,9 @@ Bright orange: #ffc000
 :root {
     font-family: "Oxanium", sans-serif;
     --font-family: "Oxanium", sans-serif;
+}
+
+/* Example overriding the default for all DataTables (use with caution) */
+.p-datatable .p-datatable-tbody > tr:hover {
+    background-color: #54447b;
 }
