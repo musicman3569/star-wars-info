@@ -30,7 +30,14 @@ Bright orange: #ffc000
     --font-family: "Oxanium", sans-serif;
 }
 
-/* Example overriding the default for all DataTables (use with caution) */
+/* Set PrimeReact table background to prevent background image
+showing through the currently highlighted row instead of the color */
 .p-datatable .p-datatable-tbody > tr:hover {
     background-color: #54447b;
+}
+
+/* Fix PrimeReact issue with highlighted frozen column being transparent
+and showing other column headers through it when horizontally scrolling */
+.p-datatable .p-sortable-column.p-highlight {
+    background: #3e3b55;
 }
