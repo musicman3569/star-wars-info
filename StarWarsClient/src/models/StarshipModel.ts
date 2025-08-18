@@ -3,13 +3,13 @@ import {
 } from '../utils/DataTableFilters.tsx';
 
 export const StarshipModelFilterSpec: FilterSpec = {
-    starship_id: {kind: 'id'},
+    starship_id: {kind: 'id', frozen: true, width: '10rem'},
     name: {kind: 'text', frozen: true},
     model: {kind: 'text'},
     manufacturer: {kind: 'text'},
     cost_in_credits: {kind: 'number'},
     length: {kind: 'number', decimalPlaces: 2},
-    max_atmosphering_speed: {kind: 'number'},
+    max_atmosphering_speed: {kind: 'number', width: '18rem'},
     crew: {kind: 'number'},
     passengers: {kind: 'number'},
     cargo_capacity: {kind: 'number'},
