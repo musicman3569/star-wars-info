@@ -10,8 +10,8 @@ import {
 } from "primereact/column";
 import type {CSSProperties} from "react";
 import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody.ts";
-import {TextFilter} from "./FilterElement/TextFilter";
-import {IdFilter} from "./FilterElement/IdFilter";
+import {FilterText} from "./FilterElement/FilterText";
+import {FilterId} from "./FilterElement/FilterId";
 import {FilterNumber} from "./FilterElement/FilterNumber";
 import {FilterDate} from "./FilterElement/FilterDate";
 import type {FilterCallback} from "../utils/DataTableFilterState.ts";
@@ -52,7 +52,7 @@ function SwapiColumn({
         switch (spec.kind) {
             case 'id':
                 return (opts: ColumnFilterElementTemplateOptions) =>
-                    <IdFilter field={field} options={opts} filterCallbacks={filterCallbacks}/>;
+                    <FilterId field={field} options={opts} filterCallbacks={filterCallbacks}/>;
             case 'number':
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     <FilterNumber field={field} options={opts} filterCallbacks={filterCallbacks}/>;
@@ -69,7 +69,7 @@ function SwapiColumn({
                     multiselectFilterTemplate(opts, spec.selectItems ?? []);
             default:
                 return (opts: ColumnFilterElementTemplateOptions) =>
-                    <TextFilter field={field} options={opts} filterCallbacks={filterCallbacks}/>;
+                    <FilterText field={field} options={opts} filterCallbacks={filterCallbacks}/>;
         }
     };
 

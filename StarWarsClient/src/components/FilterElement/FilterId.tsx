@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { InputText } from "primereact/inputtext";
+import { InputNumber } from "primereact/inputnumber";
 import type {FilterCallback} from "../../utils/DataTableFilterState";
 import type {ColumnFilterElementTemplateOptions} from "primereact/column";
+import type {InputNumberChangeEvent} from "primereact/inputnumber";
 
-export function TextFilter({ 
-    field,
-    options,
-    filterCallbacks
+export function FilterId({
+   field,
+   options,
+   filterCallbacks
 }:{
     field: string;
     options: ColumnFilterElementTemplateOptions;
@@ -14,19 +15,18 @@ export function TextFilter({
 }) {
     // Maintain the filter's state internally to avoid bug with
     // default behavior refreshing table after each character
-    const [draft, setDraft] = useState<string>(options.value ?? "");
+    const [draft, setDraft] = useState<number | null>(options.value ?? null);
 
     // if the table filter value changes externally, sync the editor
-    useEffect(() => setDraft(options.value ?? ""), [options.value]);
+    useEffect(() => setDraft(options.value), [options.value]);
 
     return (
-        <InputText
+        <InputNumber
             value={draft}
-            onChange={(e) => { 
-                setDraft(e.target.value);
-                filterCallbacks.setCallback(field, e.target.value, options); 
+            onChange={(e: InputNumberChangeEvent) => {
+                setDraft(e.value);
+                filterCallbacks.setCallback(field, e.value, options);
             }}
-            placeholder="Type to filter…"
             className="p-column-filter"
         />
     );
