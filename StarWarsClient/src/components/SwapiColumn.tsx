@@ -1,13 +1,7 @@
-import {
-    type FilterFieldSpec,
-    multiselectFilterTemplate,
-} from '../utils/DataTableFilters.tsx';
-
-import {
-    Column,
-    type ColumnFilterElementTemplateOptions
-} from "primereact/column";
-import type {CSSProperties} from "react";
+import { Column, type ColumnFilterElementTemplateOptions } from "primereact/column";
+import { type FilterFieldSpec } from '../utils/DataTableFilters.tsx';
+import { type FilterCallback } from "../utils/DataTableFilterState.ts";
+import { type CSSProperties } from "react";
 import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody.ts";
 import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
@@ -15,7 +9,7 @@ import {FilterNumber} from "./FilterElement/FilterNumber";
 import {FilterDate} from "./FilterElement/FilterDate";
 import {FilterDropdown} from "./FilterElement/FilterDropdown";
 import {FilterBoolean} from "./FilterElement/FilterBoolean";
-import type {FilterCallback} from "../utils/DataTableFilterState.ts";
+import {FilterMultiselect} from "./FilterElement/FilterMultiselect"
 
 const defaultWidth = '14rem';
 const frozenBackgroundColor = '#363749ff';
@@ -70,7 +64,9 @@ function SwapiColumn({
                         items={spec.selectItems ?? []}/>;
             case 'multiselect':
                 return (opts: ColumnFilterElementTemplateOptions) =>
-                    multiselectFilterTemplate(opts, spec.selectItems ?? []);
+                    <FilterMultiselect
+                        field={field} options={opts} filterCallbacks={filterCallbacks}
+                        items={spec.selectItems ?? []}/>;
             default:
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     <FilterText field={field} options={opts} filterCallbacks={filterCallbacks}/>;

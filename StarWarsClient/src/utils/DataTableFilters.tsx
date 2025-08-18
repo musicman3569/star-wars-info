@@ -1,13 +1,11 @@
-import React, {type ReactNode, useMemo, useState} from 'react';
+import React, { useMemo, useState} from 'react';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { type DataTableFilterMeta } from 'primereact/datatable';
 import { Button } from 'primereact/button';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
-import { MultiSelect, type MultiSelectChangeEvent } from 'primereact/multiselect';
 import type { SelectItem } from "primereact/selectitem";
-import type { ColumnFilterElementTemplateOptions } from "primereact/column";
 
 /**
  * Defines the available filter types for DataTable columns.
@@ -228,39 +226,4 @@ export function useTableFilters(
         clearFilters,
         onGlobalFilterChange,
     };
-}
-
-/**
- * Creates a MultiSelect filter template for PrimeReact DataTable columns.
- * Allows selecting multiple values from a predefined list of options.
- *
- * @template T - Type of the option items, must include an optional label and required value property
- * @param {ColumnFilterElementTemplateOptions} options - Filter options object from PrimeReact containing the current value and filter callback
- * @param {SelectItem[]} items - Array of selectable options to display in the dropdown
- * @param {string} [placeholder='Select...'] - Placeholder text to show when no value is selected
- * @returns {JSX.Element} A MultiSelect component configured for filtering
- *
- * @example
- * const options = [
- *   { label: 'Option 1', value: 1 },
- *   { label: 'Option 2', value: 2 }
- * ];
- * <Column filterElement={(opts) => multiselectFilterTemplate(opts, options)} />
- */
-export function multiselectFilterTemplate(
-    options: ColumnFilterElementTemplateOptions,
-    items: SelectItem[],
-    placeholder: string = 'Select...'
-): ReactNode {
-    return (
-        <MultiSelect
-            value={options.value ?? []}
-            options={items}
-            onChange={(e: MultiSelectChangeEvent) => options.filterCallback(e.value)}
-            placeholder={placeholder}
-            className="p-column-filter"
-            display="chip"
-            showClear
-        />
-    );
 }

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import type {FilterCallback} from "../../utils/DataTableFilterState";
 import type {ColumnFilterElementTemplateOptions} from "primereact/column";
-import {Dropdown, type DropdownChangeEvent} from "primereact/dropdown";
 import type {SelectItem} from "primereact/selectitem";
+import {MultiSelect, type MultiSelectChangeEvent} from "primereact/multiselect";
 
-export function FilterDropdown({
+export function FilterMultiselect({
     field,
     options,
     filterCallbacks,
     placeholder = 'Select...',
-    items
+    items,
 }:{
     field: string;
     options: ColumnFilterElementTemplateOptions;
@@ -25,15 +25,16 @@ export function FilterDropdown({
     useEffect(() => setDraft(options.value ?? null), [options.value]);
 
     return (
-        <Dropdown
+        <MultiSelect
             value={draft}
             options={items}
-            onChange={(e: DropdownChangeEvent) => {
+            onChange={(e: MultiSelectChangeEvent) => {
                 setDraft(e.value);
                 filterCallbacks.setCallback(field, e.value, options);
             }}
             placeholder={placeholder}
             className="p-column-filter"
+            display="chip"
             showClear
         />
     );
