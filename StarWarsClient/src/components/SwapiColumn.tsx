@@ -88,9 +88,16 @@ function SwapiColumn({
                 return (rowData: RowData) => rowData[field] ?? '';
         }
     }
+    
+    const getDataType = () => {
+        if (spec.dataType) return spec.dataType;
+        if (spec.kind === 'number' || spec.kind === 'id') return 'numeric';
+        return spec.kind;
+    }
 
     return <Column
         field={field}
+        dataType={getDataType()}
         header={formatHeaderText(field)}
         style={style}
         frozen={spec.frozen}

@@ -28,6 +28,7 @@ export function FilterDate({
             }}
             placeholder={options.index === 0 ? 'Start date' : 'End date'}
             mask="9999-99-99 99:99"
+            dateFormat="yy-mm-dd"
             showIcon
             showTime
             hourFormat="24"

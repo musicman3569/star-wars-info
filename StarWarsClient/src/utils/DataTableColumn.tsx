@@ -23,6 +23,7 @@ export type ColumnFilterKind =
 export interface ColumnSpec {
     /** One of the preset kinds above. */
     kind: ColumnFilterKind;
+    dataType?: 'text' | 'numeric' | 'date' | string | undefined;
     width?: string; // TODO: handle default width
     frozen?: boolean; // TODO: handle column freezing, and set background to #363749ff
     decimalPlaces?: number; // TODO: add decimal place handling
@@ -129,7 +130,7 @@ function buildDefaultFilters(spec: ModelSpec): DataTableFilterMeta {
             def.kind === 'text' ||
             def.kind === 'date'
         ) {
-            meta[field] = {operator, constraints: constraint};
+            meta[field] = {operator: operator, constraints: constraint};
         } else if (def.kind === 'number') {
             meta[field] = { value: null, matchMode: FilterMatchMode.BETWEEN };
         } else if (def.kind === 'dropdown' || def.kind === 'multiselect' || def.kind === 'boolean') {
