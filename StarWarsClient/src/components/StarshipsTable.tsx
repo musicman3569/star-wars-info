@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { StarshipModelFilterSpec } from '../models/StarshipModel';
+import ModelStarship from '../models/ModelStarship';
 import { FetchData } from '../utils/StarWarsInfoClient';
 import { DataTable, type DataTableFilterMeta } from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
-import { useTableFilters } from '../utils/DataTableFilters.tsx';
-import {useFilterCallbacks} from "../utils/DataTableFilterState.ts";
+import { useTableFilters } from '../utils/DataTableColumn';
+import {useCachedFilterCallbacks} from "../utils/DataTableFilterState";
 
 function StarshipsTable() {
     const [starships, setStarships] = useState<any[]>([]);
     const cssHeightToPageBottom = "calc(100vh - 100px)";
-    const filterCallbacks = useFilterCallbacks();
+    const filterCallbacks = useCachedFilterCallbacks();
     
     useEffect(() => {
         FetchData('starships', ['created', 'edited'], setStarships);
@@ -17,7 +17,7 @@ function StarshipsTable() {
     
     // Use the custom useTableFilters helper function to simplify all the complex
     // wiring that the PrimeReact DataTable needs for advanced filters.
-    const { filters, setFilters, /*globalFilterFields*/ } = useTableFilters(StarshipModelFilterSpec);
+    const { filters, setFilters, /*globalFilterFields*/ } = useTableFilters(ModelStarship);
 
     return (
         <DataTable
@@ -36,7 +36,7 @@ function StarshipsTable() {
             removableSort
         >
             {
-                Object.entries(StarshipModelFilterSpec)
+                Object.entries(ModelStarship)
                     .map(([field, spec]) => 
                         SwapiColumn({
                             field: field, 

@@ -13,7 +13,7 @@ export interface FilterCallback {
     clearCallbacks: (field: string) => void;
 }
 
-export function useFilterCallbacks(): FilterCallback {
+export function useCachedFilterCallbacks(): FilterCallback {
     const callbacks = useRef(new Map<string, Map<number, FilterCallbackCached>>());
 
     const setCallback = useCallback((field: string, val: any, opts: ColumnFilterElementTemplateOptions) => {

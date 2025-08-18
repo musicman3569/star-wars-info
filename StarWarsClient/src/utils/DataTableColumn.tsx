@@ -20,7 +20,7 @@ export type ColumnFilterKind =
     | 'multiselect'
     | 'boolean';
 
-export interface FilterFieldSpec {
+export interface ColumnSpec {
     /** One of the preset kinds above. */
     kind: ColumnFilterKind;
     width?: string; // TODO: handle default width
@@ -33,7 +33,7 @@ export interface FilterFieldSpec {
     selectItems?: SelectItem[];
 }
 
-export type FilterSpec = Record<string, FilterFieldSpec>;
+export type ModelSpec = Record<string, ColumnSpec>;
 
 /**
  * Configuration options for the useTableFilters hook.
@@ -55,15 +55,6 @@ export interface UseTableFiltersOptions {
  *
  * @param kind - The type of filter to create default constraints for
  * @returns An object containing the default value (null) and appropriate match mode for the filter type
- *
- * Filter kinds and their corresponding match modes:
- * - text: Uses CONTAINS match mode for substring matching
- * - id: Uses EQUALS match mode for exact number matching
- * - number: Uses BETWEEN match mode for exact number matching
- * - date: Uses DATE_AFTER/DATE_BEFORE match mode for date filtering
- * - dropdown: Uses EQUALS match mode for single selection
- * - multiselect: Uses IN match mode for multiple selection
- * - boolean: Uses EQUALS match mode for true/false comparison
  */
 function defaultConstraint(kind: ColumnFilterKind) {
     switch (kind) {
@@ -91,16 +82,11 @@ function defaultConstraint(kind: ColumnFilterKind) {
 
 /**
  * Determines the default filter operator for a given column filter kind.
- * This function defines how multiple filter constraints are combined for each filter type.
+ * This function defines how multiple filter constraints are combined for each 
+ * filter type (AND/OR).
  *
  * @param kind - The type of filter to determine the operator for
  * @returns The appropriate FilterOperator (AND/OR) for the filter kind
- *
- * Operator assignments:
- * - AND operator: Used for text, dates, numbers, between ranges, and multiselect
- *   to ensure all conditions must be met
- * - OR operator: Used for dropdown and boolean filters where meeting any condition
- *   is sufficient (typically better UX for single-choice selections)
  */
 function defaultOperator(kind: ColumnFilterKind): FilterOperator {
     // UX-wise this often feels better for single-choice
@@ -121,17 +107,8 @@ function defaultOperator(kind: ColumnFilterKind): FilterOperator {
  *
  * @param spec - An object defining the filter types and behaviors for each field in the table
  * @returns A DataTableFilterMeta object containing the complete filter configuration
- *
- * The resulting configuration includes:
- * - A global filter with CONTAINS match mode
- * - Field-specific filters based on their defined kinds:
- *   - Text fields: Use constraints array with AND/OR operators
- *   - Number fields: Use constraints array with specified match modes
- *   - Date fields: Use constraints array with date-specific match modes
- *   - Between ranges: Use single value with BETWEEN match mode
- *   - Dropdowns/MultiSelect: Use single value with appropriate match mode
  */
-function buildDefaultFilters(spec: FilterSpec): DataTableFilterMeta {
+function buildDefaultFilters(spec: ModelSpec): DataTableFilterMeta {
     const meta: DataTableFilterMeta = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     };
@@ -172,7 +149,7 @@ function buildDefaultFilters(spec: FilterSpec): DataTableFilterMeta {
  * @returns Object containing filter state and control methods
  */
 export function useTableFilters(
-    spec: FilterSpec,
+    spec: ModelSpec,
     opts: UseTableFiltersOptions = {}
 ): {
     filters: DataTableFilterMeta;

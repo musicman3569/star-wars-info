@@ -1,8 +1,8 @@
 import { Column, type ColumnFilterElementTemplateOptions } from "primereact/column";
-import { type FilterFieldSpec } from '../utils/DataTableFilters.tsx';
-import { type FilterCallback } from "../utils/DataTableFilterState.ts";
+import { type ColumnSpec } from '../utils/DataTableColumn';
+import { type FilterCallback } from "../utils/DataTableFilterState";
 import { type CSSProperties } from "react";
-import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody.ts";
+import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody";
 import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
 import {FilterNumber} from "./FilterElement/FilterNumber";
@@ -26,7 +26,7 @@ const formatHeaderText = (field: string): string => {
 
 interface SwapiColumnProps {
     field: string;
-    spec: FilterFieldSpec;
+    spec: ColumnSpec;
     filterCallbacks: FilterCallback;
 }
 

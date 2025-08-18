@@ -1,8 +1,6 @@
-import {
-    type FilterSpec
-} from '../utils/DataTableFilters.tsx';
+import { type ModelSpec } from '../utils/DataTableColumn';
 
-export const StarshipModelFilterSpec: FilterSpec = {
+const ModelStarship: ModelSpec = {
     starship_id: {kind: 'id', frozen: true, width: '10rem'},
     name: {kind: 'text', frozen: true},
     model: {kind: 'text'},
@@ -20,3 +18,5 @@ export const StarshipModelFilterSpec: FilterSpec = {
     created: {kind: 'date'},
     edited: {kind: 'date'}
 };
+
+export default ModelStarship;
