@@ -7,8 +7,6 @@ import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown, type DropdownChangeEvent } from 'primereact/dropdown';
 import { MultiSelect, type MultiSelectChangeEvent } from 'primereact/multiselect';
-import { Calendar } from 'primereact/calendar';
-import { InputNumber, type InputNumberChangeEvent } from 'primereact/inputnumber';
 import type { SelectItem } from "primereact/selectitem";
 import type { ColumnFilterElementTemplateOptions } from "primereact/column";
 
@@ -251,58 +249,6 @@ export function filterClearTemplate(options: { filterCallback: () => void }) {
  */
 export function filterApplyTemplate(options: { filterCallback: () => void }) {
     return <Button type="button" icon="pi pi-check" onClick={options.filterCallback} rounded text />;
-}
-
-/**
- * Creates a footer template for PrimeReact DataTable column filters.
- *
- * @param options - Object containing the field name to display
- * @returns Footer component showing the field name being filtered
- */
-export function filterFooterTemplate(options: { field: string }) {
-    return <div className="px-2 py-1 text-color-secondary text-sm">Filter by {options.field}</div>;
-}
-
-/** Use for BETWEEN; supports [min, max] input with two number boxes stacked. */
-/**
- * Creates a between range filter template with two number inputs for PrimeReact DataTable columns.
- *
- * @param options - Filter options object containing current value and callback
- * @returns Two InputNumber components configured for min/max range filtering
- */
-export function numberBetweenFilterTemplate(options: any) {
-    let [min, max] = Array.isArray(options.value) ? options.value : [null, null];
-
-    return (
-        <div className="flex flex-col gap-2 p-column-filter">
-            <InputNumber
-                value={min}
-                onChange={(e: InputNumberChangeEvent) => options.filterCallback([e.value, max || Infinity])}
-                placeholder="Min"
-            />
-            <InputNumber
-                value={max}
-                onChange={(e: InputNumberChangeEvent) => options.filterCallback([min || -Infinity, e.value])}
-                placeholder="Max"
-            />
-        </div>
-    );
-}
-
-
-export function dateBetweenFilterTemplate(options: any) {
-    return (
-        <Calendar
-            value={options.value ?? null}
-            onChange={(e) => options.filterCallback(e.value, options.index)}
-            dateFormat="yy-mm-dd"
-            placeholder={options.index === 0 ? 'Start date' : 'End date'}
-            mask="9999-99-99 99:99"
-            showIcon
-            showTime 
-            hourFormat="24"
-        />
-    );
 }
 
 /**

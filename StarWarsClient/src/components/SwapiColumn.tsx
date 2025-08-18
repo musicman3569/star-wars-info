@@ -1,6 +1,5 @@
 import {
     type FilterFieldSpec,
-    dateBetweenFilterTemplate,
     booleanFilterTemplate,
     dropdownFilterTemplate, multiselectFilterTemplate,
 } from '../utils/DataTableFilters.tsx';
@@ -14,6 +13,7 @@ import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableCo
 import {TextFilter} from "./FilterElement/TextFilter";
 import {IdFilter} from "./FilterElement/IdFilter";
 import {FilterNumber} from "./FilterElement/FilterNumber";
+import {FilterDate} from "./FilterElement/FilterDate";
 import type {FilterCallback} from "../utils/DataTableFilterState.ts";
 
 const defaultWidth = '14rem';
@@ -57,7 +57,8 @@ function SwapiColumn({
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     <FilterNumber field={field} options={opts} filterCallbacks={filterCallbacks}/>;
             case 'date':
-                return dateBetweenFilterTemplate;
+                return (opts: ColumnFilterElementTemplateOptions) =>
+                    <FilterDate field={field} options={opts} filterCallbacks={filterCallbacks}/>;
             case 'boolean':
                 return booleanFilterTemplate;
             case 'dropdown':
