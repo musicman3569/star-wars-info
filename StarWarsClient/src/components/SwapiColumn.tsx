@@ -1,7 +1,6 @@
 import {
     type FilterFieldSpec,
-    booleanFilterTemplate,
-    dropdownFilterTemplate, multiselectFilterTemplate,
+    multiselectFilterTemplate,
 } from '../utils/DataTableFilters.tsx';
 
 import {
@@ -14,6 +13,8 @@ import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
 import {FilterNumber} from "./FilterElement/FilterNumber";
 import {FilterDate} from "./FilterElement/FilterDate";
+import {FilterDropdown} from "./FilterElement/FilterDropdown";
+import {FilterBoolean} from "./FilterElement/FilterBoolean";
 import type {FilterCallback} from "../utils/DataTableFilterState.ts";
 
 const defaultWidth = '14rem';
@@ -60,10 +61,13 @@ function SwapiColumn({
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     <FilterDate field={field} options={opts} filterCallbacks={filterCallbacks}/>;
             case 'boolean':
-                return booleanFilterTemplate;
+                return (opts: ColumnFilterElementTemplateOptions) =>
+                    <FilterBoolean field={field} options={opts} filterCallbacks={filterCallbacks}/>;
             case 'dropdown':
                 return (opts: ColumnFilterElementTemplateOptions) =>
-                    dropdownFilterTemplate(opts, spec.selectItems ?? []);
+                    <FilterDropdown 
+                        field={field} options={opts} filterCallbacks={filterCallbacks}
+                        items={spec.selectItems ?? []}/>;
             case 'multiselect':
                 return (opts: ColumnFilterElementTemplateOptions) =>
                     multiselectFilterTemplate(opts, spec.selectItems ?? []);

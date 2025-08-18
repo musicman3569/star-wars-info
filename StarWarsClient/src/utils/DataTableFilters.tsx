@@ -5,7 +5,6 @@ import { Button } from 'primereact/button';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
-import { Dropdown, type DropdownChangeEvent } from 'primereact/dropdown';
 import { MultiSelect, type MultiSelectChangeEvent } from 'primereact/multiselect';
 import type { SelectItem } from "primereact/selectitem";
 import type { ColumnFilterElementTemplateOptions } from "primereact/column";
@@ -232,61 +231,6 @@ export function useTableFilters(
 }
 
 /**
- * Creates a clear button template for PrimeReact DataTable column filters.
- *
- * @param options - Object containing the filter callback function
- * @returns Button component for clearing the filter
- */
-export function filterClearTemplate(options: { filterCallback: () => void }) {
-    return <Button type="button" icon="pi pi-times" onClick={options.filterCallback} rounded text />;
-}
-
-/**
- * Creates an apply button template for PrimeReact DataTable column filters.
- *
- * @param options - Object containing the filter callback function
- * @returns Button component for applying the filter
- */
-export function filterApplyTemplate(options: { filterCallback: () => void }) {
-    return <Button type="button" icon="pi pi-check" onClick={options.filterCallback} rounded text />;
-}
-
-/**
- * Creates a dropdown filter template for PrimeReact DataTable columns.
- * Allows selecting a single value from a predefined list of options.
- *
- * @template T - Type of the option items, must include an optional label and required value property
- * @param {ColumnFilterElementTemplateOptions} options - Filter options object from PrimeReact containing the current value and filter callback
- * @param {SelectItem[]} items - Array of selectable options to display in the dropdown
- * @param {string} [placeholder='Select one'] - Placeholder text to show when no value is selected
- * @returns {JSX.Element} A Dropdown component configured for filtering
- *
- * @example
- * const options: SelectItem[] = [
- *   { label: 'Option 1', value: 1 },
- *   { label: 'Option 2', value: 2 }
- * ];
- * <Column filterElement={(opts) => dropdownFilterTemplate(opts, options)} />
- */
-export function dropdownFilterTemplate(
-    options: ColumnFilterElementTemplateOptions,
-    items: SelectItem[],
-    placeholder = 'Select one'
-) {
-    return (
-        <Dropdown
-            value={options.value ?? null}
-            options={items}
-            onChange={(e: DropdownChangeEvent) => options.filterCallback(e.value)}
-            placeholder={placeholder}
-            className="p-column-filter"
-            showClear
-        />
-    );
-}
-
-
-/**
  * Creates a MultiSelect filter template for PrimeReact DataTable columns.
  * Allows selecting multiple values from a predefined list of options.
  *
@@ -320,18 +264,3 @@ export function multiselectFilterTemplate(
         />
     );
 }
-
-/**
- * Creates a boolean dropdown filter template for PrimeReact DataTable columns.
- *
- * @param options - Filter options object containing current value and callback
- * @returns Dropdown component configured for boolean filtering
- */
-export function booleanFilterTemplate(options: any) {
-    const values: SelectItem[] = [
-        { label: "Y", value: true },
-        { label: "N", value: false },
-    ];
-    return dropdownFilterTemplate(options, values, 'Any');
-}
-
