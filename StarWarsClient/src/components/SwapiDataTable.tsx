@@ -1,23 +1,30 @@
 import { useState, useEffect } from 'react';
-import ModelStarship from '../models/ModelStarship';
 import { FetchData } from '../utils/StarWarsInfoClient';
 import { DataTable, type DataTableFilterMeta } from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
-import { useTableFilters } from '../utils/DataTableColumn';
+import {type ModelSpec, useTableFilters, getModelDataKey} from '../utils/DataTableColumn';
 import { useCachedFilterCallbacks } from "../utils/DataTableFilterCache";
 
-function StarshipsTable() {
+function SwapiDataTable({
+    modelSpec
+}:{
+    modelSpec: ModelSpec;
+}) {
     const [starships, setStarships] = useState<any[]>([]);
     const cssHeightToPageBottom = "calc(100vh - 100px)";
     const filterCallbacks = useCachedFilterCallbacks();
-    
-    useEffect(() => {
-        FetchData('starships', ['created', 'edited'], setStarships);
-    }, []);
-    
+    const modelDataKey = getModelDataKey(modelSpec); 
+
     // Use the custom useTableFilters helper function to simplify all the complex
     // wiring that the PrimeReact DataTable needs for advanced filters.
-    const { filters, setFilters, /*globalFilterFields*/ } = useTableFilters(ModelStarship);
+    const { 
+        filters: filters, 
+        setFilters: setFilters,
+    } = useTableFilters(modelSpec);
+
+    useEffect(() => {
+        FetchData(modelSpec, modelDataKey, setStarships);
+    }, []);
 
     return (
         <DataTable
@@ -27,7 +34,7 @@ function StarshipsTable() {
             rowHover={true}
             scrollable={true}
             scrollHeight={cssHeightToPageBottom}
-            dataKey="starship_id"
+            dataKey={modelDataKey}
             sortMode="single"
             sortField="name"
             filters={filters}
@@ -36,7 +43,7 @@ function StarshipsTable() {
             removableSort
         >
             {
-                Object.entries(ModelStarship)
+                Object.entries(modelSpec)
                     .map(([field, spec]) => 
                         SwapiColumn({
                             field: field, 
@@ -49,4 +56,4 @@ function StarshipsTable() {
     );
 }
 
-export default StarshipsTable;
+export default SwapiDataTable;

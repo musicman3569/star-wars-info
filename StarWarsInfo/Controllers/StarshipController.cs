@@ -7,12 +7,12 @@ using StarWarsInfo.Models;
 
 namespace StarWarsInfo.Controllers;
 
-public class StarshipsController : Controller
+public class StarshipController : Controller
 {
     private readonly ILogger<ImportController> _logger;
     private readonly AppDbContext _dbContext;
     
-    public StarshipsController(ILogger<ImportController> logger, AppDbContext dbContext)
+    public StarshipController(ILogger<ImportController> logger, AppDbContext dbContext)
     {
         _logger = logger;
         _dbContext = dbContext;

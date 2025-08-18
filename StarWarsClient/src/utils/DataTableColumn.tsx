@@ -32,9 +32,19 @@ export interface ColumnSpec {
     /** For simple kinds use a single matchMode override (optional). */
     matchMode?: FilterMatchMode;
     selectItems?: SelectItem[];
+    isDataKey?: boolean;
 }
 
 export type ModelSpec = Record<string, ColumnSpec>;
+
+export function getModelDataKey(spec: ModelSpec): string {
+    for (const [field, def] of Object.entries(spec)) {
+        if (def.isDataKey) {
+            return field;
+        }
+    }
+    throw new Error('No data key found in model spec');
+}
 
 /**
  * Configuration options for the useTableFilters hook.

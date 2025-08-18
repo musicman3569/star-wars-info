@@ -1,9 +1,10 @@
 import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/soho-dark/theme.css'
 import './App.css'
-import StarshipsTable from './components/StarshipsTable';
+import SwapiDataTable from './components/SwapiDataTable.tsx';
 import starshipsIcon from './assets/icon_starships.svg'
 import SectionIcon from './components/SectionIcon';
+import ModelStarship from "./models/ModelStarship.ts";
 
 function App() {
     return (
@@ -12,7 +13,7 @@ function App() {
                 <SectionIcon src={starshipsIcon} alt="Starships Icon" />
                 Starships
             </h1>
-            <StarshipsTable />
+            <SwapiDataTable modelSpec={ModelStarship} />
         </PrimeReactProvider>
     )
 }

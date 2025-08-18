@@ -1,7 +1,7 @@
 import { type ModelSpec } from '../utils/DataTableColumn';
 
 const ModelStarship: ModelSpec = {
-    starship_id: {kind: 'id', frozen: true, width: '10rem'},
+    starship_id: {kind: 'id', frozen: true, width: '10rem', isDataKey: true},
     name: {kind: 'text', frozen: true},
     model: {kind: 'text'},
     manufacturer: {kind: 'text'},

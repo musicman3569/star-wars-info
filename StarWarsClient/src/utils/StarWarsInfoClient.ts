@@ -1,10 +1,11 @@
 import {convertStringDates} from "./DateUtils.ts";
+import type {ModelSpec} from "./DataTableColumn.tsx";
 
 /**
  * Fetches data from the Star Wars API and processes date fields.
  *
- * @param swapiModel - The type of Star Wars data to fetch ('characters', 'films', 'planets', 'species', 'starships', 'vehicles')
- * @param dateFields - Array of field names that should be converted from string to Date objects
+ * @param modelSpec - The model specification containing field definitions
+ * @param modelDataKey - The key field name in the model (usually ends with '_id')
  * @param useStateCallback - React setState callback function to update the component's state with the fetched data
  *
  * @example
@@ -15,19 +16,24 @@ import {convertStringDates} from "./DateUtils.ts";
  * @throws {Error} Logs an error message to console if the fetch operation fails
  */
 export function FetchData(
-    swapiModel: 'characters' | 'films' | 'planets' | 'species' | 'starships' | 'vehicles',
-    dateFields: string[],
+    modelSpec: ModelSpec,
+    modelDataKey: string,
     useStateCallback: (data: any[]) => void
 ) {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const apiPath = modelDataKey.replace('_id', '');
+    const dateFields = Object.keys(modelSpec).filter(field => 
+        modelSpec[field].dataType === 'date' ||
+        modelSpec[field].kind === 'date'
+    );
 
-    fetch(apiUrl + '/' + swapiModel + '/getall')
+    fetch(apiUrl + '/' + apiPath + '/getall')
         .then(response => response.json())
         .then(data => {
             useStateCallback(
                 convertStringDates(data, dateFields)
             );
         })
-        .catch(error => console.log('Error fetching '+ swapiModel +' data: ', error));
+        .catch(error => console.log('Error fetching '+ apiPath +' data: ', error));
 }
 

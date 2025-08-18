@@ -97,6 +97,7 @@ function SwapiColumn({
 
     return <Column
         field={field}
+        hidden={spec.isDataKey}
         dataType={getDataType()}
         header={formatHeaderText(field)}
         style={style}
