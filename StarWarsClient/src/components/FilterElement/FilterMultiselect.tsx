@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import type {FilterCallback} from "../../utils/DataTableFilterState";
-import type {ColumnFilterElementTemplateOptions} from "primereact/column";
-import type {SelectItem} from "primereact/selectitem";
-import {MultiSelect, type MultiSelectChangeEvent} from "primereact/multiselect";
+import type { FilterCallback } from "../../utils/DataTableFilterCache";
+import type { ColumnFilterElementTemplateOptions } from "primereact/column";
+import type { SelectItem } from "primereact/selectitem";
+import { MultiSelect, type MultiSelectChangeEvent } from "primereact/multiselect";
 
 export function FilterMultiselect({
     field,

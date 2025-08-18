@@ -4,7 +4,7 @@ import { FetchData } from '../utils/StarWarsInfoClient';
 import { DataTable, type DataTableFilterMeta } from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
 import { useTableFilters } from '../utils/DataTableColumn';
-import {useCachedFilterCallbacks} from "../utils/DataTableFilterState";
+import { useCachedFilterCallbacks } from "../utils/DataTableFilterCache";
 
 function StarshipsTable() {
     const [starships, setStarships] = useState<any[]>([]);

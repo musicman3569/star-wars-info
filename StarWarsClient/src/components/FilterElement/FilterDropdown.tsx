@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import type {FilterCallback} from "../../utils/DataTableFilterState";
-import type {ColumnFilterElementTemplateOptions} from "primereact/column";
-import {Dropdown, type DropdownChangeEvent} from "primereact/dropdown";
-import type {SelectItem} from "primereact/selectitem";
+import type { FilterCallback } from "../../utils/DataTableFilterCache";
+import type { ColumnFilterElementTemplateOptions } from "primereact/column";
+import { Dropdown, type DropdownChangeEvent } from "primereact/dropdown";
+import type { SelectItem } from "primereact/selectitem";
 
 export function FilterDropdown({
     field,

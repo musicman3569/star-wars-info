@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { InputNumber } from "primereact/inputnumber";
-import type {FilterCallback} from "../../utils/DataTableFilterState";
-import type {ColumnFilterElementTemplateOptions} from "primereact/column";
-import type {InputNumberChangeEvent} from "primereact/inputnumber";
+import type { FilterCallback } from "../../utils/DataTableFilterCache";
+import type { ColumnFilterElementTemplateOptions } from "primereact/column";
+import type { InputNumberChangeEvent } from "primereact/inputnumber";
 
 export function FilterId({
    field,

@@ -1,6 +1,6 @@
 import { Column, type ColumnFilterElementTemplateOptions } from "primereact/column";
 import { type ColumnSpec } from '../utils/DataTableColumn';
-import { type FilterCallback } from "../utils/DataTableFilterState";
+import { type FilterCallback } from "../utils/DataTableFilterCache";
 import { type CSSProperties } from "react";
 import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody";
 import {FilterText} from "./FilterElement/FilterText";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
-import type {FilterCallback} from "../../utils/DataTableFilterState";
-import type {ColumnFilterElementTemplateOptions} from "primereact/column";
+import type { FilterCallback } from "../../utils/DataTableFilterCache";
+import type { ColumnFilterElementTemplateOptions } from "primereact/column";
 
 export function FilterText({ 
     field,
