@@ -1,15 +1,20 @@
 import {
     type FilterFieldSpec,
-    textFilterTemplate,
     numberBetweenFilterTemplate,
     dateBetweenFilterTemplate,
     booleanFilterTemplate,
-    dropdownFilterTemplate, multiselectFilterTemplate
+    dropdownFilterTemplate, multiselectFilterTemplate,
+    idFilterTemplate
 } from '../utils/DataTableFilters.tsx';
 
-import {Column, type ColumnFilterElementTemplateOptions} from "primereact/column";
-import type { CSSProperties } from "react";
-import {formatDateCustom, formatNumber} from "../utils/DataTableColumnBody.ts";
+import {
+    Column,
+    type ColumnFilterElementTemplateOptions
+} from "primereact/column";
+import type {CSSProperties} from "react";
+import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody.ts";
+import {TextFilter} from "./FilterElement/TextFilter.tsx";
+import type {FilterCallback} from "../utils/DataTableFilterState.ts";
 
 const defaultWidth = '14rem';
 const frozenBackgroundColor = '#363749ff';
@@ -24,16 +29,21 @@ const formatHeaderText = (field: string): string => {
         .join(' ');
 };
 
-interface Props {
+interface SwapiColumnProps {
     field: string;
     spec: FilterFieldSpec;
+    filterCallbacks: FilterCallback;
 }
 
-function SwapiColumn({ field, spec }: Props) {
+function SwapiColumn({
+    field,
+    spec,
+    filterCallbacks,
+}: SwapiColumnProps) {
     const style: CSSProperties = {
         minWidth: spec.width ?? defaultWidth
     };
-    
+
     if (spec.frozen) {
         style.background = frozenBackgroundColor;
     }
@@ -41,6 +51,7 @@ function SwapiColumn({ field, spec }: Props) {
     const getFilterElement = () => {
         switch (spec.kind) {
             case 'id':
+                return idFilterTemplate;
             case 'number':
                 return numberBetweenFilterTemplate;
             case 'date':
@@ -48,29 +59,30 @@ function SwapiColumn({ field, spec }: Props) {
             case 'boolean':
                 return booleanFilterTemplate;
             case 'dropdown':
-                return (opts: ColumnFilterElementTemplateOptions) => 
+                return (opts: ColumnFilterElementTemplateOptions) =>
                     dropdownFilterTemplate(opts, spec.selectItems ?? []);
             case 'multiselect':
-                return (opts: ColumnFilterElementTemplateOptions) => 
+                return (opts: ColumnFilterElementTemplateOptions) =>
                     multiselectFilterTemplate(opts, spec.selectItems ?? []);
             default:
-                return textFilterTemplate;
+                return (opts: ColumnFilterElementTemplateOptions) =>
+                    <TextFilter field={field} options={opts} filterCallbacks={filterCallbacks} />;
         }
     };
-    
-    const getBody = (rowData: any) => {
+
+    const getBody = () => {
         switch (spec.kind) {
             case 'number':
-                return formatNumber(rowData, field, spec.decimalPlaces);
+                return (rowData: RowData) => formatNumber(rowData, field, spec.decimalPlaces);
             case 'date':
-                return formatDateCustom(rowData, field);
+                return (rowData: RowData) => formatDateCustom(rowData, field);
             case 'boolean':
-                return rowData[field] ? 'Y' : 'N';
+                return (rowData: RowData) => rowData[field] ? 'Y' : 'N';
             case 'dropdown':
             case 'multiselect':
-                return spec.selectItems?.find(i => i?.value === rowData[field])?.label ?? rowData[field];
+                return (rowData: RowData) => spec.selectItems?.find(i => i?.value === rowData[field])?.label ?? rowData[field];
             default:
-                return rowData[field] ?? '';
+                return (rowData: RowData) => rowData[field] ?? '';
         }
     }
 
@@ -78,12 +90,18 @@ function SwapiColumn({ field, spec }: Props) {
         field={field}
         header={formatHeaderText(field)}
         style={style}
-        frozen
+        frozen={spec.frozen}
         sortable
         filter
         showFilterMatchModes={spec.kind !== 'number'}
         filterElement={getFilterElement()}
-        body={getBody}
+        body={getBody()}
+        onFilterApplyClick={() => {
+            filterCallbacks.applyCallbacks(field);
+        }}
+        onFilterClear={() => {
+            filterCallbacks.clearCallbacks(field);
+        }}
     />;
 }
 

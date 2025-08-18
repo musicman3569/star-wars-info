@@ -425,3 +425,4 @@ export function booleanFilterTemplate(options: any) {
     ];
     return dropdownFilterTemplate(options, values, 'Any');
 }
+
