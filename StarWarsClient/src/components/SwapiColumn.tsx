@@ -4,7 +4,6 @@ import {
     dateBetweenFilterTemplate,
     booleanFilterTemplate,
     dropdownFilterTemplate, multiselectFilterTemplate,
-    idFilterTemplate
 } from '../utils/DataTableFilters.tsx';
 
 import {
@@ -13,7 +12,8 @@ import {
 } from "primereact/column";
 import type {CSSProperties} from "react";
 import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody.ts";
-import {TextFilter} from "./FilterElement/TextFilter.tsx";
+import {TextFilter} from "./FilterElement/TextFilter";
+import {IdFilter} from "./FilterElement/IdFilter";
 import type {FilterCallback} from "../utils/DataTableFilterState.ts";
 
 const defaultWidth = '14rem';
@@ -51,7 +51,8 @@ function SwapiColumn({
     const getFilterElement = () => {
         switch (spec.kind) {
             case 'id':
-                return idFilterTemplate;
+                return (opts: ColumnFilterElementTemplateOptions) =>
+                    <IdFilter field={field} options={opts} filterCallbacks={filterCallbacks}/>;
             case 'number':
                 return numberBetweenFilterTemplate;
             case 'date':
@@ -66,7 +67,7 @@ function SwapiColumn({
                     multiselectFilterTemplate(opts, spec.selectItems ?? []);
             default:
                 return (opts: ColumnFilterElementTemplateOptions) =>
-                    <TextFilter field={field} options={opts} filterCallbacks={filterCallbacks} />;
+                    <TextFilter field={field} options={opts} filterCallbacks={filterCallbacks}/>;
         }
     };
 

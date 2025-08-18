@@ -263,43 +263,6 @@ export function filterFooterTemplate(options: { field: string }) {
     return <div className="px-2 py-1 text-color-secondary text-sm">Filter by {options.field}</div>;
 }
 
-//
-// ---------- Column filter element templates
-// These are plug-and-play for <Column filterElement={...} />
-//
-/**
- * Creates a text input filter template for PrimeReact DataTable columns.
- *
- * @param options - Filter options object containing current value and callback
- * @returns InputText component configured for filtering
- */
-export function textFilterTemplate(options: any) {
-    return (
-        <InputText
-            value={options.value || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => options.filterCallback(e.target.value)}
-            placeholder="Search..."
-            className="p-column-filter"
-        />
-    );
-}
-
-/**
- * Creates a number input filter template for PrimeReact DataTable columns.
- *
- * @param options - Filter options object containing current value and callback
- * @returns InputNumber component configured for filtering
- */
-export function idFilterTemplate(options: any) {
-    return (
-        <InputNumber
-            value={options.value ?? null}
-            onChange={(e: InputNumberChangeEvent) => options.filterCallback(e.value)}
-            className="p-column-filter"
-        />
-    );
-}
-
 /** Use for BETWEEN; supports [min, max] input with two number boxes stacked. */
 /**
  * Creates a between range filter template with two number inputs for PrimeReact DataTable columns.
