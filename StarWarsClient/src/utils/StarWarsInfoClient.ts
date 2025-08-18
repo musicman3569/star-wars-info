@@ -1,5 +1,5 @@
-import {convertStringDates} from "./DateUtils.ts";
-import type {ModelSpec} from "./DataTableColumn.tsx";
+import { convertStringDates } from "./DateUtils";
+import { type ModelSpec } from "./DataTableColumn";
 
 /**
  * Fetches data from the Star Wars API and processes date fields.
