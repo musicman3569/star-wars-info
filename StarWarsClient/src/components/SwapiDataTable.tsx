@@ -33,9 +33,12 @@ function SwapiDataTable({
             modelDataKey, 
             e.newData,
             (responseData) => {
-                const updatedData = [...tableData];
-                updatedData[e.index] = responseData;
-                setTableData(updatedData);
+                const newTableData = [...tableData];
+                const updatedRowIndex = newTableData.findIndex(item => 
+                    item[modelDataKey] === responseData[modelDataKey]
+                );
+                newTableData[updatedRowIndex] = responseData;
+                setTableData(newTableData);
             }
         );
     }

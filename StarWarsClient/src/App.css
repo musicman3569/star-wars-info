@@ -64,3 +64,18 @@ and showing other column headers through it when horizontally scrolling */
 .p-datatable-scrollable .p-frozen-column {
     background: #363749ff;
 }
+
+/* Set PrimeReact editable column background color to a different color 
+while editing */
+.p-editable-column.p-cell-editing {
+    background: #ffc000cc;
+    color: #000000;
+}
+
+/* Set PrimeReact row editor save/cancel buttons to different background 
+color while editing */
+.p-datatable .p-datatable-tbody > tr > td .p-row-editor-save,
+.p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel {
+    background: #ffc000cc;
+    color: black;
+}

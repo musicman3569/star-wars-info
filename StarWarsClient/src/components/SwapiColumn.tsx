@@ -13,7 +13,6 @@ import {FilterMultiselect} from "./FilterElement/FilterMultiselect"
 import DataTableEditor from "./DataTableEditor";
 
 const defaultWidth = '14rem';
-const frozenBackgroundColor = '#363749ff';
 
 const formatHeaderText = (field: string): string => {
     return field
@@ -39,10 +38,6 @@ function SwapiColumn({
     const style: CSSProperties = {
         minWidth: spec.width ?? defaultWidth
     };
-
-    if (spec.frozen) {
-        style.background = frozenBackgroundColor;
-    }
 
     const getFilterElement = () => {
         switch (spec.kind) {
