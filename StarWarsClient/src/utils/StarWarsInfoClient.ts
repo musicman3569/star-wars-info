@@ -18,22 +18,54 @@ import { type ModelSpec } from "./DataTableColumn";
 export function FetchData(
     modelSpec: ModelSpec,
     modelDataKey: string,
-    useStateCallback: (data: any[]) => void
+    successCallback: (data: any[]) => void
 ) {
+    const apiUrl = getApiUrl(modelDataKey);
+
+    fetch(apiUrl.fullUrl)
+        .then(response => response.json())
+        .then(data => {
+            successCallback(
+                convertStringDates(data, getDateFields(modelSpec))
+            );
+        })
+        .catch(error => console.log('Error fetching '+ apiUrl.path +' data: ', error));
+}
+
+export function UpdateData(
+    modelSpec: ModelSpec,
+    modelDataKey: string,
+    newData: any,
+    successCallback: (responseData: any) => void,
+) {
+    const apiUrl = getApiUrl(modelDataKey);
+
+    fetch(apiUrl.fullUrl, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(newData)
+    })
+        .then(response => response.json())
+        .then(updatedModel => {
+            successCallback(
+                convertStringDates([updatedModel], getDateFields(modelSpec)).at(0) as any
+            );
+        })
+        .catch(error => console.log('Error updating ' + apiUrl.path + ' data: ', error));
+}
+
+function getApiUrl(modelDataKey: string) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const apiPath = modelDataKey.replace('_id', '');
-    const dateFields = Object.keys(modelSpec).filter(field => 
+    return {
+        fullUrl: apiUrl + '/' + apiPath,
+        path: apiPath,
+    };
+}
+
+function getDateFields(modelSpec: ModelSpec) {
+    return Object.keys(modelSpec).filter(field =>
         modelSpec[field].dataType === 'date' ||
         modelSpec[field].kind === 'date'
     );
-
-    fetch(apiUrl + '/' + apiPath)
-        .then(response => response.json())
-        .then(data => {
-            useStateCallback(
-                convertStringDates(data, dateFields)
-            );
-        })
-        .catch(error => console.log('Error fetching '+ apiPath +' data: ', error));
 }
-

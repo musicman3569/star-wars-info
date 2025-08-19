@@ -34,6 +34,7 @@ export interface ColumnSpec {
     selectItems?: SelectItem[];
     isDataKey?: boolean;
     isReadOnly?: boolean;
+    isHidden?: boolean;
 }
 
 export type ModelSpec = Record<string, ColumnSpec>;

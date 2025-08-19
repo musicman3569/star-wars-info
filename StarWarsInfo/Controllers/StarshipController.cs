@@ -62,6 +62,8 @@ public class StarshipController : Controller
     [HttpPost]
     public IActionResult Create([FromBody] Starship starship)
     {
+        starship.Created = DateTime.UtcNow;
+        starship.Edited = DateTime.UtcNow;
         _dbContext.Starships.Add(starship);
         _dbContext.SaveChanges();
         return CreatedAtAction(nameof(GetById), new { id = starship.StarshipId }, starship);
@@ -71,13 +73,14 @@ public class StarshipController : Controller
     /// Updates an existing starship in the database.
     /// </summary>
     /// <param name="starship">The updated starship object.</param>
-    /// <returns>NoContent if successful; otherwise, BadRequest.</returns>
+    /// <returns>OK with the updated starship if successful; otherwise, BadRequest.</returns>
     [HttpPut]
     public IActionResult Update([FromBody] Starship starship)
     {
+        starship.Edited = DateTime.UtcNow;        
         _dbContext.Entry(starship).State = EntityState.Modified;
         _dbContext.SaveChanges();
-        return NoContent();
+        return Ok(starship);
     }
 
     /// <summary>

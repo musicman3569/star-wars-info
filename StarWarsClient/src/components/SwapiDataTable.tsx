@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FetchData } from '../utils/StarWarsInfoClient';
+import {FetchData, UpdateData} from '../utils/StarWarsInfoClient';
 import {DataTable, type DataTableFilterMeta, type DataTableRowEditCompleteEvent} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
 import {type ModelSpec, useTableFilters, getModelDataKey} from '../utils/DataTableColumn';
@@ -28,9 +28,16 @@ function SwapiDataTable({
     }, []);
 
     const onRowEditComplete = (e:DataTableRowEditCompleteEvent) => {
-        const updatedData = [...tableData];
-        updatedData[e.index] = e.newData;
-        setTableData(updatedData);
+        UpdateData(
+            modelSpec, 
+            modelDataKey, 
+            e.newData,
+            (responseData) => {
+                const updatedData = [...tableData];
+                updatedData[e.index] = responseData;
+                setTableData(updatedData);
+            }
+        );
     }
 
     return (
