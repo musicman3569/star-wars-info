@@ -9,6 +9,8 @@ namespace StarWarsInfo.Controllers;
 /// Handles the import of Star Wars data into the application database.
 /// Provides endpoints for batch data retrieval and insertion/updating operations.
 /// </summary>
+[ApiController]
+[Route("v1/[controller]")]
 public class ImportController : Controller
 {
     private readonly ILogger<ImportController> _logger;
@@ -36,7 +38,7 @@ public class ImportController : Controller
     /// the count of imported starships. On failure, an error status and message are returned.
     /// </returns>
     [HttpGet]
-    public async Task<IActionResult> All(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> SyncAll(CancellationToken cancellationToken = default)
     {
         try
         {
