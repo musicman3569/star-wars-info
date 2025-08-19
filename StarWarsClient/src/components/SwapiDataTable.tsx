@@ -12,7 +12,7 @@ function SwapiDataTable({
     modelSpec: ModelSpec;
 }) {
     const [tableData, setTableData] = useState<any[]>([]);
-    const cssHeightToPageBottom = "calc(100vh - 100px)";
+    const cssHeightToPageBottom = "calc(100vh - 100px - 50px)";
     const filterCallbacks = useCachedFilterCallbacks();
     const modelDataKey = getModelDataKey(modelSpec); 
 
@@ -21,7 +21,14 @@ function SwapiDataTable({
     const { 
         filters: filters, 
         setFilters: setFilters,
-    } = useTableFilters(modelSpec);
+        globalFilterFields: globalFilterFields,
+        header: header,
+        // clearFilters: clearFilters,
+        // onGlobalFilterChange: onGlobalFilterChange,
+    } = useTableFilters(modelSpec, {
+        globalFilterFields: [modelDataKey],
+        showGlobal: true,
+    });
 
     useEffect(() => {
         FetchData(modelSpec, modelDataKey, setTableData);
@@ -46,6 +53,7 @@ function SwapiDataTable({
     return (
         <DataTable
             value={tableData}
+            header={header}
             paginator={false}
             rows={10}
             rowHover={true}
@@ -56,7 +64,7 @@ function SwapiDataTable({
             sortField="name"
             filters={filters}
             onFilter={(e) => setFilters(e.filters as DataTableFilterMeta)}
-            // globalFilterFields={globalFilterFields}
+            globalFilterFields={globalFilterFields}
             removableSort
             editMode="row"
             onRowEditComplete={onRowEditComplete}

@@ -1,5 +1,7 @@
 import { PrimeReactProvider } from 'primereact/api';
 import 'primereact/resources/themes/soho-dark/theme.css'
+import 'primeicons/primeicons.css'
+import 'primeflex/primeflex.css'
 import './App.css'
 import SwapiDataTable from './components/SwapiDataTable.tsx';
 import starshipsIcon from './assets/icon_starships.svg'

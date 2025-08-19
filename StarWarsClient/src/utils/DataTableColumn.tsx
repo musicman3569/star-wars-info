@@ -195,16 +195,21 @@ export function useTableFilters(
     const header = opts.showGlobal === false
         ? null
         : (
-            <div className="flex gap-2 items-center">
-                <IconField iconPosition="left" className="w-full">
-                    <InputIcon className="pi pi-search"/>
-                    <InputText
-                        value={globalFilterValue}
-                        onChange={onGlobalFilterChange}
-                        placeholder={opts.globalPlaceholder ?? 'Keyword Search'}
-                    />
-                    <Button type="button" icon="pi pi-filter-slash" text onClick={clearFilters}/>
-                </IconField>
+            <div className="flex items-center gap-2">
+                <span className="flex flex-1">
+                    <Button label="Add" icon="pi pi-plus" />
+                </span>
+                <span className="flex items-center gap-0">
+                    <IconField iconPosition="left" className="flex-initial">
+                        <InputIcon className="pi pi-search"/>
+                        <InputText
+                            value={globalFilterValue}
+                            onChange={onGlobalFilterChange}
+                            placeholder={opts.globalPlaceholder ?? 'Keyword Search'}
+                        />
+                    </IconField>
+                    <Button type="button" icon="pi pi-filter-slash" onClick={clearFilters}/>
+                </span>
             </div>
         );
 

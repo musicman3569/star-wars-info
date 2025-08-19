@@ -1,7 +1,6 @@
 import { type ModelSpec } from '../utils/DataTableColumn';
 
 const ModelStarship: ModelSpec = {
-    starship_id: {kind: 'id', frozen: true, width: '10rem', isDataKey: true, isHidden: false},
     name: {kind: 'text', frozen: true},
     model: {kind: 'text'},
     manufacturer: {kind: 'text'},
@@ -15,6 +14,7 @@ const ModelStarship: ModelSpec = {
     hyperdrive_rating: {kind: 'number', decimalPlaces: 1},
     MGLT: {kind: 'number'},
     starship_class: {kind: 'text'},
+    starship_id: {kind: 'id', width: '12rem', isDataKey: true, isHidden: false},
     created: {kind: 'date', isReadOnly: true},
     edited: {kind: 'date', isReadOnly: true}
 };
