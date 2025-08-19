@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { FetchData } from '../utils/StarWarsInfoClient';
-import { DataTable, type DataTableFilterMeta } from 'primereact/datatable';
+import {DataTable, type DataTableFilterMeta, type DataTableRowEditCompleteEvent} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
 import {type ModelSpec, useTableFilters, getModelDataKey} from '../utils/DataTableColumn';
 import { useCachedFilterCallbacks } from "../utils/DataTableFilterCache";
+import {Column} from "primereact/column";
 
 function SwapiDataTable({
     modelSpec
 }:{
     modelSpec: ModelSpec;
 }) {
-    const [starships, setStarships] = useState<any[]>([]);
+    const [tableData, setTableData] = useState<any[]>([]);
     const cssHeightToPageBottom = "calc(100vh - 100px)";
     const filterCallbacks = useCachedFilterCallbacks();
     const modelDataKey = getModelDataKey(modelSpec); 
@@ -23,12 +24,18 @@ function SwapiDataTable({
     } = useTableFilters(modelSpec);
 
     useEffect(() => {
-        FetchData(modelSpec, modelDataKey, setStarships);
+        FetchData(modelSpec, modelDataKey, setTableData);
     }, []);
+
+    const onRowEditComplete = (e:DataTableRowEditCompleteEvent) => {
+        const updatedData = [...tableData];
+        updatedData[e.index] = e.newData;
+        setTableData(updatedData);
+    }
 
     return (
         <DataTable
-            value={starships}
+            value={tableData}
             paginator={false}
             rows={10}
             rowHover={true}
@@ -41,14 +48,17 @@ function SwapiDataTable({
             onFilter={(e) => setFilters(e.filters as DataTableFilterMeta)}
             // globalFilterFields={globalFilterFields}
             removableSort
+            editMode="row"
+            onRowEditComplete={onRowEditComplete}
         >
+            <Column rowEditor header="Edit" frozen />
             {
                 Object.entries(modelSpec)
                     .map(([field, spec]) => 
                         SwapiColumn({
                             field: field, 
                             spec: spec,
-                            filterCallbacks: filterCallbacks
+                            filterCallbacks: filterCallbacks,
                         })
                     )
             }

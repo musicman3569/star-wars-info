@@ -59,3 +59,8 @@ and showing other column headers through it when horizontally scrolling */
 .p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
     color: #ffc000;
 }
+
+/* Set PrimeReact frozen column background color */
+.p-datatable-scrollable .p-frozen-column {
+    background: #363749ff;
+}

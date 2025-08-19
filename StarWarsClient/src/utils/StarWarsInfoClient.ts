@@ -27,7 +27,7 @@ export function FetchData(
         modelSpec[field].kind === 'date'
     );
 
-    fetch(apiUrl + '/' + apiPath + '/getall')
+    fetch(apiUrl + '/' + apiPath)
         .then(response => response.json())
         .then(data => {
             useStateCallback(

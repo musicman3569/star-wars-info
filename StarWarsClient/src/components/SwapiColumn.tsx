@@ -10,6 +10,7 @@ import {FilterDate} from "./FilterElement/FilterDate";
 import {FilterDropdown} from "./FilterElement/FilterDropdown";
 import {FilterBoolean} from "./FilterElement/FilterBoolean";
 import {FilterMultiselect} from "./FilterElement/FilterMultiselect"
+import DataTableEditor from "./DataTableEditor";
 
 const defaultWidth = '14rem';
 const frozenBackgroundColor = '#363749ff';
@@ -107,12 +108,17 @@ function SwapiColumn({
         showFilterMatchModes={spec.kind !== 'number'}
         filterElement={getFilterElement()}
         body={getBody()}
+        editor={!spec.isReadOnly ? DataTableEditor({
+            field: field,
+            columnSpec: spec,
+        }) : null}
         onFilterApplyClick={() => {
             filterCallbacks.applyCallbacks(field);
         }}
         onFilterClear={() => {
             filterCallbacks.clearCallbacks(field);
         }}
+        
     />;
 }
 

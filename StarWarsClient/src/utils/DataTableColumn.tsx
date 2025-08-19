@@ -24,15 +24,16 @@ export interface ColumnSpec {
     /** One of the preset kinds above. */
     kind: ColumnFilterKind;
     dataType?: 'text' | 'numeric' | 'date' | string | undefined;
-    width?: string; // TODO: handle default width
-    frozen?: boolean; // TODO: handle column freezing, and set background to #363749ff
-    decimalPlaces?: number; // TODO: add decimal place handling
+    width?: string;
+    frozen?: boolean;
+    decimalPlaces?: number;
     /** Override operator if needed (defaults chosen per kind). */
     operator?: FilterOperator;
     /** For simple kinds use a single matchMode override (optional). */
     matchMode?: FilterMatchMode;
     selectItems?: SelectItem[];
     isDataKey?: boolean;
+    isReadOnly?: boolean;
 }
 
 export type ModelSpec = Record<string, ColumnSpec>;

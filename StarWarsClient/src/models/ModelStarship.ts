@@ -15,8 +15,8 @@ const ModelStarship: ModelSpec = {
     hyperdrive_rating: {kind: 'number', decimalPlaces: 1},
     MGLT: {kind: 'number'},
     starship_class: {kind: 'text'},
-    created: {kind: 'date'},
-    edited: {kind: 'date'}
+    created: {kind: 'date', isReadOnly: true},
+    edited: {kind: 'date', isReadOnly: true}
 };
 
 export default ModelStarship;
