@@ -1,35 +1,42 @@
-import { useState, useEffect } from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {FetchData, UpdateData} from '../utils/StarWarsInfoClient';
 import {DataTable, type DataTableFilterMeta, type DataTableRowEditCompleteEvent} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
-import {type ModelSpec, useTableFilters, getModelDataKey} from '../utils/DataTableColumn';
-import { useCachedFilterCallbacks } from "../utils/DataTableFilterCache";
+import {type ModelSpec, getModelDataKey, buildDefaultFilters} from '../utils/DataTableColumn';
 import {Column} from "primereact/column";
+import {useCachedFilterCallbacks} from "../utils/DataTableFilterCache.ts";
+import DataTableHeader from "./DataTableHeader.tsx";
 
 function SwapiDataTable({
     modelSpec
 }:{
     modelSpec: ModelSpec;
 }) {
-    const [tableData, setTableData] = useState<any[]>([]);
     const cssHeightToPageBottom = "calc(100vh - 100px - 50px)";
+    const modelDataKey = getModelDataKey(modelSpec);
+
+    const defaultFilters = useMemo(() => buildDefaultFilters(modelSpec), [modelSpec]);
     const filterCallbacks = useCachedFilterCallbacks();
-    const modelDataKey = getModelDataKey(modelSpec); 
+    const [tableData, setTableData] = useState<any[]>([]);
+    const [filters, setFilters] = useState<DataTableFilterMeta>(defaultFilters);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+    
+    const clearGlobalFilter = () => {
+        setFilters(defaultFilters);
+        setGlobalFilterValue('');
+    };
 
-    // Use the custom useTableFilters helper function to simplify all the complex
-    // wiring that the PrimeReact DataTable needs for advanced filters.
-    const { 
-        filters: filters, 
-        setFilters: setFilters,
-        globalFilterFields: globalFilterFields,
-        header: header,
-        // clearFilters: clearFilters,
-        // onGlobalFilterChange: onGlobalFilterChange,
-    } = useTableFilters(modelSpec, {
-        globalFilterFields: [modelDataKey],
-        showGlobal: true,
-    });
-
+    const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setGlobalFilterValue(value);
+        setFilters((prev) => {
+            const next = { ...prev };
+            // @ts-ignore – PrimeReact types don't index cleanly
+            next['global'].value = value;
+            return next;
+        });
+    };
+    
     useEffect(() => {
         FetchData(modelSpec, modelDataKey, setTableData);
     }, []);
@@ -53,7 +60,11 @@ function SwapiDataTable({
     return (
         <DataTable
             value={tableData}
-            header={header}
+            header={DataTableHeader({
+                globalFilterValue,
+                onGlobalFilterChange,
+                clearGlobalFilter,
+            })}
             paginator={false}
             rows={10}
             rowHover={true}
@@ -64,7 +75,7 @@ function SwapiDataTable({
             sortField="name"
             filters={filters}
             onFilter={(e) => setFilters(e.filters as DataTableFilterMeta)}
-            globalFilterFields={globalFilterFields}
+            globalFilterFields={[modelDataKey]}
             removableSort
             editMode="row"
             onRowEditComplete={onRowEditComplete}

@@ -50,7 +50,8 @@ and showing other column headers through it when horizontally scrolling */
 
 /* Set PrimeReact active filter menu button to different background color */
 .p-column-filter-menu-button.p-column-filter-menu-button-active, 
-.p-column-filter-menu-button.p-column-filter-menu-button-active:hover {
+.p-column-filter-menu-button.p-column-filter-menu-button-active:hover,
+.p-column-filter-menu-button.p-column-filter-menu-button-open {
     background: #ffc000cc;
     color: #000000;
 }

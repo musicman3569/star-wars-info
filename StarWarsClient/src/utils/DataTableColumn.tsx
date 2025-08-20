@@ -1,10 +1,5 @@
-import React, { useMemo, useState } from 'react';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { type DataTableFilterMeta } from 'primereact/datatable';
-import { Button } from 'primereact/button';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { InputText } from 'primereact/inputtext';
 import type { SelectItem } from "primereact/selectitem";
 
 /**
@@ -121,7 +116,7 @@ function defaultOperator(kind: ColumnFilterKind): FilterOperator {
  * @param spec - An object defining the filter types and behaviors for each field in the table
  * @returns A DataTableFilterMeta object containing the complete filter configuration
  */
-function buildDefaultFilters(spec: ModelSpec): DataTableFilterMeta {
+export function buildDefaultFilters(spec: ModelSpec): DataTableFilterMeta {
     const meta: DataTableFilterMeta = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     };
@@ -153,72 +148,3 @@ function buildDefaultFilters(spec: ModelSpec): DataTableFilterMeta {
     return meta;
 }
 
-/**
- * Hook that manages filtering state and UI for PrimeReact DataTable components.
- * Provides filter controls, global search, and filter management functionality.
- *
- * @param spec - Specification object defining filter types for each field
- * @param opts - Optional configuration for filter behavior and appearance
- * @returns Object containing filter state and control methods
- */
-export function useTableFilters(
-    spec: ModelSpec,
-    opts: UseTableFiltersOptions = {}
-): {
-    filters: DataTableFilterMeta;
-    setFilters: React.Dispatch<React.SetStateAction<DataTableFilterMeta>>;
-    globalFilterFields: string[] | undefined;
-    header: React.ReactNode | null;
-    clearFilters: () => void;
-    onGlobalFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-} {
-    const [globalFilterValue, setGlobalFilterValue] = useState('');
-    const defaultFilters = useMemo(() => buildDefaultFilters(spec), [spec]);
-    const [filters, setFilters] = useState<DataTableFilterMeta>(defaultFilters);
-
-    const clearFilters = () => {
-        setFilters(defaultFilters);
-        setGlobalFilterValue('');
-    };
-
-    const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setGlobalFilterValue(value);
-        setFilters((prev) => {
-            const next = { ...prev };
-            // @ts-ignore – PrimeReact types don't index cleanly
-            next['global'].value = value;
-            return next;
-        });
-    };
-
-    const header = opts.showGlobal === false
-        ? null
-        : (
-            <div className="flex items-center gap-2">
-                <span className="flex flex-1">
-                    <Button label="Add" icon="pi pi-plus" />
-                </span>
-                <span className="flex items-center gap-0">
-                    <IconField iconPosition="left" className="flex-initial">
-                        <InputIcon className="pi pi-search"/>
-                        <InputText
-                            value={globalFilterValue}
-                            onChange={onGlobalFilterChange}
-                            placeholder={opts.globalPlaceholder ?? 'Keyword Search'}
-                        />
-                    </IconField>
-                    <Button type="button" icon="pi pi-filter-slash" onClick={clearFilters}/>
-                </span>
-            </div>
-        );
-
-    return {
-        filters,
-        setFilters,
-        globalFilterFields: opts.globalFilterFields,
-        header,
-        clearFilters,
-        onGlobalFilterChange,
-    };
-}
