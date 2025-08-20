@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
 using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace StarWarsInfo.Controllers;
 
@@ -42,8 +44,20 @@ public class ImportController : Controller
     {
         try
         {
+            // Retrieve all starship data from the Star Wars API and bulk insert/update into the database
             var starships = await _swapiClient.FetchStarshipsAsync(cancellationToken);
             await _dbContext.BulkInsertOrUpdateAsync(starships, cancellationToken:cancellationToken);
+            
+            // With the new data inserted, reset the sequence to the next available ID.
+            // The syntax for this is specific to PostgreSQL.
+            var maxId = await _dbContext.Starships.MaxAsync(s => s.StarshipId, cancellationToken);
+            var nextId = maxId + 1;
+            await _dbContext.Database.ExecuteSqlRawAsync(
+                "ALTER SEQUENCE starships_starshipid_seq RESTART WITH @p_next",
+                new[] { new NpgsqlParameter("p_next", nextId) },
+                cancellationToken
+            );
+            
             return new OkObjectResult(new 
             {
                 status = "complete",
