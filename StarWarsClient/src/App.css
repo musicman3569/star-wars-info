@@ -34,8 +34,7 @@ Bright orange: #ffc000
     --font-family: "Oxanium", sans-serif;
 }
 
-/* Set PrimeReact table background to prevent background image
-showing through the currently highlighted row instead of the color */
+/* Set PrimeReact table background for non-frozen columns  */
 .p-datatable .p-datatable-tbody > tr {
     background: hsla(236, 15%, 13%, 0.95);
 }
