@@ -11,6 +11,7 @@ import {useCachedFilterCallbacks} from "../utils/DataTableFilterCache.ts";
 import DataTableHeader from "./DataTableHeader.tsx";
 import DataTableEditForm from "./DataTableEditForm.tsx";
 import {Button} from "primereact/button";
+import {ConfirmDialog, confirmDialog} from "primereact/confirmdialog";
 
 function SwapiDataTable({
     modelSpec
@@ -70,7 +71,6 @@ function SwapiDataTable({
     }
     
     const onClickRowDelete = (rowData: any) => {
-        console.log('Delete row', rowData);
         DeleteData(
             modelDataKey, 
             rowData[modelDataKey],
@@ -122,7 +122,20 @@ function SwapiDataTable({
             }
             <Column 
                 header="Delete" 
-                body={(rowData) => <Button icon="pi pi-trash" onClick={() => onClickRowDelete(rowData)} />}   
+                body={(rowData) => 
+                    <Button 
+                        icon="pi pi-trash" 
+                        onClick={() => {
+                            confirmDialog({
+                                message: `Are you sure you want to delete ${rowData.name}?`,
+                                header: `Delete Starship`,
+                                icon: 'pi pi-exclamation-triangle',
+                                defaultFocus: 'cancel',
+                                accept: () => onClickRowDelete(rowData),
+                            });
+                            
+                        }
+                    }/>}   
             />
         </DataTable>
         <DataTableEditForm 
@@ -131,6 +144,7 @@ function SwapiDataTable({
             modelSpec={modelSpec}
             onSave={(formData) => onRowEditComplete(formData)}
         />
+        <ConfirmDialog />
     </>);
 }
 
