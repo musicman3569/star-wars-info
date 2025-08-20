@@ -109,7 +109,7 @@ function SwapiDataTable({
             editMode="row"
             onRowEditComplete={(e) => onRowEditComplete(e.newData)}
         >
-            <Column rowEditor header="Edit" frozen />
+            <Column rowEditor header="Edit" frozen style={{width: '1rem'}} />
             {
                 Object.entries(modelSpec)
                     .map(([field, spec]) => 

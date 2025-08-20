@@ -36,8 +36,14 @@ Bright orange: #ffc000
 
 /* Set PrimeReact table background to prevent background image
 showing through the currently highlighted row instead of the color */
+.p-datatable .p-datatable-tbody > tr {
+    background: hsla(236, 15%, 13%, 0.95);
+}
+
+/* Set PrimeReact table background to prevent background image
+showing through the currently highlighted row instead of the color */
 .p-datatable .p-datatable-tbody > tr:hover {
-    background-color: #54447b;
+    background: #54447b;
 }
 
 /* Fix PrimeReact issue with highlighted frozen column being transparent
@@ -83,4 +89,9 @@ color while editing */
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel {
     background: #ffc000cc;
     color: black;
+}
+
+/* Set PrimeReact table toolbar header background color */
+.p-datatable .p-datatable-header {
+    background: #282936cc;
 }
