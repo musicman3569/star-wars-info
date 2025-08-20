@@ -14,7 +14,7 @@ const ModelStarship: ModelSpec = {
     hyperdrive_rating: {kind: 'number', decimalPlaces: 1},
     MGLT: {kind: 'number'},
     starship_class: {kind: 'text'},
-    starship_id: {kind: 'id', width: '12rem', isDataKey: true, isHidden: false},
+    starship_id: {kind: 'id', width: '12rem', isDataKey: true, isHidden: false, isReadOnly: true},
     created: {kind: 'date', isReadOnly: true},
     edited: {kind: 'date', isReadOnly: true}
 };

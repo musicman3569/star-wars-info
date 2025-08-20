@@ -6,6 +6,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Checkbox } from 'primereact/checkbox';
 import { type ColumnSpec } from '../utils/DataTableColumn';
 import type {ColumnEditorOptions} from "primereact/column";
+import type { JSX } from "react";
 
 interface DataTableEditorProps {
     field: string;
@@ -14,11 +15,9 @@ interface DataTableEditorProps {
 
 function DataTableEditor({
     field,
-    columnSpec
- }: DataTableEditorProps) {
+    columnSpec,
+ }: DataTableEditorProps): ((options:ColumnEditorOptions) => JSX.Element) | null {
     switch (columnSpec.kind) {
-        case 'id':
-            return null;
         case 'text':
             return (options:ColumnEditorOptions) => (
                 <InputText
@@ -33,6 +32,7 @@ function DataTableEditor({
                     className="w-full"
                 />
             );
+        case "id":
         case 'number':
             return (options:ColumnEditorOptions) => (
                 <InputNumber
@@ -41,6 +41,7 @@ function DataTableEditor({
                     mode="decimal"
                     minFractionDigits={columnSpec.decimalPlaces ?? 0}
                     maxFractionDigits={columnSpec.decimalPlaces ?? 0}
+                    readOnly={columnSpec.isReadOnly}
                 />
             );
         case 'date':
@@ -53,6 +54,7 @@ function DataTableEditor({
                     showIcon
                     showTime
                     hourFormat="24"
+                    readOnlyInput={columnSpec.isReadOnly}
                 />
             );
         case 'dropdown':
@@ -61,6 +63,7 @@ function DataTableEditor({
                     value={options.value}
                     options={columnSpec.selectItems}
                     onChange={(e) => options.editorCallback?.(e.value)}
+                    readOnly={columnSpec.isReadOnly}
                 />
             );
         case 'multiselect':
@@ -69,6 +72,7 @@ function DataTableEditor({
                     value={options.value}
                     options={columnSpec.selectItems}
                     onChange={(e) => options.editorCallback?.(e.value)}
+                    readOnly={columnSpec.isReadOnly}
                 />
             );
         case 'boolean':
@@ -76,6 +80,7 @@ function DataTableEditor({
                 <Checkbox
                     checked={options.value}
                     onChange={(e) => options.editorCallback?.(e.value)}
+                    readOnly={columnSpec.isReadOnly}
                 />
             );
         default:

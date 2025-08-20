@@ -1,11 +1,15 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {FetchData, UpdateData} from '../utils/StarWarsInfoClient';
-import {DataTable, type DataTableFilterMeta, type DataTableRowEditCompleteEvent} from 'primereact/datatable';
+import {
+    DataTable,
+    type DataTableFilterMeta,
+} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
 import {type ModelSpec, getModelDataKey, buildDefaultFilters} from '../utils/DataTableColumn';
 import {Column} from "primereact/column";
 import {useCachedFilterCallbacks} from "../utils/DataTableFilterCache.ts";
 import DataTableHeader from "./DataTableHeader.tsx";
+import DataTableEditForm from "./DataTableEditForm.tsx";
 
 function SwapiDataTable({
     modelSpec
@@ -20,6 +24,7 @@ function SwapiDataTable({
     const [tableData, setTableData] = useState<any[]>([]);
     const [filters, setFilters] = useState<DataTableFilterMeta>(defaultFilters);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [editFormVisible, setEditFormVisible] = useState(false);
     
     const clearGlobalFilter = () => {
         setFilters(defaultFilters);
@@ -41,11 +46,11 @@ function SwapiDataTable({
         FetchData(modelSpec, modelDataKey, setTableData);
     }, []);
 
-    const onRowEditComplete = (e:DataTableRowEditCompleteEvent) => {
+    const onRowEditComplete = (newRowData:any) => {
         UpdateData(
             modelSpec, 
-            modelDataKey, 
-            e.newData,
+            modelDataKey,
+            newRowData,
             (responseData) => {
                 const newTableData = [...tableData];
                 const updatedRowIndex = newTableData.findIndex(item => 
@@ -57,13 +62,20 @@ function SwapiDataTable({
         );
     }
 
-    return (
+    const onClickRowAdd = () => {
+        if (!editFormVisible) {
+            setEditFormVisible(true);
+        }
+    }
+
+    return (<>
         <DataTable
             value={tableData}
             header={DataTableHeader({
                 globalFilterValue,
                 onGlobalFilterChange,
                 clearGlobalFilter,
+                onClickRowAdd
             })}
             paginator={false}
             rows={10}
@@ -78,7 +90,7 @@ function SwapiDataTable({
             globalFilterFields={[modelDataKey]}
             removableSort
             editMode="row"
-            onRowEditComplete={onRowEditComplete}
+            onRowEditComplete={(e) => onRowEditComplete(e.newData)}
         >
             <Column rowEditor header="Edit" frozen />
             {
@@ -92,7 +104,13 @@ function SwapiDataTable({
                     )
             }
         </DataTable>
-    );
+        <DataTableEditForm 
+            visible={editFormVisible}
+            onHide={() => setEditFormVisible(false)}
+            modelSpec={modelSpec}
+            onSave={(formData) => onRowEditComplete(formData)}
+        />
+    </>);
 }
 
 export default SwapiDataTable;

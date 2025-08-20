@@ -2,7 +2,7 @@ import { Column, type ColumnFilterElementTemplateOptions } from "primereact/colu
 import { type ColumnSpec } from '../utils/DataTableColumn';
 import { type FilterCallback } from "../utils/DataTableFilterCache";
 import { type CSSProperties } from "react";
-import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableCellFormat";
+import {formatDateCustom, formatNumber, formatHeaderText, type RowData} from "../utils/DataTableCellFormat";
 import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
 import {FilterNumber} from "./FilterElement/FilterNumber";
@@ -13,16 +13,6 @@ import {FilterMultiselect} from "./FilterElement/FilterMultiselect"
 import DataTableEditor from "./DataTableEditor";
 
 const defaultWidth = '14rem';
-
-const formatHeaderText = (field: string): string => {
-    return field
-        .split('_')
-        .map(word => word
-            .charAt(0)
-            .toUpperCase() + word.slice(1)
-        )
-        .join(' ');
-};
 
 interface SwapiColumnProps {
     field: string;

@@ -77,3 +77,19 @@ export const formatCurrency = (rowData: RowData, propertyName: string, currency:
         ? value.toLocaleString('en-US', {style: 'currency', currency: currency})
         : '';
 };
+
+
+/**
+ * Formats a field name by converting snake_case to Title Case format.
+ * @param field - The field name in snake_case format to be converted
+ * @returns Formatted string with each word capitalized and spaces between words
+ */
+export const formatHeaderText = (field: string): string => {
+    return field
+        .split('_')
+        .map(word => word
+            .charAt(0)
+            .toUpperCase() + word.slice(1)
+        )
+        .join(' ');
+};

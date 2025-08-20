@@ -41,7 +41,7 @@ export function UpdateData(
     const apiUrl = getApiUrl(modelDataKey);
 
     fetch(apiUrl.fullUrl, {
-        method: 'PUT',
+        method: (newData[modelDataKey]) ? 'PUT' : 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(newData)
     })

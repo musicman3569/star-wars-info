@@ -9,16 +9,18 @@ interface DataTableHeaderProps {
     globalFilterValue: string;
     onGlobalFilterChange: React.ChangeEventHandler<HTMLInputElement>;
     clearGlobalFilter:  React.MouseEventHandler<HTMLButtonElement>;
+    onClickRowAdd:  React.MouseEventHandler<HTMLButtonElement>;
 }
 export function DataTableHeader({
     globalFilterValue,
     onGlobalFilterChange,
     clearGlobalFilter,
+    onClickRowAdd,
 }:DataTableHeaderProps){
     return (
         <div className="flex items-center gap-2">
             <span className="flex flex-1">
-                <Button label="Add" icon="pi pi-plus" />
+                <Button label="Add" icon="pi pi-plus" onClick={onClickRowAdd}/>
             </span>
             <span className="flex items-center gap-0">
                 <IconField iconPosition="left" className="flex-initial">

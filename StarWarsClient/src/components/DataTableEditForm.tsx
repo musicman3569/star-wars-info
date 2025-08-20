@@ -1,0 +1,83 @@
+import {Dialog} from 'primereact/dialog';
+import {Button} from 'primereact/button';
+import {type JSX, useState} from 'react';
+import {type ModelSpec} from '../utils/DataTableColumn';
+import DataTableEditor from './DataTableEditor';
+import type {ColumnEditorOptions} from "primereact/column";
+import { formatHeaderText } from "../utils/DataTableCellFormat";
+
+interface DataTableEditFormProps {
+    visible: boolean;
+    onHide: () => void;
+    modelSpec: ModelSpec;
+    data?: any;
+    onSave: (data: any) => void;
+}
+
+interface EditorComponent {
+    field: string;
+    element?: JSX.Element;
+}
+
+const DataTableEditForm = ({
+   visible,
+   onHide,
+   modelSpec,
+   data,
+   onSave
+}: DataTableEditFormProps) => {
+    const [formData, setFormData] = useState(data ?? []);
+
+    const footerContent = (
+        <div>
+            <Button label="Cancel" icon="pi pi-times" onClick={onHide} className="p-button-text"/>
+            <Button label="Save" icon="pi pi-check" onClick={() => {
+                onSave(formData);
+                onHide();
+            }} autoFocus/>
+        </div>
+    );
+
+    const editorComponents = Object
+        .entries(modelSpec)
+        .filter(([, columnSpec]) => !columnSpec.isReadOnly)
+        .map(([field, columnSpec]) => {
+            return {
+                field: field,
+                element: DataTableEditor({field, columnSpec})?.({
+                    value: formData[field],
+                    field: field,
+                    rowData: formData,
+                    editorCallback: (value: any) => {
+                        setFormData({...formData, [field]: value});
+                    }
+                } as ColumnEditorOptions)
+            } as EditorComponent;
+        })
+        .filter((e)=> e.element !== undefined)
+    ;
+
+    return (
+        <Dialog
+            header="Edit Record"
+            visible={visible}
+            onHide={() => setFormData([])}
+            style={{width: '50vw', minWidth: '28rem'}}
+            footer={footerContent}
+            modal
+        >
+            <div className="p-fluid">
+                {editorComponents.map( (editor:EditorComponent) =>(
+                    <div className="p-inputgroup">
+                        <span className="p-inputgroup-addon swapi-form-label">
+                            {formatHeaderText(editor.field)}
+                        </span>
+                        {editor.element}
+                    </div>
+                ))}
+            </div>
+        </Dialog>
+    );
+};
+
+export default DataTableEditForm;
