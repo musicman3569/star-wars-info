@@ -28,15 +28,21 @@ const DataTableEditForm = ({
 }: DataTableEditFormProps) => {
     const [formData, setFormData] = useState(data ?? []);
 
+    const resetForm = () => {
+        setFormData([]);
+        onHide();
+    }
+    
     const footerContent = (
         <div>
-            <Button label="Cancel" icon="pi pi-times" onClick={onHide} className="p-button-text"/>
+            <Button label="Cancel" icon="pi pi-times" onClick={resetForm} className="p-button-text"/>
             <Button label="Save" icon="pi pi-check" onClick={() => {
                 onSave(formData);
-                onHide();
+                resetForm();
             }} autoFocus/>
         </div>
     );
+    
 
     const editorComponents = Object
         .entries(modelSpec)
@@ -61,7 +67,8 @@ const DataTableEditForm = ({
         <Dialog
             header="Edit Record"
             visible={visible}
-            onHide={() => setFormData([])}
+            onShow={() => setFormData(data ?? [])}
+            onHide={() => false}
             style={{width: '50vw', minWidth: '28rem'}}
             footer={footerContent}
             modal
