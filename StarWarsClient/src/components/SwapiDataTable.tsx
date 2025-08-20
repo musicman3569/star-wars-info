@@ -128,7 +128,7 @@ function SwapiDataTable({
                         onClick={() => {
                             confirmDialog({
                                 message: `Are you sure you want to delete ${rowData.name}?`,
-                                header: `Delete Starship`,
+                                header: `Delete Row`,
                                 icon: 'pi pi-exclamation-triangle',
                                 defaultFocus: 'cancel',
                                 accept: () => onClickRowDelete(rowData),
