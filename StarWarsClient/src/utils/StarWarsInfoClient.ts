@@ -54,6 +54,25 @@ export function UpdateData(
         .catch(error => console.log('Error updating ' + apiUrl.path + ' data: ', error));
 }
 
+export function DeleteData(
+    modelDataKey: string,
+    id: string,
+    successCallback: () => void,
+) {
+    const apiUrl = getApiUrl(modelDataKey);
+    const url = apiUrl.fullUrl + '/' + id;
+    fetch(url, {
+        method: 'DELETE'
+    })
+        .then(response => {
+            if (response.ok) {
+                successCallback();
+            } else {
+                throw new Error('Failed to delete ' + apiUrl.path + ' data');
+            }
+        })
+}
+
 function getApiUrl(modelDataKey: string) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const apiPath = modelDataKey.replace('_id', '');

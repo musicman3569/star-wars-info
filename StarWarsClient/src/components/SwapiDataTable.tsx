@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import {FetchData, UpdateData} from '../utils/StarWarsInfoClient';
+import {DeleteData, FetchData, UpdateData} from '../utils/StarWarsInfoClient';
 import {
     DataTable,
     type DataTableFilterMeta,
@@ -10,6 +10,7 @@ import {Column} from "primereact/column";
 import {useCachedFilterCallbacks} from "../utils/DataTableFilterCache.ts";
 import DataTableHeader from "./DataTableHeader.tsx";
 import DataTableEditForm from "./DataTableEditForm.tsx";
+import {Button} from "primereact/button";
 
 function SwapiDataTable({
     modelSpec
@@ -67,6 +68,22 @@ function SwapiDataTable({
             setEditFormVisible(true);
         }
     }
+    
+    const onClickRowDelete = (rowData: any) => {
+        console.log('Delete row', rowData);
+        DeleteData(
+            modelDataKey, 
+            rowData[modelDataKey],
+            () => {
+                const newTableData = [...tableData];
+                const deletedRowIndex = newTableData.findIndex(item =>
+                    item[modelDataKey] === rowData[modelDataKey]
+                );
+                newTableData.splice(deletedRowIndex, 1);
+                setTableData(newTableData);
+            }
+        );
+    }
 
     return (<>
         <DataTable
@@ -103,6 +120,10 @@ function SwapiDataTable({
                         })
                     )
             }
+            <Column 
+                header="Delete" 
+                body={(rowData) => <Button icon="pi pi-trash" onClick={() => onClickRowDelete(rowData)} />}   
+            />
         </DataTable>
         <DataTableEditForm 
             visible={editFormVisible}
