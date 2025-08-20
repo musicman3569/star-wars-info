@@ -2,7 +2,7 @@ import { Column, type ColumnFilterElementTemplateOptions } from "primereact/colu
 import { type ColumnSpec } from '../utils/DataTableColumn';
 import { type FilterCallback } from "../utils/DataTableFilterCache";
 import { type CSSProperties } from "react";
-import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableColumnBody";
+import {formatDateCustom, formatNumber, type RowData} from "../utils/DataTableCellFormat";
 import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
 import {FilterNumber} from "./FilterElement/FilterNumber";
