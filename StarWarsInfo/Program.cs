@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
@@ -17,6 +18,40 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower;
 });
+
+// Approach to integrating with OAuth via Keycloak taken from
+// https://stackoverflow.com/questions/77084743/secure-asp-net-core-rest-api-with-keycloak
+var keycloakUrl = Environment.GetEnvironmentVariable("KEYCLOAK_URL") ?? "";
+builder.Services
+    .AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.MetadataAddress = $"{keycloakUrl}/realms/starwarsinfo/.well-known/openid-configuration";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            RoleClaimType = "groups",
+            NameClaimType = "preferred_username",
+            ValidateAudience = false, //"account",
+            ValidateIssuer = false, // TODO: remove if unneeded after testing
+            ClockSkew = TimeSpan.FromMinutes(5)
+        };
+        // If you still have certificate trust issues, uncomment and adjust:
+        options.BackchannelHttpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+    });
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireClaim("email_verified", "true")
+        //.RequireClaim("groups", "sw_admin", "sw_user")
+        .Build();
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClientApp", policy =>
@@ -63,10 +98,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseCors("AllowClientApp");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("AllowClientApp");
 
 // Map Controller Routes
 app.MapControllerRoute(

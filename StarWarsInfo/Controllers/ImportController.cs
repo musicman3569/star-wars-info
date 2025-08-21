@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
 using EFCore.BulkExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace StarWarsInfo.Controllers;
 
@@ -11,6 +11,7 @@ namespace StarWarsInfo.Controllers;
 /// Handles the import of Star Wars data into the application database.
 /// Provides endpoints for batch data retrieval and insertion/updating operations.
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("v1/[controller]")]
 public class ImportController : Controller
@@ -52,9 +53,8 @@ public class ImportController : Controller
             // The syntax for this is specific to PostgreSQL.
             var maxId = await _dbContext.Starships.MaxAsync(s => s.StarshipId, cancellationToken);
             var nextId = maxId + 1;
-            await _dbContext.Database.ExecuteSqlRawAsync(
-                "ALTER SEQUENCE starships_starshipid_seq RESTART WITH @p_next",
-                new[] { new NpgsqlParameter("p_next", nextId) },
+            await _dbContext.Database.ExecuteSqlInterpolatedAsync(
+                $"SELECT setval('starwarsinfo.\"Starships_StarshipId_seq\"', {nextId}, false);",
                 cancellationToken
             );
             
