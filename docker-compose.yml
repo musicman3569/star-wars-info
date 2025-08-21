@@ -14,6 +14,7 @@ services:
       VSTEST_HOST_DEBUG: 1
       CLIENT_APP_URL_NO_PORT: "https://${HOSTNAME_CLIENT}"
       CLIENT_APP_URL: "https://${HOSTNAME_CLIENT}:${CLIENT_HTTPS_PORT}"
+      KEYCLOAK_URL: "https://${KC_HOSTNAME}:${KC_HTTPS_PORT}"
     volumes:
       - ./SSL:/SSL
       - dotnet_nuget:/root/.nuget/packages
@@ -105,6 +106,7 @@ services:
       KC_HTTPS_CERTIFICATE_KEY_FILE: /SSL/${KC_HOSTNAME}.key
     volumes:
       - ./SSL:/SSL
+      - ./Keycloak/import:/opt/keycloak/data/import
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

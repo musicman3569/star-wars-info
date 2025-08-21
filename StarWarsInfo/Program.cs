@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
 
@@ -14,6 +16,47 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower;
 });
+
+// Approach to integrating with OAuth via Keycloak taken from
+// https://stackoverflow.com/questions/77084743/secure-asp-net-core-rest-api-with-keycloak
+var keycloakUrl = Environment.GetEnvironmentVariable("KEYCLOAK_URL") ?? "";
+builder.Services
+    .AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false; // Set to false for self-signed certs
+        options.MetadataAddress = $"{keycloakUrl}/realms/starwarsinfo/.well-known/openid-configuration";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            // "groups" is actually an array of Realm Roles from Keycloak. Create the Realm Roles
+            // "sw_admin" and "sw_user", and then in the Keycloak client add the "groups" mapping
+            // under Client scopes -> (client name)-dedicated -> Add mapper -> predefined -> groups
+            RoleClaimType = "groups",
+            NameClaimType = "preferred_username",
+            // "account" is the default client ID from Keycloak that is used in the aud payload
+            ValidAudience = "account",
+            // https://stackoverflow.com/questions/60306175/bearer-error-invalid-token-error-description-the-issuer-is-invalid
+            ValidateIssuer = false, // TODO: remove if unneeded after testing
+            ClockSkew = TimeSpan.FromMinutes(5)
+        };
+        // Needed for self-signed certs
+        options.BackchannelHttpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireClaim("email_verified", "true")
+        // Required Realm Roles from Keycloak
+        .RequireClaim("groups", "sw_admin", "sw_user")
+        .Build();
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClientApp", policy =>
@@ -27,6 +70,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
 // Register HttpClient for SWAPI
 builder.Services.AddHttpClient("swapi", client =>
 {
@@ -34,14 +78,13 @@ builder.Services.AddHttpClient("swapi", client =>
     client.Timeout = TimeSpan.FromSeconds(30);
     //client.DefaultRequestHeaders.UserAgent.ParseAdd("StarWarsInfo/1.0 (+https://example.com)");
 });
+
 // Register the import service
 builder.Services.AddScoped<ISwapiClient, SwapiClient>();
 
-
-
 // Configure Entity Framework Core with PostgreSQL
 // Ensure you have the Npgsql.EntityFrameworkCore.PostgreSQL package installed
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
@@ -62,8 +105,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseCors("AllowClientApp");
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors("AllowClientApp");
 
 // Map Controller Routes
 app.MapControllerRoute(
