@@ -89,3 +89,27 @@ prompt_y_n() {
         esac
     done
 }
+
+
+# Performs in-place text replacement in a file using sed command.
+# Handles the differences between GNU sed (Linux/Windows) and BSD sed (macOS)
+# to ensure portable operation across different operating systems.
+#
+# Parameters:
+#   $1 - The sed regular expression pattern to apply
+#   $2 - The file path to modify in-place
+sed_replace() {
+    local regex_exp="$1"
+    local file_to_edit="$2"
+    
+    # Determine portable in-place option for sed (GNU vs BSD/macOS)
+    if sed --version >/dev/null 2>&1; then
+        log_output "Linux/Windows detected"
+        SED_INPLACE=("-i")
+    else
+        log_output "MacOS/BSD detected"
+        SED_INPLACE=("-i" "")
+    fi
+    
+    sed "${SED_INPLACE[@]}" "$regex_exp" "$file_to_edit"
+}

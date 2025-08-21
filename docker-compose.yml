@@ -106,6 +106,7 @@ services:
       KC_HTTPS_CERTIFICATE_KEY_FILE: /SSL/${KC_HOSTNAME}.key
     volumes:
       - ./SSL:/SSL
+      - ./Keycloak/import:/opt/keycloak/data/import
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
