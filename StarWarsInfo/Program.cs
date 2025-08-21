@@ -1,5 +1,8 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
 
@@ -37,11 +40,9 @@ builder.Services.AddHttpClient("swapi", client =>
 // Register the import service
 builder.Services.AddScoped<ISwapiClient, SwapiClient>();
 
-
-
 // Configure Entity Framework Core with PostgreSQL
 // Ensure you have the Npgsql.EntityFrameworkCore.PostgreSQL package installed
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
@@ -64,6 +65,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors("AllowClientApp");
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Map Controller Routes
 app.MapControllerRoute(
