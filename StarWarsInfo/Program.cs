@@ -47,16 +47,6 @@ builder.Services
 
     });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .RequireClaim("email_verified", "true")
-        // Required Realm Roles from Keycloak
-        .RequireClaim("groups", "sw_admin", "sw_user")
-        .Build();
-});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClientApp", policy =>
@@ -66,9 +56,20 @@ builder.Services.AddCors(options =>
                 Environment.GetEnvironmentVariable("CLIENT_APP_URL") ?? "",
                 Environment.GetEnvironmentVariable("CLIENT_APP_URL_NO_PORT") ?? ""
             )
+            .AllowCredentials()
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireClaim("email_verified", "true")
+        // Required Realm Roles from Keycloak
+        .RequireClaim("groups", "sw_admin", "sw_user")
+        .Build();
 });
 
 // Register HttpClient for SWAPI
@@ -106,9 +107,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("AllowClientApp");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowClientApp");
 
 // Map Controller Routes
 app.MapControllerRoute(
