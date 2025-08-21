@@ -13,12 +13,12 @@ export interface RowData {
  * @param decimals - Maximum number of decimal places to show (default: 0)
  * @returns Formatted number string with specified decimals, or empty string if value is not a number
  */
-export const formatNumber = (rowData: RowData, propertyName: string, decimals: number = 0): string => {
+export const formatNumber = (rowData: RowData, propertyName: string, decimals: number = 0, suffix: string = ''): string => {
     const value = rowData[propertyName];
     return typeof value === 'number' ? value.toLocaleString('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: decimals
-    }) : '';
+    }) + suffix : '';
 };
 
 /**

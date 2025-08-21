@@ -30,6 +30,7 @@ export interface ColumnSpec {
     isDataKey?: boolean;
     isReadOnly?: boolean;
     isHidden?: boolean;
+    displaySuffix?: string;
 }
 
 export type ModelSpec = Record<string, ColumnSpec>;

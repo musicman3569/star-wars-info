@@ -23,7 +23,7 @@ export function FilterNumber({
     useEffect(() => setMax(options.value?.[1] ?? null), [options.value?.[1]]);
 
     return (
-        <div className="flex flex-col gap-2 p-column-filter">
+        <div className="flex flex-column gap-2 p-column-filter">
             <InputNumber
                 value={min}
                 onChange={(e: InputNumberChangeEvent) => {

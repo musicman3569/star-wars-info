@@ -62,7 +62,7 @@ function SwapiColumn({
     const getBody = () => {
         switch (spec.kind) {
             case 'number':
-                return (rowData: RowData) => formatNumber(rowData, field, spec.decimalPlaces);
+                return (rowData: RowData) => formatNumber(rowData, field, spec.decimalPlaces, spec.displaySuffix);
             case 'date':
                 return (rowData: RowData) => formatDateCustom(rowData, field);
             case 'boolean':

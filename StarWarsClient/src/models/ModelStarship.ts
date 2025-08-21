@@ -6,7 +6,7 @@ const ModelStarship: ModelSpec = {
     manufacturer: {kind: 'text'},
     cost_in_credits: {kind: 'number'},
     length: {kind: 'number', decimalPlaces: 2},
-    max_atmosphering_speed: {kind: 'number', width: '18rem'},
+    max_atmosphering_speed: {kind: 'number', width: '18rem', displaySuffix: ' km'},
     crew: {kind: 'number'},
     passengers: {kind: 'number'},
     cargo_capacity: {kind: 'number'},
