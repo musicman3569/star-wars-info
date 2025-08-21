@@ -1,7 +1,5 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using StarWarsInfo.Data;
@@ -26,29 +24,36 @@ builder.Services
     .AddAuthentication()
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = false;
+        options.RequireHttpsMetadata = false; // Set to false for self-signed certs
         options.MetadataAddress = $"{keycloakUrl}/realms/starwarsinfo/.well-known/openid-configuration";
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            // "groups" is actually an array of Realm Roles from Keycloak. Create the Realm Roles
+            // "sw_admin" and "sw_user", and then in the Keycloak client add the "groups" mapping
+            // under Client scopes -> (client name)-dedicated -> Add mapper -> predefined -> groups
             RoleClaimType = "groups",
             NameClaimType = "preferred_username",
-            ValidateAudience = false, //"account",
+            // "account" is the default client ID from Keycloak that is used in the aud payload
+            ValidAudience = "account",
+            // https://stackoverflow.com/questions/60306175/bearer-error-invalid-token-error-description-the-issuer-is-invalid
             ValidateIssuer = false, // TODO: remove if unneeded after testing
             ClockSkew = TimeSpan.FromMinutes(5)
         };
-        // If you still have certificate trust issues, uncomment and adjust:
+        // Needed for self-signed certs
         options.BackchannelHttpHandler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         };
 
     });
+
 builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .RequireClaim("email_verified", "true")
-        //.RequireClaim("groups", "sw_admin", "sw_user")
+        // Required Realm Roles from Keycloak
+        .RequireClaim("groups", "sw_admin", "sw_user")
         .Build();
 });
 
@@ -65,6 +70,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
 // Register HttpClient for SWAPI
 builder.Services.AddHttpClient("swapi", client =>
 {
@@ -72,6 +78,7 @@ builder.Services.AddHttpClient("swapi", client =>
     client.Timeout = TimeSpan.FromSeconds(30);
     //client.DefaultRequestHeaders.UserAgent.ParseAdd("StarWarsInfo/1.0 (+https://example.com)");
 });
+
 // Register the import service
 builder.Services.AddScoped<ISwapiClient, SwapiClient>();
 

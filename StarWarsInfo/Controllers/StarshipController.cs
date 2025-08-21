@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using StarWarsInfo.Data;
-using StarWarsInfo.Integrations.Swapi;
-using EFCore.BulkExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using StarWarsInfo.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace StarWarsInfo.Controllers;
 
 /// <summary>
 /// Controller responsible for managing starship-related operations in the Star Wars information system.
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("v1/[controller]")]
 public class StarshipController : Controller
