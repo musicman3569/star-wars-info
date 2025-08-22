@@ -8,6 +8,19 @@ and sortable information site, so you can impress your friends with your astute
 
 ![Star Wars Ship Models](StarWarsClient/public/starwars_ships.png)
 
+## System Requirements:
+- Docker/Docker Compose
+- BASH (for Windows, Git Bash works and is usually installed alongside Git)
+- Works on Windows, Linux, and MacOS
+
+## Quick Start
+- To get started, go to the project root directory and run `DevTools/initialize-environment.sh`
+- When the script completes, the services should be started with the following URLS:
+    - https://starwarsinfo.test:8080/ -  The main website written in React.js
+    - https://starwarsinfo.test:8081/ - The ASP.NET Core API backend
+    - https://starwarsinfo.test:8082/ - The Keycloak SSO service, used for login and administering the SSO service.
+- When you first visit the site, you will be prompted to log in. Register an email/password to gain access (email verification is off for easier testing)
+
 ## Project Structure
 
 At the root of the solution there are several project folders:
