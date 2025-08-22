@@ -89,7 +89,7 @@ services:
       postgres:
         condition: service_healthy
     platform: linux/amd64
-    entrypoint: ["/opt/keycloak/bin/kc.sh", "${LOCALDEV__KC_ENTRYPOINT}"]
+    entrypoint: ["/opt/keycloak/bin/kc.sh", "${KEYCLOAK_ENTRYPOINT}", "${KEYCLOAK_ENTRYPOINT_ARG}"]
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}

@@ -1,9 +1,6 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {DeleteData, FetchData, UpdateData} from '../utils/StarWarsInfoClient';
-import {
-    DataTable,
-    type DataTableFilterMeta,
-} from 'primereact/datatable';
+import {DataTable, type DataTableFilterMeta} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
 import {type ModelSpec, getModelDataKey, buildDefaultFilters} from '../utils/DataTableColumn';
 import {Column} from "primereact/column";
@@ -12,6 +9,7 @@ import DataTableHeader from "./DataTableHeader.tsx";
 import DataTableEditForm from "./DataTableEditForm.tsx";
 import {Button} from "primereact/button";
 import {ConfirmDialog, confirmDialog} from "primereact/confirmdialog";
+import {useKeycloak} from "@react-keycloak/web";
 
 function SwapiDataTable({
     modelSpec
@@ -20,6 +18,7 @@ function SwapiDataTable({
 }) {
     const cssHeightToPageBottom = "calc(100vh - 100px - 50px)";
     const modelDataKey = getModelDataKey(modelSpec);
+    const { keycloak, initialized } = useKeycloak();
 
     const defaultFilters = useMemo(() => buildDefaultFilters(modelSpec), [modelSpec]);
     const filterCallbacks = useCachedFilterCallbacks();
@@ -45,10 +44,19 @@ function SwapiDataTable({
     };
     
     useEffect(() => {
-        FetchData(modelSpec, modelDataKey, setTableData);
-    }, []);
-
+        // Wait until the provider is initialized and a token is available
+        if (!initialized) return;
+        
+        FetchData(
+            modelSpec, 
+            modelDataKey, 
+            setTableData, 
+            keycloak.token
+        ).then();
+    }, [initialized, keycloak.token, modelSpec, modelDataKey]);
+    
     const onRowEditComplete = (newRowData:any) => {
+        if (!initialized) return;
         UpdateData(
             modelSpec, 
             modelDataKey,
@@ -58,9 +66,16 @@ function SwapiDataTable({
                 const updatedRowIndex = newTableData.findIndex(item => 
                     item[modelDataKey] === responseData[modelDataKey]
                 );
-                newTableData[updatedRowIndex] = responseData;
+                
+                if (updatedRowIndex === -1) {
+                    newTableData.push(responseData);   
+                } else {
+                    newTableData[updatedRowIndex] = responseData;
+                }
+                
                 setTableData(newTableData);
-            }
+            },
+            keycloak.token
         );
     }
 
@@ -71,6 +86,7 @@ function SwapiDataTable({
     }
     
     const onClickRowDelete = (rowData: any) => {
+        if (!initialized) return;
         DeleteData(
             modelDataKey, 
             rowData[modelDataKey],
@@ -81,7 +97,8 @@ function SwapiDataTable({
                 );
                 newTableData.splice(deletedRowIndex, 1);
                 setTableData(newTableData);
-            }
+            },
+            keycloak.token
         );
     }
 
@@ -133,9 +150,9 @@ function SwapiDataTable({
                                 defaultFocus: 'cancel',
                                 accept: () => onClickRowDelete(rowData),
                             });
-                            
-                        }
-                    }/>}   
+                        }}
+                    />
+                }   
             />
         </DataTable>
         <DataTableEditForm 

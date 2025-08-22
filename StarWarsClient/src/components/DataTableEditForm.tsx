@@ -23,7 +23,7 @@ const DataTableEditForm = ({
    visible,
    onHide,
    modelSpec,
-   data,
+   data = [] as any[],
    onSave
 }: DataTableEditFormProps) => {
     const [formData, setFormData] = useState(data ?? []);
@@ -51,7 +51,7 @@ const DataTableEditForm = ({
             return {
                 field: field,
                 element: DataTableEditor({field, columnSpec})?.({
-                    value: formData[field],
+                    value: formData[field] ?? '', // must always be defined to not get an uncontrolled component warning in the browser
                     field: field,
                     rowData: formData,
                     editorCallback: (value: any) => {
@@ -75,7 +75,7 @@ const DataTableEditForm = ({
         >
             <div className="p-fluid">
                 {editorComponents.map( (editor:EditorComponent) =>(
-                    <div className="p-inputgroup">
+                    <div className="p-inputgroup" key={editor.field}>
                         <span className="p-inputgroup-addon swapi-form-label">
                             {formatHeaderText(editor.field)}
                         </span>
