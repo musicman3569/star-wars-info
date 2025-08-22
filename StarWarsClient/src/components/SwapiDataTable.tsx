@@ -80,7 +80,7 @@ function SwapiDataTable({
                 setTableData(data);
                 if (data.length === 0) {
                     confirmDialog({
-                        message: `No records were found. Would you like to import data from the Star Wars API now?`,
+                        message: `No database records were found. Would you like to import data from the Star Wars API now?`,
                         header: `Import Data`,
                         icon: 'pi pi-cloud-download',
                         defaultFocus: 'accept',
