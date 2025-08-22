@@ -101,7 +101,7 @@ public static class SwapiFieldParser
     /// <returns>The numeric ID from the end of the URL.</returns>
     public static int RawUrlToId(string url)
     {
-        var parts = url.TrimEnd('/').Split('/');
+        var parts = url.Trim().TrimEnd('/').Split('/');
         return int.Parse(parts[^1]);
     }
     
