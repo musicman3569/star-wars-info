@@ -1,6 +1,6 @@
 :root {
     --keycloak-logo-url: url('../img/keycloak-logo-text.svg');
-    --keycloak-bg-logo-url: url("https://github.com/musicman3569/star-wars-info/blob/main/StarWarsClient/src/assets/login_wallpaper.jpg?raw=true");
+    --keycloak-bg-logo-url: url("https://github.com/musicman3569/star-wars-info/blob/main/StarWarsClient/src/assets/login_wallpaper_purple.jpg?raw=true");
     --keycloak-logo-height: 63px;
     --keycloak-logo-width: 300px;
     --keycloak-card-top-color: var(--pf-v5-global--palette--blue-400);
