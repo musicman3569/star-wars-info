@@ -12,11 +12,12 @@ and sortable information site, so you can impress your friends with your astute
 
 At the root of the solution there are several project folders:
 - __/DevTools__: Scripts/tools for developers that simplify environment management.
-- __/Keycloak__: Files and configurations for the Keycloak identity and access management service.
-- __/Postgres__: Files and configurations for the Postgres database service.
+- __/Keycloak__: Template files to import/bootstrap the Keycloak identity and access management service.
+- __/Postgres__: Database initialization files for the Postgres database service.
 - __/SSL__: PEM-formatted SSL certificate and key files for use with API, client, & Keycloak services.
 - __/StarWarsClient__: The React.js front end client application (via Vite)
 - __/StarWarsInfo__: The backend API project, written in .NET as a REST provider
+- __/StarWarsInfoTests__: Unit tests for the backend API project
 
 ## Developer Resources and Links
 - [Star Wars API](https://swapi.info//)
