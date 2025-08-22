@@ -1,6 +1,11 @@
 import { convertStringDates } from "./DateUtils";
 import { type ModelSpec } from "./DataTableColumn";
 
+interface ImportResult {
+    status: "complete" | "failed";
+    starship_import_count: number;
+}
+
 /**
  * Fetches data from the Star Wars API and processes date fields.
  *
@@ -19,7 +24,7 @@ export async function FetchData(
     modelSpec: ModelSpec,
     modelDataKey: string,
     successCallback: (data: any[]) => void,
-    authToken?: string = '',
+    authToken?: string,
 ) {
     const apiUrl = getApiUrl(modelDataKey);
 
@@ -60,7 +65,7 @@ export async function UpdateData(
     modelDataKey: string,
     newData: any,
     successCallback: (responseData: any) => void,
-    authToken?: string = '',
+    authToken?: string,
 ) {
     const apiUrl = getApiUrl(modelDataKey);
 
@@ -100,7 +105,7 @@ export async function DeleteData(
     modelDataKey: string,
     id: string,
     successCallback: () => void,
-    authToken?: string = '',
+    authToken?: string,
 ) {
     const apiUrl = getApiUrl(modelDataKey);
     const url = apiUrl.fullUrl + '/' + id;
@@ -118,6 +123,27 @@ export async function DeleteData(
         }
     } catch (error) {
         throw new Error('Failed to delete ' + apiUrl.path + ' data: ' + error);
+    }
+}
+
+export async function ImportData(
+    successCallback: (importResult: ImportResult) => void,
+    authToken?: string,
+) {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiFullUrl = apiUrl + '/import';
+
+    try {
+        const response = await fetch(apiFullUrl, {
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        successCallback(data);
+    } catch (error) {
+        console.log('Error importing data from SWAPI API: ', error);
     }
 }
 

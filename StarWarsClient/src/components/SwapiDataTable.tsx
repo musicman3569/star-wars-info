@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useMemo} from 'react';
-import {DeleteData, FetchData, UpdateData} from '../utils/StarWarsInfoClient';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {DeleteData, FetchData, ImportData, UpdateData} from '../utils/StarWarsInfoClient';
 import {DataTable, type DataTableFilterMeta} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
 import {type ModelSpec, getModelDataKey, buildDefaultFilters} from '../utils/DataTableColumn';
@@ -10,6 +10,7 @@ import DataTableEditForm from "./DataTableEditForm.tsx";
 import {Button} from "primereact/button";
 import {ConfirmDialog, confirmDialog} from "primereact/confirmdialog";
 import {useKeycloak} from "@react-keycloak/web";
+import { Toast } from 'primereact/toast';
 
 /**
  * A data table component for displaying and managing Star Wars information.
@@ -25,6 +26,7 @@ function SwapiDataTable({
     const cssHeightToPageBottom = "calc(100vh - 100px - 50px)";
     const modelDataKey = getModelDataKey(modelSpec);
     const { keycloak, initialized } = useKeycloak();
+    const toast = useRef<Toast>(null);
 
     const defaultFilters = useMemo(() => buildDefaultFilters(modelSpec), [modelSpec]);
     const filterCallbacks = useCachedFilterCallbacks();
@@ -73,13 +75,61 @@ function SwapiDataTable({
         
         FetchData(
             modelSpec, 
-            modelDataKey, 
-            setTableData, 
+            modelDataKey,
+            (data) => {
+                setTableData(data);
+                if (data.length === 0) {
+                    confirmDialog({
+                        message: `No records were found. Would you like to import data from the Star Wars API now?`,
+                        header: `Import Data`,
+                        icon: 'pi pi-cloud-download',
+                        defaultFocus: 'accept',
+                        accept: importData,
+                    });
+                }
+            },
             keycloak.token
         ).then();
-
+        
         setLoading(false);
     }, [initialized, keycloak.token, modelSpec, modelDataKey]);
+    
+    const importData = () => {
+        if (!initialized) return;
+        setLoading(true);
+        toast.current?.show({
+            severity: 'info',
+            summary: 'Data Import',
+            detail: "Importing data from SWAPI to database...",
+            life: 3000
+        });
+        ImportData((importResult) => {
+            confirmDialog({
+                message: `Imported ${importResult.starship_import_count} starships. Reload table now?`,
+                header: `Import Data Complete`,
+                icon: 'pi pi-cloud-download',
+                defaultFocus: 'accept',
+                accept: () => {
+                    toast.current?.show({
+                        severity: 'info',
+                        summary: 'Loading Data',
+                        detail: "Refreshing table data, please wait...",
+                        life: 3000
+                    });
+                    FetchData(
+                        modelSpec,
+                        modelDataKey,
+                        (data) => {
+                            setTableData(data);
+                        },
+                        keycloak.token
+                    ).then();
+                },
+            });},
+            keycloak.token
+        );
+        setLoading(false);
+    }
 
     /**
      * Handles the completion of row editing by updating the data
@@ -104,6 +154,12 @@ function SwapiDataTable({
                 }
                 
                 setTableData(newTableData);
+                toast.current?.show({
+                    severity: 'success',
+                    summary: 'Update Success',
+                    detail: `${responseData.name} updated successfully`,
+                    life: 3000
+                });
             },
             keycloak.token
         );
@@ -134,6 +190,12 @@ function SwapiDataTable({
                 );
                 newTableData.splice(deletedRowIndex, 1);
                 setTableData(newTableData);
+                toast.current?.show({
+                    severity: 'success',
+                    summary: 'Delete Success',
+                    detail: `${rowData.name} deleted successfully`,
+                    life: 3000
+                });
             },
             keycloak.token
         );
@@ -201,6 +263,7 @@ function SwapiDataTable({
             onSave={(formData) => onRowEditComplete(formData)}
         />
         <ConfirmDialog />
+        <Toast ref={toast} />
     </>);
 }
 
