@@ -6,7 +6,7 @@ function SwapiMenu() {
     
     let items = [
         { 
-            label: 'My Account', 
+            label: 'My SSO Account', 
             icon: 'pi pi-user', 
             url: `${keycloakUrl}/realms/starwarsinfo/account/` 
         },

@@ -1,10 +1,34 @@
+/* ---------- START CUSTOM OVERRIDES ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
 :root {
-    --keycloak-logo-url: url('../img/keycloak-logo-text.svg');
+    --keycloak-logo-url: url('../img/swapi_favicon.svg');
     --keycloak-bg-logo-url: url("https://github.com/musicman3569/star-wars-info/blob/main/StarWarsClient/src/assets/login_wallpaper_purple.jpg?raw=true");
     --keycloak-logo-height: 63px;
     --keycloak-logo-width: 300px;
-    --keycloak-card-top-color: var(--pf-v5-global--palette--blue-400);
+    --keycloak-card-top-color: #ffc000;
+    --pf-v5-global--link--Color: #ffc000;
+    --pf-v5-global--FontFamily--text: "Oxanium", sans-serif;
+    --pf-v5-global--FontFamily--heading: "Oxanium", sans-serif;
 }
+
+:where(a:hover) {
+    --pf-v5-global--link--Color: #ffc000;
+}
+
+.pf-v5-c-button.pf-m-primary {
+    background-color: var(--keycloak-card-top-color);
+    color: black;
+}
+
+#kc-header-wrapper {
+    background: #26292dbb;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* ---------- END CUSTOM OVERRIDES ---------- */
+/* Everything below is directly copied from the default login theme */
 
 .pf-v5-c-login__container {
     grid-template-columns: 34rem;
