@@ -15,10 +15,6 @@ body {
     background-image: none;
 }
 
-h1 {
-    color: #aa82ff;
-}
-
 .swapi-form-label {
     width: 14em;
 }
@@ -93,4 +89,16 @@ color while editing */
 /* Set PrimeReact table toolbar header background color */
 .p-datatable .p-datatable-header {
     background: #282936cc;
+}
+
+/* Set PrimeReact TabView panels to transparent background so the
+transparent table backround effects work  */
+.p-tabview .p-tabview-panels {
+    background: none;
+}
+
+/* Remove PrimeReact tabview padding so that the tab content touches
+the tab header instead of having a gap */
+.p-tabview .p-tabview-panels {
+    padding: 0;
 }
