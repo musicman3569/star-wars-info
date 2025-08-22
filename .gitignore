@@ -6,3 +6,4 @@ riderModule.iml
 .env
 .idea/
 /Keycloak/import/*.json
+/Keycloak/themes/org.keycloak.keycloak-themes-26.3.2

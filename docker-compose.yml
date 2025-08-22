@@ -74,8 +74,9 @@ services:
     # to dependent services that should wait to start.
     healthcheck:
       test: pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB
-      timeout: 10s
-      retries: 20
+      interval: 2s
+      timeout: 5s
+      retries: 40
     expose:
       - 5432
     ports:
@@ -107,6 +108,7 @@ services:
     volumes:
       - ./SSL:/SSL
       - ./Keycloak/import:/opt/keycloak/data/import
+      - ./Keycloak/themes/starwarsinfo:/opt/keycloak/themes/starwarsinfo
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
