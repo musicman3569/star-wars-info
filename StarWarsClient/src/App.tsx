@@ -16,6 +16,7 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./utils/KeycloakInit"
 import {TabPanel, TabView} from "primereact/tabview";
 import {useState} from "react";
+import SwapiMenu from "./components/SwapiMenu.tsx";
 
 function App() {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -32,40 +33,47 @@ function App() {
             <PrimeReactProvider>
                 <TabView activeIndex={activeTabIndex} onTabChange={(e) => setActiveTabIndex(e.index)}>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
-                            <SectionIcon src={starshipsIcon} alt="Starships Icon"/>
-                            <span>Starships</span>
+                        <SectionIcon src={starshipsIcon} alt="Starships Icon"/>
+                        <span>Starships</span>
                     </>}>
                         <SwapiDataTable modelSpec={ModelStarship}/>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
-                            <SectionIcon src={peopleIcon} alt="People Icon"/>
-                            <span>People</span>
+                        <SectionIcon src={peopleIcon} alt="People Icon"/>
+                        <span>People</span>
                     </>}>
                         <p>People here</p>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
-                            <SectionIcon src={speciesIcon} alt="Species Icon"/>
-                            <span>Species</span>
+                        <SectionIcon src={speciesIcon} alt="Species Icon"/>
+                        <span>Species</span>
                     </>}>
                         <p>Species Here</p>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
-                            <SectionIcon src={planetsIcon} alt="Planets Icon"/>
-                            <span>Planets</span>
+                        <SectionIcon src={planetsIcon} alt="Planets Icon"/>
+                        <span>Planets</span>
                     </>}>
                         <p>Planets Here</p>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
-                            <SectionIcon src={vehiclesIcon} alt="Vehicles Icon"/>
-                            <span>Vehicles</span>
+                        <SectionIcon src={vehiclesIcon} alt="Vehicles Icon"/>
+                        <span>Vehicles</span>
                     </>}>
                         <p>Vehicles Here</p>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
-                            <SectionIcon src={filmsIcon} alt="Films Icon"/>
-                            <span>Films</span>
+                        <SectionIcon src={filmsIcon} alt="Films Icon"/>
+                        <span>Films</span>
                     </>}>
                         <p>Films Here</p>
+                    </TabPanel>
+                    <TabPanel className="border-round-top-xl mr-2" headerClassName="tab-rightmost" header={<>
+                        <i className="pi pi-bars mr-2"></i>
+                    </>}>
+                        <div className="flex">
+                            <SwapiMenu />
+                        </div>
                     </TabPanel>
                 </TabView>
             </PrimeReactProvider>

@@ -102,3 +102,9 @@ the tab header instead of having a gap */
 .p-tabview .p-tabview-panels {
     padding: 0;
 }
+
+/* App.css (or a CSS module) */
+.p-tabview .p-tabview-nav li.tab-rightmost { margin-left: auto; }
+
+/* optional: keep the nav full-width to make the push work nicely */
+.p-tabview .p-tabview-nav { display: flex; }
