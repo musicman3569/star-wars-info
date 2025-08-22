@@ -26,6 +26,7 @@ function SwapiDataTable({
     const [filters, setFilters] = useState<DataTableFilterMeta>(defaultFilters);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [editFormVisible, setEditFormVisible] = useState(false);
+    const [loading, setLoading] = useState(true);
     
     const clearGlobalFilter = () => {
         setFilters(defaultFilters);
@@ -53,6 +54,8 @@ function SwapiDataTable({
             setTableData, 
             keycloak.token
         ).then();
+
+        setLoading(false);
     }, [initialized, keycloak.token, modelSpec, modelDataKey]);
     
     const onRowEditComplete = (newRowData:any) => {
@@ -115,7 +118,7 @@ function SwapiDataTable({
             rows={10}
             rowHover={true}
             scrollable={true}
-            scrollHeight={cssHeightToPageBottom}
+            scrollHeight={loading ? "0px" : cssHeightToPageBottom}
             dataKey={modelDataKey}
             sortMode="single"
             sortField="name"
@@ -125,6 +128,8 @@ function SwapiDataTable({
             removableSort
             editMode="row"
             onRowEditComplete={(e) => onRowEditComplete(e.newData)}
+            loading={loading}
+            emptyMessage=" "
         >
             <Column rowEditor header="Edit" frozen style={{width: '1rem'}} />
             {
