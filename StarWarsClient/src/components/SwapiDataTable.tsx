@@ -27,6 +27,7 @@ function SwapiDataTable({
     const modelDataKey = getModelDataKey(modelSpec);
     const { keycloak, initialized } = useKeycloak();
     const toast = useRef<Toast>(null);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const defaultFilters = useMemo(() => buildDefaultFilters(modelSpec), [modelSpec]);
     const filterCallbacks = useCachedFilterCallbacks();
@@ -58,6 +59,17 @@ function SwapiDataTable({
             return next;
         });
     };
+
+    /**
+     * Effect hook that updates the window width when the component mounts or when the window resizes.
+     * This is used for responsive layout such as unfreezing columns when the screen is narrow to make
+     * more readable space on the table.
+     */
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     
 
     /**
@@ -235,6 +247,7 @@ function SwapiDataTable({
                             field: field, 
                             spec: spec,
                             filterCallbacks: filterCallbacks,
+                            windowWidth: windowWidth
                         })
                     )
             }

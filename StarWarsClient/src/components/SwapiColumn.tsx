@@ -1,7 +1,7 @@
 import { Column, type ColumnFilterElementTemplateOptions } from "primereact/column";
 import { type ColumnSpec } from '../utils/DataTableColumn';
 import { type FilterCallback } from "../utils/DataTableFilterCache";
-import { type CSSProperties } from "react";
+import {type CSSProperties} from "react";
 import {formatDateCustom, formatNumber, formatHeaderText, type RowData} from "../utils/DataTableCellFormat";
 import {FilterText} from "./FilterElement/FilterText";
 import {FilterId} from "./FilterElement/FilterId";
@@ -14,21 +14,36 @@ import DataTableEditor from "./DataTableEditor";
 
 const defaultWidth = '14rem';
 
+/**
+ * Props interface for the SwapiColumn component
+ * @interface SwapiColumnProps
+ * @property {string} field - The field name for the column
+ * @property {ColumnSpec} spec - Column specification containing display and behavior settings
+ * @property {FilterCallback} filterCallbacks - Callbacks for filter operations
+ * @property {number} [windowWidth] - Optional window width for responsive behavior
+ */
 interface SwapiColumnProps {
     field: string;
     spec: ColumnSpec;
     filterCallbacks: FilterCallback;
+    windowWidth?: number;
 }
 
 function SwapiColumn({
     field,
     spec,
     filterCallbacks,
+    windowWidth = 0,
 }: SwapiColumnProps) {
     const style: CSSProperties = {
         minWidth: spec.width ?? defaultWidth
     };
 
+
+    /**
+     * Returns the appropriate filter element component based on the column specification type
+     * @returns {(opts: ColumnFilterElementTemplateOptions) => JSX.Element} Filter element component
+     */
     const getFilterElement = () => {
         switch (spec.kind) {
             case 'id':
@@ -59,6 +74,10 @@ function SwapiColumn({
         }
     };
 
+    /**
+     * Returns the cell content formatter function based on the column specification type
+     * @returns {(rowData: RowData) => string | number} Cell content formatter function
+     */
     const getBody = () => {
         switch (spec.kind) {
             case 'number':
@@ -74,7 +93,11 @@ function SwapiColumn({
                 return (rowData: RowData) => rowData[field] ?? '';
         }
     }
-    
+
+    /**
+     * Determines the data type for the column based on specification
+     * @returns {string} Column data type
+     */
     const getDataType = () => {
         if (spec.dataType) return spec.dataType;
         if (spec.kind === 'number' || spec.kind === 'id') return 'numeric';
@@ -87,7 +110,7 @@ function SwapiColumn({
         dataType={getDataType()}
         header={formatHeaderText(field)}
         style={style}
-        frozen={spec.frozen}
+        frozen={windowWidth > 768 ? spec.frozen : false}
         sortable
         filter
         showFilterMatchModes={spec.kind !== 'number'}
