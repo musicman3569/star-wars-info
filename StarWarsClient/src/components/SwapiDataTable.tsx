@@ -11,6 +11,12 @@ import {Button} from "primereact/button";
 import {ConfirmDialog, confirmDialog} from "primereact/confirmdialog";
 import {useKeycloak} from "@react-keycloak/web";
 
+/**
+ * A data table component for displaying and managing Star Wars information.
+ * Supports filtering, editing, adding, and deleting rows of data.
+ * @param {Object} props - Component props
+ * @param {ModelSpec} props.modelSpec - Specification of the data model structure
+ */
 function SwapiDataTable({
     modelSpec
 }:{
@@ -27,12 +33,19 @@ function SwapiDataTable({
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [editFormVisible, setEditFormVisible] = useState(false);
     const [loading, setLoading] = useState(true);
-    
+
+    /**
+     * Clears the global filter and resets filters to their default values
+     */
     const clearGlobalFilter = () => {
         setFilters(defaultFilters);
         setGlobalFilterValue('');
     };
 
+    /**
+     * Handles changes to the global filter input
+     * @param {React.ChangeEvent<HTMLInputElement>} e - Input change event
+     */
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setGlobalFilterValue(value);
@@ -44,8 +57,18 @@ function SwapiDataTable({
         });
     };
     
+
+    /**
+     * Effect hook that fetches data when the component mounts or when dependencies change.
+     * Waits for Keycloak initialization and valid token before making the API call.
+     * Updates the table data and loading state.
+     *
+     * @dependency {boolean} initialized - Keycloak initialization status
+     * @dependency {string} keycloak.token - Authentication token
+     * @dependency {ModelSpec} modelSpec - Data model specification
+     * @dependency {string} modelDataKey - Key field for the data model
+     */
     useEffect(() => {
-        // Wait until the provider is initialized and a token is available
         if (!initialized) return;
         
         FetchData(
@@ -57,7 +80,11 @@ function SwapiDataTable({
 
         setLoading(false);
     }, [initialized, keycloak.token, modelSpec, modelDataKey]);
-    
+
+    /**
+     * Handles the completion of row editing by updating the data
+     * @param {any} newRowData - The updated row data
+     */
     const onRowEditComplete = (newRowData:any) => {
         if (!initialized) return;
         UpdateData(
@@ -82,12 +109,19 @@ function SwapiDataTable({
         );
     }
 
+    /**
+     * Shows the edit form for adding a new row
+     */
     const onClickRowAdd = () => {
         if (!editFormVisible) {
             setEditFormVisible(true);
         }
     }
-    
+
+    /**
+     * Deletes a row from the table
+     * @param {any} rowData - The data of the row to be deleted
+     */
     const onClickRowDelete = (rowData: any) => {
         if (!initialized) return;
         DeleteData(
