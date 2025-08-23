@@ -159,6 +159,7 @@ function SwapiDataTable({
                     item[modelDataKey] === responseData[modelDataKey]
                 );
                 
+                // -1 means the row doesn't exist in the table, so we push it on the end
                 if (updatedRowIndex === -1) {
                     newTableData.push(responseData);   
                 } else {
