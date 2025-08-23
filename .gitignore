@@ -6,3 +6,4 @@ riderModule.iml
 .env
 .idea/
 /Keycloak/themes/org.keycloak.*
+.vs/
