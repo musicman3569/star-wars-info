@@ -14,4 +14,3 @@ set -e
 "$SCRIPT_DIR"/keycloak-prep-import.sh
 "$SCRIPT_DIR"/hosts-add-entries.sh
 "$SCRIPT_DIR"/ssl-generate-certs.sh
-"$SCRIPT_DIR"/docker-comopose-rebuild.sh
