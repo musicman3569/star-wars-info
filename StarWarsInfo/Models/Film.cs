@@ -8,7 +8,7 @@ public class Film
     public string OpeningCrawl { get; set; } = string.Empty;
     public string Director { get; set; } = string.Empty;
     public string Producer { get; set; } = string.Empty;
-    public DateTime ReleaseDate { get; set; } = DateTime.MinValue;
+    public DateOnly ReleaseDate { get; set; } = DateOnly.MinValue;
     public ICollection<Person> Characters { get; set; } = [];
     public ICollection<Planet> Planets { get; set; } = [];
     public ICollection<Starship> Starships { get; set; } = [];

@@ -2,7 +2,7 @@ namespace StarWarsInfo.Integrations.Swapi;
 
 public interface ISwapiImportService
 {
-    // Task<int> ImportFilmsAsync(CancellationToken ct = default);
+    Task<int> ImportFilmsAsync(CancellationToken ct = default);
     // Task<int> ImportPeopleAsync(CancellationToken ct = default);
     // Task<int> ImportPlanetsAsync(CancellationToken ct = default);
     // Task<int> ImportSpeciesAsync(CancellationToken ct = default);

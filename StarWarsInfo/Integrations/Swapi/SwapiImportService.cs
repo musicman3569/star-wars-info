@@ -17,47 +17,24 @@ public class SwapiImportService : ISwapiImportService
         _dbContext = dbContext;
         _logger = logger;
     }
-
-    // public async Task<int> ImportStarshipsAsync(CancellationToken cancellationToken = default)
-    // {
-    //     // Retrieve all starship data from the Star Wars API and bulk insert/update into the database
-    //     var starships = await _swapiClient.FetchStarshipsAsync(cancellationToken);
-    //     await _dbContext.BulkInsertOrUpdateAsync(
-    //         starships,
-    //         cancellationToken:cancellationToken
-    //     );
-    //         
-    //     // With the new data inserted, reset the sequence to the next available ID.
-    //     // The syntax for this is specific to PostgreSQL.
-    //     var maxId = await _dbContext.Starships.MaxAsync(s => s.StarshipId, cancellationToken);
-    //     var nextId = maxId + 1;
-    //     await _dbContext.Database.ExecuteSqlInterpolatedAsync(
-    //         $"SELECT setval('starwarsinfo.\"Starships_StarshipId_seq\"', {nextId}, false);",
-    //         cancellationToken
-    //     );
-    //     
-    //     return starships.Count;
-    // }
     
-    // public async Task<int> ImportFilmsAsync(CancellationToken ct = default) 
-    // {
-    //     
-    // }
+    public Task<int> ImportFilmsAsync(CancellationToken ct = default) =>
+        ImportAsync(
+            _swapiClient.FetchFilmsAsync,
+            _dbContext.Films,
+            f => f.FilmId,
+            "starwarsinfo.\"Films_FilmId_seq\"",
+            ct
+        );
+    
+    // public Task<int> ImportPeopleAsync(CancellationToken ct = default) => 
+    // 
     //
-    // public async Task<int> ImportPeopleAsync(CancellationToken ct = default) 
-    // {
-    //     
-    // }
+    // public Task<int> ImportPlanetsAsync(CancellationToken ct = default) => 
+    // 
     //
-    // public async Task<int> ImportPlanetsAsync(CancellationToken ct = default) 
-    // {
-    //     
-    // }
-    //
-    // public async Task<int> ImportSpeciesAsync(CancellationToken ct = default) 
-    // {
-    //     
-    // }
+    // public Task<int> ImportSpeciesAsync(CancellationToken ct = default) => 
+    // 
     
     public Task<int> ImportStarshipsAsync(CancellationToken ct = default) =>
         ImportAsync(
@@ -69,19 +46,19 @@ public class SwapiImportService : ISwapiImportService
         );
 
     
-    // public async Task<int> ImportVehiclesAsync(CancellationToken ct = default) 
-    // {
-    //     
-    // }
+    // public Task<int> ImportVehiclesAsync(CancellationToken ct = default) => 
+    // 
     
     private async Task<int> ImportAsync<TEntity>(
         Func<CancellationToken, Task<List<TEntity>>> fetchAsync,
         DbSet<TEntity> dbSet,
         Expression<Func<TEntity, int>> idSelector,
         string sequenceName,
-        CancellationToken ct)
+        CancellationToken ct
+    )
         where TEntity : class
     {
+        // Call the API fetch function to get the entities to be imported
         var entities = await fetchAsync(ct);
 
         await _dbContext.BulkInsertOrUpdateAsync(
@@ -89,9 +66,12 @@ public class SwapiImportService : ISwapiImportService
             cancellationToken: ct
         );
 
+        // Get the next available id for the imported entities.
         var maxId = await dbSet.MaxAsync(idSelector, ct);
         var nextId = maxId + 1;
 
+        // The imported date already has id values, so the auto-increment sequence
+        // will be out of sync. This will reset it to the next highest available id.
         await _dbContext.Database.ExecuteSqlInterpolatedAsync(
             $"SELECT setval({sequenceName}, {nextId}, false);",
             ct

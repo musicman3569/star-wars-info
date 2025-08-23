@@ -3,7 +3,9 @@ import { type ModelSpec } from "./DataTableColumn";
 
 interface ImportResult {
     status: "complete" | "failed";
+    message: string;
     starship_import_count: number;
+    film_import_count: number;
 }
 
 /**

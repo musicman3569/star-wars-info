@@ -15,4 +15,6 @@ public interface ISwapiClient
     /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A list of Starships retrieved from the API, or an empty list if no data is available.</returns>
     public Task<List<Starship>> FetchStarshipsAsync(CancellationToken ct);
+    
+    public Task<List<Film>> FetchFilmsAsync(CancellationToken ct);
 }

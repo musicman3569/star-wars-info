@@ -58,4 +58,20 @@ public class SwapiClient : ISwapiClient
             .Select(StarshipMapper.FromJson)
             .ToList() ?? [];
     }
+    
+    /// <summary>
+    /// Fetches a list of Film objects by retrieving the corresponding data
+    /// from the Star Wars API (SWAPI) and mapping/cleaning the raw values to a Film model.
+    /// </summary>
+    /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A list of Films retrieved from the API, or an empty list if no data is available.</returns>
+    public async Task<List<Film>> FetchFilmsAsync(CancellationToken ct)
+    {
+        var jsonDocument = await FetchResourceAsync("films", ct);
+        return jsonDocument?
+            .RootElement
+            .EnumerateArray()
+            .Select(FilmMapper.FromJson)
+            .ToList() ?? [];
+    }
 }

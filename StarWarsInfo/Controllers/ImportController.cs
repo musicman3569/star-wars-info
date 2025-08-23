@@ -38,14 +38,20 @@ public class ImportController : Controller
     [HttpGet]
     public async Task<IActionResult> SyncAll(CancellationToken cancellationToken = default)
     {
+        var starshipImportCount = 0;
+        var filmImportCount = 0;
+        
         try
         {
-            var starshipImportCount = await _swapiImportService.ImportStarshipsAsync(cancellationToken);
+            starshipImportCount = await _swapiImportService.ImportStarshipsAsync(cancellationToken);
+            filmImportCount = await _swapiImportService.ImportFilmsAsync(cancellationToken);
             
             return new OkObjectResult(new 
             {
                 status = "complete",
-                starship_import_count = starshipImportCount
+                message = "Import successful.",
+                starship_import_count = starshipImportCount,
+                film_import_count = filmImportCount
             });
         }
         catch (Exception ex)
@@ -53,7 +59,9 @@ public class ImportController : Controller
             return StatusCode(500, new
             {
                 status = "failed", 
-                message = ex.Message
+                message = ex.Message,
+                starship_import_count = starshipImportCount,
+                film_import_count = filmImportCount
             });
         }
     }
