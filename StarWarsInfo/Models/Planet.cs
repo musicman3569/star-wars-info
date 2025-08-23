@@ -10,7 +10,7 @@ public class Planet
     public string Climate { get; set; } = string.Empty;
     public decimal? Gravity { get; set; } // unknown, " standard" suffix
     public string Terrain { get; set; } = string.Empty;
-    public int? SurfaceWater { get; set; } // unknown
+    public decimal? SurfaceWater { get; set; } // unknown
     public ulong? Population { get; set; } // unknown
     public ICollection<Person> Residents { get; set; } = [];
     public ICollection<Film> Films { get; set; } = [];

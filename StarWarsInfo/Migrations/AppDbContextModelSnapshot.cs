@@ -219,8 +219,8 @@ namespace StarWarsInfo.Migrations
                     b.Property<int>("HomeworldId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Mass")
-                        .HasColumnType("integer");
+                    b.Property<decimal?>("Mass")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -274,19 +274,14 @@ namespace StarWarsInfo.Migrations
                     b.Property<int?>("RotationPeriod")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SpeciesId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("SurfaceWater")
-                        .HasColumnType("integer");
+                    b.Property<decimal?>("SurfaceWater")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Terrain")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("PlanetId");
-
-                    b.HasIndex("SpeciesId");
 
                     b.ToTable("Planets");
                 });
@@ -327,7 +322,7 @@ namespace StarWarsInfo.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("HomeworldId")
+                    b.Property<int?>("HomeworldId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Language")
@@ -343,6 +338,8 @@ namespace StarWarsInfo.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("SpeciesId");
+
+                    b.HasIndex("HomeworldId");
 
                     b.ToTable("Species");
                 });
@@ -596,21 +593,18 @@ namespace StarWarsInfo.Migrations
                     b.Navigation("Homeworld");
                 });
 
-            modelBuilder.Entity("StarWarsInfo.Models.Planet", b =>
+            modelBuilder.Entity("StarWarsInfo.Models.Species", b =>
                 {
-                    b.HasOne("StarWarsInfo.Models.Species", null)
-                        .WithMany("Homeworld")
-                        .HasForeignKey("SpeciesId");
+                    b.HasOne("StarWarsInfo.Models.Planet", "Homeworld")
+                        .WithMany()
+                        .HasForeignKey("HomeworldId");
+
+                    b.Navigation("Homeworld");
                 });
 
             modelBuilder.Entity("StarWarsInfo.Models.Planet", b =>
                 {
                     b.Navigation("Residents");
-                });
-
-            modelBuilder.Entity("StarWarsInfo.Models.Species", b =>
-                {
-                    b.Navigation("Homeworld");
                 });
 #pragma warning restore 612, 618
         }

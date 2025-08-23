@@ -29,7 +29,7 @@ public class PersonMapper
             PersonId = SwapiFieldParser.RawUrlToId(Url),
             Name = SwapiFieldParser.RawTextToTitleCase(Name),
             Height = SwapiFieldParser.RawTextToIntNullable(Height),
-            Mass = SwapiFieldParser.RawTextToIntNullable(Mass),
+            Mass = SwapiFieldParser.RawTextToDecimalNullable(Mass),
             HairColor = SwapiFieldParser.RawTextToTitleCase(HairColor),
             SkinColor = SwapiFieldParser.RawTextToTitleCase(SkinColor),
             EyeColor = SwapiFieldParser.RawTextToTitleCase(EyeColor),

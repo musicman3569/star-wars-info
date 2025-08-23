@@ -18,6 +18,10 @@ import keycloak from "./utils/KeycloakInit"
 import {TabPanel, TabView} from "primereact/tabview";
 import {useState} from "react";
 import SwapiMenu from "./components/SwapiMenu.tsx";
+import ModelPerson from "./models/ModelPerson.ts";
+import ModelSpecies from "./models/ModelSpecies.ts";
+import ModelPlanet from "./models/ModelPlanet.ts";
+import ModelVehicle from "./models/ModelVehicle.ts";
 
 function App() {
     const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -43,25 +47,25 @@ function App() {
                         <SectionIcon src={peopleIcon} alt="People Icon"/>
                         <span>People</span>
                     </>}>
-                        <p>People here</p>
+                        <SwapiDataTable modelSpec={ModelPerson}/>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
                         <SectionIcon src={speciesIcon} alt="Species Icon"/>
                         <span>Species</span>
                     </>}>
-                        <p>Species Here</p>
+                        <SwapiDataTable modelSpec={ModelSpecies}/>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
                         <SectionIcon src={planetsIcon} alt="Planets Icon"/>
                         <span>Planets</span>
                     </>}>
-                        <p>Planets Here</p>
+                        <SwapiDataTable modelSpec={ModelPlanet}/>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
                         <SectionIcon src={vehiclesIcon} alt="Vehicles Icon"/>
                         <span>Vehicles</span>
                     </>}>
-                        <p>Vehicles Here</p>
+                        <SwapiDataTable modelSpec={ModelVehicle}/>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" header={<>
                         <SectionIcon src={filmsIcon} alt="Films Icon"/>

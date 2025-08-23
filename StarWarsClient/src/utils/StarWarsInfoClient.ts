@@ -6,6 +6,7 @@ interface ImportResult {
     message: string;
     starship_import_count: number;
     film_import_count: number;
+    current_model: string;    
 }
 
 /**

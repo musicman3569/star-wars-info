@@ -1,5 +1,6 @@
 using StarWarsInfo.Models;
 using System.Text.Json;
+using Serilog;
 
 namespace StarWarsInfo.Integrations.Swapi.Mappers;
 
@@ -39,7 +40,7 @@ public class PlanetMapper
         Climate = Climate,
         Gravity = SwapiFieldParser.RawTextToDecimalNullable(Gravity),
         Terrain = Terrain,
-        SurfaceWater = SwapiFieldParser.RawTextToIntNullable(SurfaceWater),
+        SurfaceWater = SwapiFieldParser.RawTextToDecimalNullable(SurfaceWater),
         Population = SwapiFieldParser.RawTextToUlongNullable(Population),
         Created = Created,
         Edited = Edited
@@ -58,7 +59,9 @@ public class PlanetMapper
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         };
-        var planetMapper = jsonElement.Deserialize<PlanetMapper>(options) ?? new();
+        
+        var planetMapper = jsonElement.Deserialize<PlanetMapper>(options) ?? new PlanetMapper();
+        Log.Information("Mapping Planet: {name}", planetMapper.Name);
         return planetMapper.ToPlanet();
     }
 }

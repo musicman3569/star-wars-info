@@ -11,8 +11,8 @@ public class Species
     public string HairColors { get; set; } = string.Empty; // comma separated
     public string EyeColors { get; set; } = string.Empty; // comma separated
     public int? AverageLifespan { get; set; } // n/a, indefinite, unknown
-    public int HomeworldId { get; set; } = 0;
-    public ICollection<Planet> Homeworld { get; set; } = [];
+    public int? HomeworldId { get; set; }
+    public Planet? Homeworld { get; set; }
     public string Language { get; set; } = string.Empty;
     public ICollection<Person> People { get; set; } = [];
     public ICollection<Film> Films { get; set; } = [];

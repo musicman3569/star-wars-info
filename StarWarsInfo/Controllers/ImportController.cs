@@ -44,14 +44,21 @@ public class ImportController : Controller
         var peopleImportCount = 0;
         var speciesImportCount = 0;
         var vehicleImportCount = 0;
+        var currentModel = "";
         
         try
         {
+            currentModel = "starships";
             starshipImportCount = await _swapiImportService.ImportStarshipsAsync(cancellationToken);
+            currentModel = "films";
             filmImportCount = await _swapiImportService.ImportFilmsAsync(cancellationToken);
+            currentModel = "planets";
             planetImportCount = await _swapiImportService.ImportPlanetsAsync(cancellationToken);
+            currentModel = "people";
             peopleImportCount = await _swapiImportService.ImportPeopleAsync(cancellationToken);
+            currentModel = "species";
             speciesImportCount = await _swapiImportService.ImportSpeciesAsync(cancellationToken);
+            currentModel = "vehicles";           
             vehicleImportCount = await _swapiImportService.ImportVehiclesAsync(cancellationToken);
             
             
@@ -64,7 +71,8 @@ public class ImportController : Controller
                 planet_import_count = planetImportCount,
                 people_import_count = peopleImportCount,
                 species_import_count = speciesImportCount,
-                vehicle_import_count = vehicleImportCount
+                vehicle_import_count = vehicleImportCount,
+                current_model = currentModel           
             });
         }
         catch (Exception ex)
@@ -78,7 +86,8 @@ public class ImportController : Controller
                 planet_import_count = planetImportCount,
                 people_import_count = peopleImportCount,
                 species_import_count = speciesImportCount,
-                vehicle_import_count = vehicleImportCount
+                vehicle_import_count = vehicleImportCount,
+                current_model = currentModel
             });
         }
     }

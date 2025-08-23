@@ -1,6 +1,6 @@
 using StarWarsInfo.Models;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Serilog;
 
 namespace StarWarsInfo.Integrations.Swapi.Mappers;
 
@@ -19,7 +19,7 @@ public class SpeciesMapper
     public string HairColors { get; set; } = String.Empty;
     public string EyeColors { get; set; } = String.Empty;
     public string AverageLifespan { get; set; } = String.Empty;
-    public string Homeworld { get; set; } = String.Empty;
+    public string? Homeworld { get; set; } = String.Empty;
     public string Language { get; set; } = String.Empty;
     public ICollection<string> People { get; set; } = [];
     public ICollection<string> Films { get; set; } = [];
@@ -42,7 +42,7 @@ public class SpeciesMapper
         HairColors = HairColors,
         EyeColors = EyeColors,
         AverageLifespan = SwapiFieldParser.RawTextToIntNullable(AverageLifespan),
-        HomeworldId = SwapiFieldParser.RawUrlToId(Homeworld),
+        HomeworldId = SwapiFieldParser.RawUrlToIdNullable(Homeworld),
         Language = SwapiFieldParser.RawTextToTitleCase(Language),
         Created = Created,
         Edited = Edited
@@ -61,6 +61,7 @@ public class SpeciesMapper
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         };
         var speciesMapper = jsonElement.Deserialize<SpeciesMapper>(options) ?? new();
+        Log.Information($"Mapping Species: {speciesMapper.Name}");
         return speciesMapper.ToSpecies();
     }
 }

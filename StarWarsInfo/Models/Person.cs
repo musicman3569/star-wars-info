@@ -5,7 +5,7 @@ public class Person
     public int PersonId { get; set; } = 0;
     public string Name { get; set; } = string.Empty;
     public int? Height { get; set; } // unknown
-    public int? Mass { get; set; } // unknown
+    public decimal? Mass { get; set; } // unknown
     public string HairColor { get; set; } = string.Empty;
     public string SkinColor { get; set; } = string.Empty; // unknown
     public string EyeColor { get; set; } = string.Empty; // unknown

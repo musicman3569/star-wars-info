@@ -33,27 +33,26 @@ namespace StarWarsInfo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Species",
+                name: "Planets",
                 columns: table => new
                 {
-                    SpeciesId = table.Column<int>(type: "integer", nullable: false)
+                    PlanetId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Classification = table.Column<string>(type: "text", nullable: false),
-                    Designation = table.Column<string>(type: "text", nullable: false),
-                    AverageHeight = table.Column<int>(type: "integer", nullable: true),
-                    SkinColors = table.Column<string>(type: "text", nullable: false),
-                    HairColors = table.Column<string>(type: "text", nullable: false),
-                    EyeColors = table.Column<string>(type: "text", nullable: false),
-                    AverageLifespan = table.Column<int>(type: "integer", nullable: true),
-                    HomeworldId = table.Column<int>(type: "integer", nullable: false),
-                    Language = table.Column<string>(type: "text", nullable: false),
+                    RotationPeriod = table.Column<int>(type: "integer", nullable: true),
+                    OrbitalPeriod = table.Column<int>(type: "integer", nullable: true),
+                    Diameter = table.Column<int>(type: "integer", nullable: true),
+                    Climate = table.Column<string>(type: "text", nullable: false),
+                    Gravity = table.Column<decimal>(type: "numeric", nullable: true),
+                    Terrain = table.Column<string>(type: "text", nullable: false),
+                    SurfaceWater = table.Column<decimal>(type: "numeric", nullable: true),
+                    Population = table.Column<decimal>(type: "numeric(20,0)", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Species", x => x.SpeciesId);
+                    table.PrimaryKey("PK_Planets", x => x.PlanetId);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,56 +108,85 @@ namespace StarWarsInfo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FilmSpecies",
+                name: "FilmPlanet",
                 columns: table => new
                 {
                     FilmsFilmId = table.Column<int>(type: "integer", nullable: false),
-                    SpeciesId = table.Column<int>(type: "integer", nullable: false)
+                    PlanetsPlanetId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FilmSpecies", x => new { x.FilmsFilmId, x.SpeciesId });
+                    table.PrimaryKey("PK_FilmPlanet", x => new { x.FilmsFilmId, x.PlanetsPlanetId });
                     table.ForeignKey(
-                        name: "FK_FilmSpecies_Films_FilmsFilmId",
+                        name: "FK_FilmPlanet_Films_FilmsFilmId",
                         column: x => x.FilmsFilmId,
                         principalTable: "Films",
                         principalColumn: "FilmId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FilmSpecies_Species_SpeciesId",
-                        column: x => x.SpeciesId,
-                        principalTable: "Species",
-                        principalColumn: "SpeciesId",
+                        name: "FK_FilmPlanet_Planets_PlanetsPlanetId",
+                        column: x => x.PlanetsPlanetId,
+                        principalTable: "Planets",
+                        principalColumn: "PlanetId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Planets",
+                name: "People",
                 columns: table => new
                 {
-                    PlanetId = table.Column<int>(type: "integer", nullable: false)
+                    PersonId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    RotationPeriod = table.Column<int>(type: "integer", nullable: true),
-                    OrbitalPeriod = table.Column<int>(type: "integer", nullable: true),
-                    Diameter = table.Column<int>(type: "integer", nullable: true),
-                    Climate = table.Column<string>(type: "text", nullable: false),
-                    Gravity = table.Column<decimal>(type: "numeric", nullable: true),
-                    Terrain = table.Column<string>(type: "text", nullable: false),
-                    SurfaceWater = table.Column<int>(type: "integer", nullable: true),
-                    Population = table.Column<decimal>(type: "numeric(20,0)", nullable: true),
+                    Height = table.Column<int>(type: "integer", nullable: true),
+                    Mass = table.Column<decimal>(type: "numeric", nullable: true),
+                    HairColor = table.Column<string>(type: "text", nullable: false),
+                    SkinColor = table.Column<string>(type: "text", nullable: false),
+                    EyeColor = table.Column<string>(type: "text", nullable: false),
+                    BirthYear = table.Column<string>(type: "text", nullable: false),
+                    Gender = table.Column<string>(type: "text", nullable: false),
+                    HomeworldId = table.Column<int>(type: "integer", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    SpeciesId = table.Column<int>(type: "integer", nullable: true)
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Planets", x => x.PlanetId);
+                    table.PrimaryKey("PK_People", x => x.PersonId);
                     table.ForeignKey(
-                        name: "FK_Planets_Species_SpeciesId",
-                        column: x => x.SpeciesId,
-                        principalTable: "Species",
-                        principalColumn: "SpeciesId");
+                        name: "FK_People_Planets_HomeworldId",
+                        column: x => x.HomeworldId,
+                        principalTable: "Planets",
+                        principalColumn: "PlanetId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Species",
+                columns: table => new
+                {
+                    SpeciesId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Classification = table.Column<string>(type: "text", nullable: false),
+                    Designation = table.Column<string>(type: "text", nullable: false),
+                    AverageHeight = table.Column<int>(type: "integer", nullable: true),
+                    SkinColors = table.Column<string>(type: "text", nullable: false),
+                    HairColors = table.Column<string>(type: "text", nullable: false),
+                    EyeColors = table.Column<string>(type: "text", nullable: false),
+                    AverageLifespan = table.Column<int>(type: "integer", nullable: true),
+                    HomeworldId = table.Column<int>(type: "integer", nullable: true),
+                    Language = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Species", x => x.SpeciesId);
+                    table.ForeignKey(
+                        name: "FK_Species_Planets_HomeworldId",
+                        column: x => x.HomeworldId,
+                        principalTable: "Planets",
+                        principalColumn: "PlanetId");
                 });
 
             migrationBuilder.CreateTable(
@@ -210,59 +238,6 @@ namespace StarWarsInfo.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FilmPlanet",
-                columns: table => new
-                {
-                    FilmsFilmId = table.Column<int>(type: "integer", nullable: false),
-                    PlanetsPlanetId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FilmPlanet", x => new { x.FilmsFilmId, x.PlanetsPlanetId });
-                    table.ForeignKey(
-                        name: "FK_FilmPlanet_Films_FilmsFilmId",
-                        column: x => x.FilmsFilmId,
-                        principalTable: "Films",
-                        principalColumn: "FilmId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FilmPlanet_Planets_PlanetsPlanetId",
-                        column: x => x.PlanetsPlanetId,
-                        principalTable: "Planets",
-                        principalColumn: "PlanetId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "People",
-                columns: table => new
-                {
-                    PersonId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Height = table.Column<int>(type: "integer", nullable: true),
-                    Mass = table.Column<int>(type: "integer", nullable: true),
-                    HairColor = table.Column<string>(type: "text", nullable: false),
-                    SkinColor = table.Column<string>(type: "text", nullable: false),
-                    EyeColor = table.Column<string>(type: "text", nullable: false),
-                    BirthYear = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<string>(type: "text", nullable: false),
-                    HomeworldId = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_People", x => x.PersonId);
-                    table.ForeignKey(
-                        name: "FK_People_Planets_HomeworldId",
-                        column: x => x.HomeworldId,
-                        principalTable: "Planets",
-                        principalColumn: "PlanetId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FilmPerson",
                 columns: table => new
                 {
@@ -283,30 +258,6 @@ namespace StarWarsInfo.Migrations
                         column: x => x.CharactersPersonId,
                         principalTable: "People",
                         principalColumn: "PersonId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PersonSpecies",
-                columns: table => new
-                {
-                    PeoplePersonId = table.Column<int>(type: "integer", nullable: false),
-                    SpeciesId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonSpecies", x => new { x.PeoplePersonId, x.SpeciesId });
-                    table.ForeignKey(
-                        name: "FK_PersonSpecies_People_PeoplePersonId",
-                        column: x => x.PeoplePersonId,
-                        principalTable: "People",
-                        principalColumn: "PersonId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonSpecies_Species_SpeciesId",
-                        column: x => x.SpeciesId,
-                        principalTable: "Species",
-                        principalColumn: "SpeciesId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -358,6 +309,54 @@ namespace StarWarsInfo.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FilmSpecies",
+                columns: table => new
+                {
+                    FilmsFilmId = table.Column<int>(type: "integer", nullable: false),
+                    SpeciesId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FilmSpecies", x => new { x.FilmsFilmId, x.SpeciesId });
+                    table.ForeignKey(
+                        name: "FK_FilmSpecies_Films_FilmsFilmId",
+                        column: x => x.FilmsFilmId,
+                        principalTable: "Films",
+                        principalColumn: "FilmId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FilmSpecies_Species_SpeciesId",
+                        column: x => x.SpeciesId,
+                        principalTable: "Species",
+                        principalColumn: "SpeciesId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonSpecies",
+                columns: table => new
+                {
+                    PeoplePersonId = table.Column<int>(type: "integer", nullable: false),
+                    SpeciesId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonSpecies", x => new { x.PeoplePersonId, x.SpeciesId });
+                    table.ForeignKey(
+                        name: "FK_PersonSpecies_People_PeoplePersonId",
+                        column: x => x.PeoplePersonId,
+                        principalTable: "People",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PersonSpecies_Species_SpeciesId",
+                        column: x => x.SpeciesId,
+                        principalTable: "Species",
+                        principalColumn: "SpeciesId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_FilmPerson_FilmsFilmId",
                 table: "FilmPerson",
@@ -404,9 +403,9 @@ namespace StarWarsInfo.Migrations
                 column: "VehiclesVehicleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Planets_SpeciesId",
-                table: "Planets",
-                column: "SpeciesId");
+                name: "IX_Species_HomeworldId",
+                table: "Species",
+                column: "HomeworldId");
         }
 
         /// <inheritdoc />
@@ -440,6 +439,9 @@ namespace StarWarsInfo.Migrations
                 name: "Films");
 
             migrationBuilder.DropTable(
+                name: "Species");
+
+            migrationBuilder.DropTable(
                 name: "Starships");
 
             migrationBuilder.DropTable(
@@ -450,9 +452,6 @@ namespace StarWarsInfo.Migrations
 
             migrationBuilder.DropTable(
                 name: "Planets");
-
-            migrationBuilder.DropTable(
-                name: "Species");
         }
     }
 }

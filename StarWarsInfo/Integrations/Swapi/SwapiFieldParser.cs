@@ -15,10 +15,12 @@ public static class SwapiFieldParser
     /// </returns>
     private static bool TextIsNull(string? text) 
     {
+        var lowerText = text?.ToLower();
         return 
-            string.IsNullOrWhiteSpace(text) || 
-            text == "unknown" || 
-            text == "n/a";
+            string.IsNullOrWhiteSpace(lowerText) || 
+            lowerText == "unknown" || 
+            lowerText == "indefinite" ||
+            lowerText == "n/a";
     }
     
     /// <summary>
@@ -103,6 +105,22 @@ public static class SwapiFieldParser
     {
         var parts = url.Trim().TrimEnd('/').Split('/');
         return int.Parse(parts[^1]);
+    }
+
+    
+    /// <summary>
+    /// Extracts the numeric identifier from the end of a URL string, returning null if the URL is null.
+    /// This method is useful for getting the ID from nullable SWAPI URLs that end with a numeric value.
+    /// </summary>
+    /// <param name="url">URL string that ends with a numeric ID (e.g., "https://swapi.info/api/starships/3"), or null.</param>
+    /// <returns>The numeric ID from the end of the URL, or null if the URL is null.</returns>
+    public static int? RawUrlToIdNullable(string? url)
+    {
+        if (string.IsNullOrEmpty(url)) {
+            return null;
+        }
+
+        return RawUrlToId(url);
     }
     
     /// <summary>

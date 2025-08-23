@@ -117,7 +117,7 @@ function SwapiDataTable({
         });
         ImportData((importResult) => {
             confirmDialog({
-                message: `Imported ${importResult.starship_import_count} starships, ${importResult.film_import_count} films. ${importResult.message} | Reload table now?`,
+                message: `Imported ${importResult.starship_import_count} starships, ${importResult.film_import_count} films. ${importResult.message} | ${importResult.current_model} | Reload table now?`,
                 header: `Import Data Complete`,
                 icon: 'pi pi-cloud-download',
                 defaultFocus: 'accept',
