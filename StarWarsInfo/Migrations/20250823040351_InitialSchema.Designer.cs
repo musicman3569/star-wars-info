@@ -12,7 +12,7 @@ using StarWarsInfo.Data;
 namespace StarWarsInfo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250814033446_InitialSchema")]
+    [Migration("20250823040351_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -174,8 +174,8 @@ namespace StarWarsInfo.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()

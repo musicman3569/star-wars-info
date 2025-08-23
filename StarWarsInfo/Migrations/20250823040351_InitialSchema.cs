@@ -23,7 +23,7 @@ namespace StarWarsInfo.Migrations
                     OpeningCrawl = table.Column<string>(type: "text", nullable: false),
                     Director = table.Column<string>(type: "text", nullable: false),
                     Producer = table.Column<string>(type: "text", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReleaseDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
