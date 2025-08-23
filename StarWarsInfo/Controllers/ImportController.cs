@@ -40,18 +40,31 @@ public class ImportController : Controller
     {
         var starshipImportCount = 0;
         var filmImportCount = 0;
+        var planetImportCount = 0;
+        var peopleImportCount = 0;
+        var speciesImportCount = 0;
+        var vehicleImportCount = 0;
         
         try
         {
             starshipImportCount = await _swapiImportService.ImportStarshipsAsync(cancellationToken);
             filmImportCount = await _swapiImportService.ImportFilmsAsync(cancellationToken);
+            planetImportCount = await _swapiImportService.ImportPlanetsAsync(cancellationToken);
+            peopleImportCount = await _swapiImportService.ImportPeopleAsync(cancellationToken);
+            speciesImportCount = await _swapiImportService.ImportSpeciesAsync(cancellationToken);
+            vehicleImportCount = await _swapiImportService.ImportVehiclesAsync(cancellationToken);
+            
             
             return new OkObjectResult(new 
             {
                 status = "complete",
                 message = "Import successful.",
                 starship_import_count = starshipImportCount,
-                film_import_count = filmImportCount
+                film_import_count = filmImportCount,
+                planet_import_count = planetImportCount,
+                people_import_count = peopleImportCount,
+                species_import_count = speciesImportCount,
+                vehicle_import_count = vehicleImportCount
             });
         }
         catch (Exception ex)
@@ -61,7 +74,11 @@ public class ImportController : Controller
                 status = "failed", 
                 message = ex.Message,
                 starship_import_count = starshipImportCount,
-                film_import_count = filmImportCount
+                film_import_count = filmImportCount,
+                planet_import_count = planetImportCount,
+                people_import_count = peopleImportCount,
+                species_import_count = speciesImportCount,
+                vehicle_import_count = vehicleImportCount
             });
         }
     }

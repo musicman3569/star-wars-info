@@ -12,7 +12,7 @@ using StarWarsInfo.Data;
 namespace StarWarsInfo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250823040351_InitialSchema")]
+    [Migration("20250823043513_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -271,8 +271,8 @@ namespace StarWarsInfo.Migrations
                     b.Property<int?>("OrbitalPeriod")
                         .HasColumnType("integer");
 
-                    b.Property<long?>("Population")
-                        .HasColumnType("bigint");
+                    b.Property<decimal?>("Population")
+                        .HasColumnType("numeric(20,0)");
 
                     b.Property<int?>("RotationPeriod")
                         .HasColumnType("integer");

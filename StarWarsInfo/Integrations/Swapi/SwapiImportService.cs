@@ -27,15 +27,6 @@ public class SwapiImportService : ISwapiImportService
             ct
         );
     
-    // public Task<int> ImportPeopleAsync(CancellationToken ct = default) => 
-    // 
-    //
-    // public Task<int> ImportPlanetsAsync(CancellationToken ct = default) => 
-    // 
-    //
-    // public Task<int> ImportSpeciesAsync(CancellationToken ct = default) => 
-    // 
-    
     public Task<int> ImportStarshipsAsync(CancellationToken ct = default) =>
         ImportAsync(
             _swapiClient.FetchStarshipsAsync,
@@ -44,10 +35,43 @@ public class SwapiImportService : ISwapiImportService
             "starwarsinfo.\"Starships_StarshipId_seq\"",
             ct
         );
-
     
-    // public Task<int> ImportVehiclesAsync(CancellationToken ct = default) => 
-    // 
+    public Task<int> ImportPeopleAsync(CancellationToken ct = default) =>
+        ImportAsync(
+            _swapiClient.FetchPeopleAsync,
+            _dbContext.People,
+            p => p.PersonId,
+            "starwarsinfo.\"People_PersonId_seq\"",
+            ct
+        );
+
+    public Task<int> ImportPlanetsAsync(CancellationToken ct = default) =>
+        ImportAsync(
+            _swapiClient.FetchPlanetsAsync,
+            _dbContext.Planets,
+            p => p.PlanetId,
+            "starwarsinfo.\"Planets_PlanetId_seq\"",
+            ct
+        );
+
+    public Task<int> ImportSpeciesAsync(CancellationToken ct = default) =>
+        ImportAsync(
+            _swapiClient.FetchSpeciesAsync,
+            _dbContext.Species,
+            s => s.SpeciesId,
+            "starwarsinfo.\"Species_SpeciesId_seq\"",
+            ct
+        );
+
+    public Task<int> ImportVehiclesAsync(CancellationToken ct = default) =>
+        ImportAsync(
+            _swapiClient.FetchVehiclesAsync,
+            _dbContext.Vehicles,
+            v => v.VehicleId,
+            "starwarsinfo.\"Vehicles_VehicleId_seq\"",
+            ct
+        );
+    
     
     private async Task<int> ImportAsync<TEntity>(
         Func<CancellationToken, Task<List<TEntity>>> fetchAsync,

@@ -74,4 +74,69 @@ public class SwapiClient : ISwapiClient
             .Select(FilmMapper.FromJson)
             .ToList() ?? [];
     }
+    
+    /// <summary>
+    /// Fetches a list of Planet objects by retrieving the corresponding data
+    /// from the Star Wars API (SWAPI) and mapping/cleaning the raw values to a Planet model.
+    /// </summary>
+    /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A list of Planets retrieved from the API, or an empty list if no data is available.</returns>
+    public async Task<List<Planet>> FetchPlanetsAsync(CancellationToken ct)
+    {
+        var jsonDocument = await FetchResourceAsync("planets", ct);
+        return jsonDocument?
+            .RootElement
+            .EnumerateArray()
+            .Select(PlanetMapper.FromJson)
+            .ToList() ?? [];
+    }
+
+    /// <summary>
+    /// Fetches a list of Person objects by retrieving the corresponding data
+    /// from the Star Wars API (SWAPI) and mapping/cleaning the raw values to a Person model.
+    /// </summary>
+    /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A list of People retrieved from the API, or an empty list if no data is available.</returns>
+    public async Task<List<Person>> FetchPeopleAsync(CancellationToken ct)
+    {
+        var jsonDocument = await FetchResourceAsync("people", ct);
+        return jsonDocument?
+            .RootElement
+            .EnumerateArray()
+            .Select(PersonMapper.FromJson)
+            .ToList() ?? [];
+    }
+    
+    /// <summary>
+    /// Fetches a list of Vehicle objects by retrieving the corresponding data
+    /// from the Star Wars API (SWAPI) and mapping/cleaning the raw values to a Vehicle model.
+    /// </summary>
+    /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A list of Vehicles retrieved from the API, or an empty list if no data is available.</returns>
+    public async Task<List<Vehicle>> FetchVehiclesAsync(CancellationToken ct)
+    {
+        var jsonDocument = await FetchResourceAsync("vehicles", ct);
+        return jsonDocument?
+            .RootElement
+            .EnumerateArray()
+            .Select(VehicleMapper.FromJson)
+            .ToList() ?? [];
+    }
+
+    /// <summary>
+    /// Fetches a list of Species objects by retrieving the corresponding data
+    /// from the Star Wars API (SWAPI) and mapping/cleaning the raw values to a Species model.
+    /// </summary>
+    /// <param name="ct">The cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A list of Species retrieved from the API, or an empty list if no data is available.</returns>
+    public async Task<List<Species>> FetchSpeciesAsync(CancellationToken ct)
+    {
+        var jsonDocument = await FetchResourceAsync("species", ct);
+        return jsonDocument?
+            .RootElement
+            .EnumerateArray()
+            .Select(SpeciesMapper.FromJson)
+            .ToList() ?? [];
+    }
+    
 }

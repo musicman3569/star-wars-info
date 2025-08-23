@@ -17,4 +17,9 @@ public interface ISwapiClient
     public Task<List<Starship>> FetchStarshipsAsync(CancellationToken ct);
     
     public Task<List<Film>> FetchFilmsAsync(CancellationToken ct);
+    
+    public Task<List<Planet>> FetchPlanetsAsync(CancellationToken ct);
+    public Task<List<Person>> FetchPeopleAsync(CancellationToken ct);
+    public Task<List<Species>> FetchSpeciesAsync(CancellationToken ct);
+    public Task<List<Vehicle>> FetchVehiclesAsync(CancellationToken ct);
 }

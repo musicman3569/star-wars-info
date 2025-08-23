@@ -146,7 +146,7 @@ namespace StarWarsInfo.Migrations
                     Gravity = table.Column<decimal>(type: "numeric", nullable: true),
                     Terrain = table.Column<string>(type: "text", nullable: false),
                     SurfaceWater = table.Column<int>(type: "integer", nullable: true),
-                    Population = table.Column<long>(type: "bigint", nullable: true),
+                    Population = table.Column<decimal>(type: "numeric(20,0)", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Edited = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     SpeciesId = table.Column<int>(type: "integer", nullable: true)

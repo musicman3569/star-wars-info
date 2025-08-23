@@ -35,30 +35,27 @@ public class StarshipMapper
     /// Converts the current instance of <see cref="StarshipMapper"/> into an instance of <see cref="Starship"/>.
     /// </summary>
     /// <returns>A <see cref="Starship"/> object populated from the current <see cref="StarshipMapper"/> instance.</returns>
-    public Starship ToStarship()
+    public Starship ToStarship() =>  new Starship
     {
-        return new Starship
-        {
-            StarshipId = SwapiFieldParser.RawUrlToId(Url),
-            Name = SwapiFieldParser.RawTextToTitleCase(Name),
-            Model = SwapiFieldParser.RawTextToTitleCase(Model),
-            Manufacturer = SwapiFieldParser.RawTextToTitleCase(Manufacturer),
-            CostInCredits = SwapiFieldParser.RawTextToDecimalNullable(CostInCredits),
-            Length = SwapiFieldParser.RawTextToDecimal(Length),
-            MaxAtmospheringSpeed = SwapiFieldParser.RawTextToDecimalNullable(MaxAtmospheringSpeed),
-            Crew = SwapiFieldParser.RawTextToIntNullable(Crew),
-            Passengers = SwapiFieldParser.RawTextToIntNullable(Passengers),
-            CargoCapacity = SwapiFieldParser.RawTextToUlongNullable(CargoCapacity),
-            Consumables = Consumables,
-            HyperdriveRating = SwapiFieldParser.RawTextToDecimalNullable(HyperdriveRating),
-            Mglt = SwapiFieldParser.RawTextToIntNullable(Mglt),
-            StarshipClass = SwapiFieldParser.RawTextToTitleCase(StarshipClass),
-            // Pilots = Pilots,
-            // Films = Films,
-            Created = Created,
-            Edited = Edited
-        };
-    }
+        StarshipId = SwapiFieldParser.RawUrlToId(Url),
+        Name = SwapiFieldParser.RawTextToTitleCase(Name),
+        Model = SwapiFieldParser.RawTextToTitleCase(Model),
+        Manufacturer = SwapiFieldParser.RawTextToTitleCase(Manufacturer),
+        CostInCredits = SwapiFieldParser.RawTextToDecimalNullable(CostInCredits),
+        Length = SwapiFieldParser.RawTextToDecimal(Length),
+        MaxAtmospheringSpeed = SwapiFieldParser.RawTextToDecimalNullable(MaxAtmospheringSpeed),
+        Crew = SwapiFieldParser.RawTextToIntNullable(Crew),
+        Passengers = SwapiFieldParser.RawTextToIntNullable(Passengers),
+        CargoCapacity = SwapiFieldParser.RawTextToUlongNullable(CargoCapacity),
+        Consumables = Consumables,
+        HyperdriveRating = SwapiFieldParser.RawTextToDecimalNullable(HyperdriveRating),
+        Mglt = SwapiFieldParser.RawTextToIntNullable(Mglt),
+        StarshipClass = SwapiFieldParser.RawTextToTitleCase(StarshipClass),
+        // Pilots = Pilots,
+        // Films = Films,
+        Created = Created,
+        Edited = Edited
+    };
 
     /// <summary>
     /// Creates an instance of <see cref="Starship"/> by deserializing the provided <see cref="JsonElement"/>

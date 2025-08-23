@@ -12,6 +12,7 @@ import planetsIcon from './assets/icon_planets.svg';
 import filmsIcon from './assets/icon_films.svg';
 import SectionIcon from './components/SectionIcon';
 import ModelStarship from "./models/ModelStarship.ts";
+import ModelFilm from "./models/ModelFilm.ts";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./utils/KeycloakInit"
 import {TabPanel, TabView} from "primereact/tabview";
@@ -66,7 +67,7 @@ function App() {
                         <SectionIcon src={filmsIcon} alt="Films Icon"/>
                         <span>Films</span>
                     </>}>
-                        <p>Films Here</p>
+                        <SwapiDataTable modelSpec={ModelFilm}/>
                     </TabPanel>
                     <TabPanel className="border-round-top-xl mr-2" headerClassName="tab-rightmost" header={<>
                         <i className="pi pi-bars mr-2"></i>
