@@ -28,6 +28,11 @@ hosts_add_entries() {
     local sudo_cmd=$(get_sudo_cmd)
 
     for entry in "${HOSTS_ARRAY[@]}"; do
+        if [ "$entry" == "127.0.0.1 localhost" ]; then
+            log_output "Skipping localhost entry"
+            continue
+        fi
+        
         # Check if the entry already exists
         if ! grep -qF "$entry" "$HOSTS_FILE"; then
             echo "Adding entry: $entry"

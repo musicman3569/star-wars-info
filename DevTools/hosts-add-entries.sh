@@ -18,7 +18,7 @@ source "$(dirname "$0")/Common/common-hosts-entries.sh"
 source "$(dirname "$0")/../.env"
 
 # Define the array of host entries need for the
-# Docker services
+# Docker services. NOTE: Only use EXACTLY 1 SPACE between the IP and hostname
 declare HOSTS_ARRAY=(
     "127.0.0.1 $HOSTNAME_API"
     "127.0.0.1 $HOSTNAME_CLIENT"
