@@ -82,6 +82,7 @@ builder.Services.AddHttpClient("swapi", client =>
 
 // Register the import service
 builder.Services.AddScoped<ISwapiClient, SwapiClient>();
+builder.Services.AddScoped<ISwapiImportService, SwapiImportService>();
 
 // Configure Entity Framework Core with PostgreSQL
 // Ensure you have the Npgsql.EntityFrameworkCore.PostgreSQL package installed
@@ -110,10 +111,5 @@ app.UseRouting();
 app.UseCors("AllowClientApp");
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Map Controller Routes
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

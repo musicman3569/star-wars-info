@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using StarWarsInfo.Data;
 using StarWarsInfo.Integrations.Swapi;
-using EFCore.BulkExtensions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace StarWarsInfo.Controllers;
 
@@ -16,19 +15,15 @@ namespace StarWarsInfo.Controllers;
 [Route("v1/[controller]")]
 public class ImportController : Controller
 {
-    private readonly ILogger<ImportController> _logger;
-    private readonly AppDbContext _dbContext;
-    private readonly ISwapiClient _swapiClient;
+    private readonly ISwapiImportService _swapiImportService;
 
     /// <summary>
     /// Handles the import of Star Wars data into the application's database.
     /// Provides mechanisms to interact with third-party APIs and persist the retrieved data.
     /// </summary>
-    public ImportController(ILogger<ImportController> logger, AppDbContext dbContext, ISwapiClient swapiClient)
+    public ImportController(ISwapiImportService swapiImportService)
     {
-        _logger = logger;
-        _dbContext = dbContext;
-        _swapiClient = swapiClient;
+        _swapiImportService = swapiImportService;
     }
 
     /// <summary>
@@ -45,28 +40,16 @@ public class ImportController : Controller
     {
         try
         {
-            // Retrieve all starship data from the Star Wars API and bulk insert/update into the database
-            var starships = await _swapiClient.FetchStarshipsAsync(cancellationToken);
-            await _dbContext.BulkInsertOrUpdateAsync(starships, cancellationToken:cancellationToken);
-            
-            // With the new data inserted, reset the sequence to the next available ID.
-            // The syntax for this is specific to PostgreSQL.
-            var maxId = await _dbContext.Starships.MaxAsync(s => s.StarshipId, cancellationToken);
-            var nextId = maxId + 1;
-            await _dbContext.Database.ExecuteSqlInterpolatedAsync(
-                $"SELECT setval('starwarsinfo.\"Starships_StarshipId_seq\"', {nextId}, false);",
-                cancellationToken
-            );
+            var starshipImportCount = await _swapiImportService.ImportStarshipsAsync(cancellationToken);
             
             return new OkObjectResult(new 
             {
                 status = "complete",
-                starship_import_count = starships.Count
+                starship_import_count = starshipImportCount
             });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during data import");
             return StatusCode(500, new
             {
                 status = "failed", 
