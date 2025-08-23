@@ -73,6 +73,17 @@ public class SwapiImportService : ISwapiImportService
         );
     
     
+    /// <summary>
+    /// Imports entities from an external source into the database, updates existing records,
+    /// and maintains the database sequence for auto-incrementing IDs.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity being imported.</typeparam>
+    /// <param name="fetchAsync">Function to fetch entities from the external source.</param>
+    /// <param name="dbSet">The database set where entities will be imported.</param>
+    /// <param name="idSelector">Expression to select the ID property of the entity.</param>
+    /// <param name="sequenceName">The name of the database sequence for auto-incrementing IDs.</param>
+    /// <param name="ct">Cancellation token to cancel the operation.</param>
+    /// <returns>The number of entities that were processed.</returns>
     private async Task<int> ImportAsync<TEntity>(
         Func<CancellationToken, Task<List<TEntity>>> fetchAsync,
         DbSet<TEntity> dbSet,
