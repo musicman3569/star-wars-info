@@ -20,10 +20,10 @@ set -e
     declare COLOR_BLUE='\033[0;34m'
 }
 
-#"$SCRIPT_DIR"/env_run_all_checks.sh "$1"
-#"$SCRIPT_DIR"/keycloak-prep-import.sh
-#"$SCRIPT_DIR"/hosts-add-entries.sh
-#"$SCRIPT_DIR"/ssl-generate-certs.sh
+"$SCRIPT_DIR"/env_run_all_checks.sh "$1"
+"$SCRIPT_DIR"/keycloak-prep-import.sh
+"$SCRIPT_DIR"/hosts-add-entries.sh
+"$SCRIPT_DIR"/ssl-generate-certs.sh
 
 cd "$SCRIPT_DIR"/..
 
