@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "None",
+      "composeLaunchServiceName": "starwarsinfo",
+      "serviceActions": {
+        "starwarsinfo": "StartDebugging",
+        "keycloak": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging",
+        "starwarsclient": "StartWithoutDebugging"
+      }
+    }
+  }
+}

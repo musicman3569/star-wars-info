@@ -1,8 +1,9 @@
 services:
   starwarsinfo:
+    image: ${DOCKER_REGISTRY-}starwarsinfo
     build:
       context: .
-      dockerfile: ./StarWarsInfo/Dockerfile
+      dockerfile: StarWarsInfo/Dockerfile
       args:
         API_HTTPS_PORT: ${API_HTTPS_PORT}
         BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
