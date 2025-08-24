@@ -28,7 +28,7 @@ hosts_add_entries() {
     local sudo_cmd=$(get_sudo_cmd)
 
     for entry in "${HOSTS_ARRAY[@]}"; do
-        if [ "$entry" == "127.0.0.1 localhost" ]; then
+        if [ "$entry" == "127.0.0.1 host.docker.internal" ]; then
             log_output "Skipping localhost entry"
             continue
         fi

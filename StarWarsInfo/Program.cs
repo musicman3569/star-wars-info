@@ -8,6 +8,7 @@ using StarWarsInfo.Integrations.Swapi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
+var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -44,7 +45,7 @@ builder.Services
             // "account" is the default client ID from Keycloak that is used in the aud payload
             ValidAudience = "account",
             // https://stackoverflow.com/questions/60306175/bearer-error-invalid-token-error-description-the-issuer-is-invalid
-            ValidateIssuer = false, // TODO: remove if unneeded after testing
+            ValidateIssuer = !isDevelopment, // TODO: remove if unneeded after testing
             ClockSkew = TimeSpan.FromMinutes(5)
         };
         // Needed for self-signed certs
@@ -88,7 +89,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
-        .RequireClaim("email_verified", "true")
         // Required Realm Roles from Keycloak
         .RequireClaim("groups", "sw_admin", "sw_user")
         .Build();
@@ -99,7 +99,6 @@ builder.Services.AddHttpClient("swapi", client =>
 {
     client.BaseAddress = new Uri("https://swapi.info/api/");
     client.Timeout = TimeSpan.FromSeconds(30);
-    //client.DefaultRequestHeaders.UserAgent.ParseAdd("StarWarsInfo/1.0 (+https://example.com)");
 });
 
 // Register the import service

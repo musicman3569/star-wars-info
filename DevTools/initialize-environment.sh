@@ -14,3 +14,8 @@ set -e
 "$SCRIPT_DIR"/keycloak-prep-import.sh
 "$SCRIPT_DIR"/hosts-add-entries.sh
 "$SCRIPT_DIR"/ssl-generate-certs.sh
+
+cd "$SCRIPT_DIR"/..
+dotnet tool restore
+
+"$SCRIPT_DIR"/ef-cli-wrapper.sh database update
