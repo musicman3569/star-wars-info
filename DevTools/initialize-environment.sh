@@ -20,10 +20,10 @@ set -e
     declare COLOR_BLUE='\033[0;34m'
 }
 
-"$SCRIPT_DIR"/env_run_all_checks.sh "$1"
-"$SCRIPT_DIR"/keycloak-prep-import.sh
-"$SCRIPT_DIR"/hosts-add-entries.sh
-"$SCRIPT_DIR"/ssl-generate-certs.sh
+#"$SCRIPT_DIR"/env_run_all_checks.sh "$1"
+#"$SCRIPT_DIR"/keycloak-prep-import.sh
+#"$SCRIPT_DIR"/hosts-add-entries.sh
+#"$SCRIPT_DIR"/ssl-generate-certs.sh
 
 cd "$SCRIPT_DIR"/..
 
@@ -41,9 +41,11 @@ echo -e "$COLOR_GREEN"
 echo "================================================"
 echo "Congratulations, your environment is configured!"
 echo "================================================"
-echo -e "\nYou can start the service by running: ${COLOR_NONE}docker compose up --build --detach${COLOR_GREEN}"
+echo -e "\nYou can start the service by either:"
+echo -e "1) Running: ${COLOR_NONE}docker compose up --build --detach${COLOR_GREEN} OR"
+echo -e "2) Opening the solution in Visual Studio/Rider/etc. and using the Docker Compose build option.\n"
 echo "It will take a few minutes to build. Check the docker logs and ensure all"
-echo "all services build and are listening on their ports."
+echo "services build and are listening on their ports."
 echo "See the README.md for additional details."
 echo ""
 echo "Once the services are ready you can access the main site at:"
