@@ -17,5 +17,3 @@ set -e
 
 cd "$SCRIPT_DIR"/..
 dotnet tool restore
-
-"$SCRIPT_DIR"/ef-cli-wrapper.sh database update
