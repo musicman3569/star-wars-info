@@ -11,6 +11,7 @@ import {Button} from "primereact/button";
 import {ConfirmDialog, confirmDialog} from "primereact/confirmdialog";
 import {useKeycloak} from "@react-keycloak/web";
 import { Toast } from 'primereact/toast';
+import {ImportResultMessage} from "./ImportResultMessage.tsx";
 
 /**
  * A data table component for displaying and managing Star Wars information.
@@ -106,6 +107,21 @@ function SwapiDataTable({
         setLoading(false);
     }, [initialized, keycloak.token, modelSpec, modelDataKey]);
     
+
+    /**
+     * Imports data from the Star Wars API (SWAPI) into the local database.
+     * Shows toast notifications for import progress and completion.
+     * After successful import, displays a confirmation dialog with import results
+     * and refreshes the table data.
+     *
+     * @dependency {boolean} initialized - Keycloak initialization status
+     * @dependency {Toast} toast.current - Reference to Toast component for notifications
+     * @dependency {string} keycloak.token - Authentication token
+     * @dependency {ModelSpec} modelSpec - Data model specification
+     * @dependency {string} modelDataKey - Key field for the data model
+     * @dependency {Function} setTableData - State setter for table data
+     * @dependency {Function} setLoading - State setter for loading indicator
+     */
     const importData = () => {
         if (!initialized) return;
         setLoading(true);
@@ -117,7 +133,7 @@ function SwapiDataTable({
         });
         ImportData((importResult) => {
             confirmDialog({
-                message: `Imported ${importResult.starship_import_count} starships, ${importResult.film_import_count} films. ${importResult.message} | ${importResult.current_model} | Reload table now?`,
+                message: <ImportResultMessage importResult={importResult}/>,
                 header: `Import Data Complete`,
                 icon: 'pi pi-cloud-download',
                 defaultFocus: 'accept',
@@ -214,6 +230,15 @@ function SwapiDataTable({
         );
     }
 
+    
+    /**
+     * Main Data Table that displays the Star Wars data for the selected Model.
+     * Supports read, add, edit, and delete operations.  Also automatically detects empty
+     * table results (which should never be the case since they all have data) and prompts
+     * to import. Columns are all build from the ModelSpec so they do not have to be
+     * individually (and repetitively) defined when sensible default behavior can be
+     * determined from the ModelSpec.
+     */
     return (<>
         <DataTable
             value={tableData}

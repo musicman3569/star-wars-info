@@ -1,12 +1,16 @@
 import { convertStringDates } from "./DateUtils";
 import { type ModelSpec } from "./DataTableColumn";
 
-interface ImportResult {
+export interface ImportResult {
     status: "complete" | "failed";
     message: string;
     starship_import_count: number;
     film_import_count: number;
-    current_model: string;    
+    planet_import_count: number;
+    people_import_count: number;
+    species_import_count: number;
+    vehicle_import_count: number;
+    current_model: string;
 }
 
 /**
