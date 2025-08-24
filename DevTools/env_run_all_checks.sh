@@ -10,7 +10,7 @@ source "$(dirname "$0")/Common/common-env-files.sh"
 # Initialize global script variables.
 {    
     declare ENV_FILE=".env"
-    declare ENV_TEMPLATE_FILE=".env.template"
+    declare ENV_TEMPLATE_FILE="${1:-.env.template}"
     declare ENV_TMP_FILE=".env.tmp"
 }
 
