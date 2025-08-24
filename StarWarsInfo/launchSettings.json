@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true,
+      "dockerComposeFile": "../docker-compose.yml",
+      "dockerServiceName": "starwarsinfo"
+    }
+  }
+}
