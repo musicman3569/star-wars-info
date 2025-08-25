@@ -21,13 +21,17 @@ and sortable information site, so you can impress your friends with your astute
   and run the Docker Compose build option. That's it!
 
 ## Logging In and Using the Application
+
 - When the build completes (Keycloak can take a few minutes the first time), the services should be available at the following URLS:
     - https://host.docker.internal:8080/ -  The main website written in React.js
     - https://host.docker.internal:8081/ - The ASP.NET Core API backend and Swagger docs
     - https://host.docker.internal:8082/ - The Keycloak SSO service, used for login and administering the SSO service.
 - When you first visit the site, you will be prompted to log in. Register an email/password to gain access (email verification is off for easier testing).
+
+  ![Registration Screenshot](StarWarsClient/public/login_screenshot.png)
+  
 - On the first page, it will detect the empty database and prompt you to import the initial data.
-  Click yes to automatically import the data from the 3rd party SWAPI REST API into the application's database.
+  Click yes to automatically import/clean the data from the 3rd party SWAPI REST API into the application's database.
 
 ## Project Structure Overview
 
