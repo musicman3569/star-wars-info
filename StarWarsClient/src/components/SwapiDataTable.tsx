@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {useState, useEffect, useMemo, useRef} from 'react';
 import {DeleteData, FetchData, ImportData, UpdateData} from '../utils/StarWarsInfoClient';
 import {DataTable, type DataTableFilterMeta} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
@@ -40,24 +40,15 @@ function SwapiDataTable({
     const globalFilterFields = getModelGlobalFilterFields(modelSpec);
 
     /**
-     * Clears the global filter and resets filters to their default values
-     */
-    const clearGlobalFilter = () => {
-        setFilters(defaultFilters);
-        setGlobalFilterValue('');
-    };
-
-    /**
      * Handles changes to the global filter input
-     * @param {React.ChangeEvent<HTMLInputElement>} e - Input change event
+     * @param {string} newValue - New value of the global filter input
      */
-    const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setGlobalFilterValue(value);
+    const onGlobalFilterChange = (newValue:string) => {
+        setGlobalFilterValue(newValue);
         setFilters((prev) => {
             const next = { ...prev };
             // @ts-ignore – PrimeReact types don't index cleanly
-            next['global'].value = value;
+            next['global'].value = newValue;
             return next;
         });
     };
@@ -246,7 +237,6 @@ function SwapiDataTable({
             header={DataTableHeader({
                 globalFilterValue,
                 onGlobalFilterChange,
-                clearGlobalFilter,
                 onClickRowAdd
             })}
             paginator={true}

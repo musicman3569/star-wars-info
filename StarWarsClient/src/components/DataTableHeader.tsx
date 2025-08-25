@@ -7,14 +7,12 @@ import React from "react";
 
 interface DataTableHeaderProps {
     globalFilterValue: string;
-    onGlobalFilterChange: React.ChangeEventHandler<HTMLInputElement>;
-    clearGlobalFilter:  React.MouseEventHandler<HTMLButtonElement>;
+    onGlobalFilterChange: (value: string) => void;
     onClickRowAdd:  React.MouseEventHandler<HTMLButtonElement>;
 }
 export function DataTableHeader({
     globalFilterValue,
     onGlobalFilterChange,
-    clearGlobalFilter,
     onClickRowAdd,
 }:DataTableHeaderProps){
     return (
@@ -27,11 +25,11 @@ export function DataTableHeader({
                     <InputIcon className="pi pi-search"/>
                     <InputText
                         value={globalFilterValue}
-                        onChange={onGlobalFilterChange}
+                        onChange={(e) => onGlobalFilterChange(e.target.value)}
                         placeholder={'Keyword Search'}
                     />
                 </IconField>
-                <Button type="button" icon="pi pi-filter-slash" onClick={clearGlobalFilter}/>
+                <Button type="button" icon="pi pi-filter-slash" onClick={() => onGlobalFilterChange('')}/>
             </span>
         </div>        
     );
