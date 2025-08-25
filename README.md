@@ -10,11 +10,11 @@ and sortable information site, so you can impress your friends with your astute
 
 ## System Requirements:
 - Docker/Docker Compose (Docker Desktop for Windows)
-- BASH (for Windows, Git Bash works and is usually installed alongside Git)
+- BASH (for Windows, Git BASH works and is usually installed alongside Git)
 - Works as-is on Windows, Linux, and MacOS!
 
 ## Quick Start
-- To get started, go to the project root directory and run in a BASH terminal run `DevTools/initialize-environment.sh`. 
+- To get started, open a BASH terminal (not Powershell) in the project root directory and run the script `DevTools/initialize-environment.sh`. 
   This only needs to be run once when you first clone the project, and automatically
   handles all the environment setup for you.
 - Run `docker compose up --build --detach` to start the services, or open the solution in your favorite IDE/editor 
