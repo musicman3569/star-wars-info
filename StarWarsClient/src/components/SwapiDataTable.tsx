@@ -257,6 +257,7 @@ function SwapiDataTable({
             dataKey={modelDataKey}
             sortMode="single"
             sortField="name"
+            sortOrder={1}
             filters={filters}
             onFilter={(e) => setFilters(e.filters as DataTableFilterMeta)}
             globalFilterFields={globalFilterFields}
