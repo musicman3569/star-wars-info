@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prod": "vite build && vite preview --port 443"
+    "prod": "vite build && vite preview"
   },
   "dependencies": {
     "@react-keycloak/web": "^3.4.0",
