@@ -29,12 +29,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Approach to integrating with OAuth via Keycloak taken from
 // https://stackoverflow.com/questions/77084743/secure-asp-net-core-rest-api-with-keycloak
 var keycloakUrl = Environment.GetEnvironmentVariable("KEYCLOAK_URL") ?? "";
+var metaDataAddress = $"{keycloakUrl}/realms/starwarsinfo/.well-known/openid-configuration"; 
 builder.Services
     .AddAuthentication()
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false; // Set to false for self-signed certs
-        options.MetadataAddress = $"{keycloakUrl}/realms/starwarsinfo/.well-known/openid-configuration";
+        options.MetadataAddress = metaDataAddress;
+        options.RefreshOnIssuerKeyNotFound = true; // Refresh JWKS if the kid isn't found
         options.TokenValidationParameters = new TokenValidationParameters
         {
             // "groups" is actually an array of Realm Roles from Keycloak. Create the Realm Roles
@@ -60,11 +62,13 @@ builder.Services
             OnAuthenticationFailed = ctx =>
             {
                 Console.WriteLine($"JWT auth failed: {ctx.Exception}");
+                Console.WriteLine($"JWT MetadataAddress: {metaDataAddress}");
                 return Task.CompletedTask;
             },
             OnChallenge = ctx =>
             {
                 Console.WriteLine($"JWT challenge: {ctx.Error} - {ctx.ErrorDescription}");
+                Console.WriteLine($"JWT MetadataAddress: {metaDataAddress}");
                 return Task.CompletedTask;
             }
         };
