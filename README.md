@@ -4,7 +4,7 @@ The Stars Wars Info project is an information resource about Starships from the 
 This includes all the details you could ever want to know, including models, size, passenger
 capacity, cost, crew size, hyperdrive ratings, and more!  All this is presented in a searchable
 and sortable information site, so you can impress your friends with your astute
-(and perhaps excessive) trivia knowledge.
+(and perhaps excessive) trivia knowledge. You can try the live demo site at https://starwars.hamiweb.net/.
 
 ![Star Wars Ship Models](StarWarsClient/public/starwars_ships.png)
 
