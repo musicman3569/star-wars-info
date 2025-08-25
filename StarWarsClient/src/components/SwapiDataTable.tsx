@@ -265,6 +265,8 @@ function SwapiDataTable({
             onRowEditComplete={(e) => onRowEditComplete(e.newData)}
             loading={loading}
             emptyMessage=" "
+            cellMemo={true}
+            cellMemoPropsDepth={1}
         >
             <Column rowEditor header="Edit" frozen style={{width: '1rem'}} />
             {
