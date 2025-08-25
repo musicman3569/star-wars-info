@@ -24,7 +24,7 @@ function SwapiDataTable({
 }:{
     modelSpec: ModelSpec;
 }) {
-    const cssHeightToPageBottom = "calc(100vh - 100px - 50px)";
+    const cssHeightToPageBottom = "calc(100vh - 190px)";
     const modelDataKey = getModelDataKey(modelSpec);
     const { keycloak, initialized } = useKeycloak();
     const toast = useRef<Toast>(null);
@@ -249,7 +249,8 @@ function SwapiDataTable({
                 clearGlobalFilter,
                 onClickRowAdd
             })}
-            paginator={false}
+            paginator={true}
+            rowsPerPageOptions={[10, 25, 50, 100]}
             rows={10}
             rowHover={true}
             scrollable={true}
