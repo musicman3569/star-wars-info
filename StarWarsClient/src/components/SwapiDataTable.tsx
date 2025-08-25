@@ -2,7 +2,7 @@ import React, {useState, useEffect, useMemo, useRef} from 'react';
 import {DeleteData, FetchData, ImportData, UpdateData} from '../utils/StarWarsInfoClient';
 import {DataTable, type DataTableFilterMeta} from 'primereact/datatable';
 import SwapiColumn from './SwapiColumn';
-import {type ModelSpec, getModelDataKey, buildDefaultFilters} from '../utils/DataTableColumn';
+import {type ModelSpec, getModelDataKey, buildDefaultFilters, getModelGlobalFilterFields} from '../utils/DataTableColumn';
 import {Column} from "primereact/column";
 import {useCachedFilterCallbacks} from "../utils/DataTableFilterCache.ts";
 import DataTableHeader from "./DataTableHeader.tsx";
@@ -37,6 +37,7 @@ function SwapiDataTable({
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [editFormVisible, setEditFormVisible] = useState(false);
     const [loading, setLoading] = useState(true);
+    const globalFilterFields = getModelGlobalFilterFields(modelSpec);
 
     /**
      * Clears the global filter and resets filters to their default values
@@ -258,7 +259,7 @@ function SwapiDataTable({
             sortField="name"
             filters={filters}
             onFilter={(e) => setFilters(e.filters as DataTableFilterMeta)}
-            globalFilterFields={[modelDataKey]}
+            globalFilterFields={globalFilterFields}
             removableSort
             editMode="row"
             onRowEditComplete={(e) => onRowEditComplete(e.newData)}

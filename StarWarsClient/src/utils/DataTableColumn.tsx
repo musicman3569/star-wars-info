@@ -35,6 +35,14 @@ export interface ColumnSpec {
 
 export type ModelSpec = Record<string, ColumnSpec>;
 
+/**
+ * Retrieves the field name that is marked as the data key in the model specification.
+ * The data key is typically used as a unique identifier for records in the data table.
+ *
+ * @param spec - The model specification containing field definitions and their properties
+ * @returns The field name that is marked as the data key
+ * @throws Error if no field is marked as a data key in the model specification
+ */
 export function getModelDataKey(spec: ModelSpec): string {
     for (const [field, def] of Object.entries(spec)) {
         if (def.isDataKey) {
@@ -42,6 +50,20 @@ export function getModelDataKey(spec: ModelSpec): string {
         }
     }
     throw new Error('No data key found in model spec');
+}
+
+
+/**
+ * Retrieves an array of field names from the model specification that are eligible for global filtering.
+ * Only fields with 'id' or 'text' kinds are included in the global filter.
+ *
+ * @param modelSpec - The model specification containing field definitions and their properties
+ * @returns An array of field names that can be used for global filtering
+ */
+export function getModelGlobalFilterFields(modelSpec: ModelSpec): string[] {
+    return Object.entries(modelSpec)
+        .filter(([_, def]) => def.kind === 'id' || def.kind === 'text')
+        .map(([field]) => field);
 }
 
 /**
