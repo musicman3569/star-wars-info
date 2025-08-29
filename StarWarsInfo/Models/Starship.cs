@@ -11,7 +11,7 @@ public class Starship
     public decimal? CostInCredits { get; set; } // unknown
     public decimal Length { get; set; } = 0;
     public decimal? MaxAtmospheringSpeed { get; set; } // unknown, n/a, km suffix
-    public int? Crew { get; set; } // unknown, n/a
+    public int? Crew { get; set; } // unknown, n/a, <min>-<max>
     public int? Passengers { get; set; } // unknown, n/a
     public ulong? CargoCapacity { get; set; } // unknown
     public string? Consumables { get; set; } // time duration: X months, year(s), week, days, hours, unknown

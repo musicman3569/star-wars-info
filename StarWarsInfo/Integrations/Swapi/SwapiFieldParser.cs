@@ -48,7 +48,26 @@ public static class SwapiFieldParser
             return null;
         }
         
+        // If it is an integer range, use the upper value (after the hyphen)
+        var numberRangeMatch = GetIntegerRangeRegexMatch(rawText); 
+        if (numberRangeMatch.Success) {
+            return int.Parse(numberRangeMatch.Groups[2].Value);
+        }
+        
         return int.Parse(RemoveNonNumerics(rawText));
+    }
+    
+    /// <summary>
+    /// Performs a Regex match on a string potentially containing an integer range
+    /// using a hyphen as a separator.  Accounts for arbitrary whitespace.
+    /// Returns the Regex match where the first match group should be the lower value
+    /// and the second match group should be the upper value. 
+    /// </summary>
+    /// <param name="rawText">Raw input string that may contain an integer range.</param>
+    /// <returns>Regex match result that can be used to test for success or extract the match groups.</returns>
+    public static Match GetIntegerRangeRegexMatch(string rawText)
+    {
+        return Regex.Match(rawText, @"^\s*(\d+)\s*-\s*(\d+)\s*$");
     }
     
     /// <summary>
