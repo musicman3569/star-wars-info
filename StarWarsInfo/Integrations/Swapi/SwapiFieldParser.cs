@@ -48,7 +48,8 @@ public static class SwapiFieldParser
             return null;
         }
         
-        // If it is an integer range, use the upper value (after the hyphen)
+        // If it is an integer range and not a single number,
+        // use the upper value (after the hyphen)
         var numberRangeMatch = GetIntegerRangeRegexMatch(rawText); 
         if (numberRangeMatch.Success) {
             return int.Parse(numberRangeMatch.Groups[2].Value);
