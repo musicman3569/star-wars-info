@@ -41,6 +41,8 @@ namespace StarWarsInfoTest.Integrations.Swapi
         [InlineData("1,234", 1234)]
         [InlineData("  007  ", 7)]
         [InlineData("speed: 9000", 9000)]
+        [InlineData("30-165", 165)]
+        [InlineData(" 567 - 2500", 2500)]
         public void RawTextToIntNullable_RemovesNonNumerics_Parses(string input, int expected)
         {
             var result = SwapiFieldParser.RawTextToIntNullable(input);
